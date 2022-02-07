@@ -15,7 +15,6 @@ struct Args
 };
 
 std::optional<Args> ParseArgs(int argc, char** argv);
-std::string ReplaceString(const std::string& string, const std::string& searchPattern, const std::string& replaceString);
 void CopyWithReplace(std::istream& input, std::ostream& output, const std::string& searchPattern, const std::string& replaceString);
 
 int main(int argc, char** argv)
