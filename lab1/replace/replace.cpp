@@ -87,7 +87,7 @@ std::string ReplaceString(const std::string& string, const std::string& searchPa
 		if (foundPos != std::string::npos)
 		{
 			result.append(replaceString);
-			pos = foundPos + replaceString.length();
+			pos = foundPos + searchPattern.length();
 		}
 		else
 		{
