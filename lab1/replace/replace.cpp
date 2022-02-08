@@ -22,7 +22,7 @@ int main(int argc, char** argv)
 	auto const args = ParseArgs(argc, argv);
 	if (!args)
 	{
-		std::cout << "Invalid argument count\n"
+		std::cerr << "Invalid argument count\n"
 				  << "Usage: replace.exe <input file> <output file> <search pattern> <replace string>\n";
 		return FAILURE;
 	}
@@ -31,7 +31,7 @@ int main(int argc, char** argv)
 	inputFile.open(args->inputFilename);
 	if (!inputFile.is_open())
 	{
-		std::cout << "Failed to open input file '" << args->inputFilename << "' for reading\n";
+		std::cerr << "Failed to open input file '" << args->inputFilename << "' for reading\n";
 		return FAILURE;
 	}
 
@@ -39,7 +39,7 @@ int main(int argc, char** argv)
 	outputFile.open(args->outputFilename);
 	if (!outputFile.is_open())
 	{
-		std::cout << "Failed to open output file '" << args->outputFilename << "' for writing\n";
+		std::cerr << "Failed to open output file '" << args->outputFilename << "' for writing\n";
 		return FAILURE;
 	}
 
@@ -47,13 +47,13 @@ int main(int argc, char** argv)
 
 	if (inputFile.bad())
 	{
-		std::cout << "Failed to read from input file\n";
+		std::cerr << "Failed to read from input file\n";
 		return FAILURE;
 	}
 
 	if (!outputFile.flush())
 	{
-		std::cout << "Failed to write to output file\n";
+		std::cerr << "Failed to write to output file\n";
 		return FAILURE;
 	}
 
