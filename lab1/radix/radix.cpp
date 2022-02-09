@@ -1,7 +1,8 @@
 #include <iostream>
+#include <limits>
 #include <optional>
 #include <string>
-#include <limits>
+#include <algorithm>
 
 constexpr int MIN_RADIX = 2;
 constexpr int MAX_RADIX = 36;
@@ -42,7 +43,7 @@ int main(int argc, char** argv)
 	bool wasError;
 	int const sourceRadix = args->sourceRadix.value();
 	int const destinationRadix = args->destinationRadix.value();
-	
+
 	int number = StringToInt(args->number, sourceRadix, wasError);
 	if (wasError)
 	{
@@ -207,7 +208,56 @@ int StringToInt(const std::string& str, int radix, bool& wasError)
 	return result;
 }
 
-std::string IntToString(int n, int radix, bool& wasError)
+char IntToDigit(int value, int radix, bool& wasError)
 {
-	return std::to_string(n);
+	if (value >= radix)
+	{
+		wasError = true;
+		return '0';
+	}
+
+	if (0 <= value && value <= 9)
+	{
+		return static_cast<char>('0' + value);
+	}
+
+	if (10 <= value && value <= 36)
+	{
+		return static_cast<char>('A' + value - 10);
+	}
+
+	wasError = true;
+	return '0';
+}
+
+std::string IntToString(int number, int radix, bool& wasError)
+{
+	std::string result;
+
+	bool isNegative = false;
+	if (number < 0)
+	{
+		isNegative = true;
+		number = -number;
+	}
+
+	while (number > 0)
+	{
+		int digit = number % radix;
+		result.push_back(IntToDigit(digit, radix, wasError));
+		if (wasError)
+		{
+			return "";
+		}
+
+		number /= radix;
+	}
+
+	if (isNegative)
+	{
+		result.push_back('-');
+	}
+	std::reverse(result.begin(), result.end());
+
+	return result;
 }
