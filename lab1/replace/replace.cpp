@@ -3,9 +3,6 @@
 #include <string>
 #include <optional>
 
-constexpr int SUCCESS = 0;
-constexpr int FAILURE = 1;
-
 struct Args
 {
 	std::string inputFilename;
@@ -24,7 +21,7 @@ int main(int argc, char** argv)
 	{
 		std::cerr << "Invalid argument count\n"
 				  << "Usage: replace.exe <input file> <output file> <search pattern> <replace string>\n";
-		return FAILURE;
+		return EXIT_FAILURE;
 	}
 
 	std::ifstream inputFile;
@@ -32,7 +29,7 @@ int main(int argc, char** argv)
 	if (!inputFile.is_open())
 	{
 		std::cerr << "Failed to open input file '" << args->inputFilename << "' for reading\n";
-		return FAILURE;
+		return EXIT_FAILURE;
 	}
 
 	std::ofstream outputFile;
@@ -40,7 +37,7 @@ int main(int argc, char** argv)
 	if (!outputFile.is_open())
 	{
 		std::cerr << "Failed to open output file '" << args->outputFilename << "' for writing\n";
-		return FAILURE;
+		return EXIT_FAILURE;
 	}
 
 	CopyWithReplace(inputFile, outputFile, args->searchPattern, args->replaceString);
@@ -48,16 +45,16 @@ int main(int argc, char** argv)
 	if (inputFile.bad())
 	{
 		std::cerr << "Failed to read from input file\n";
-		return FAILURE;
+		return EXIT_FAILURE;
 	}
 
 	if (!outputFile.flush())
 	{
 		std::cerr << "Failed to write to output file\n";
-		return FAILURE;
+		return EXIT_FAILURE;
 	}
 
-	return SUCCESS;
+	return EXIT_SUCCESS;
 }
 
 std::optional<Args> ParseArgs(int argc, char** argv)
