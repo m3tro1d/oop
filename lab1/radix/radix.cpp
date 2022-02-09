@@ -23,19 +23,19 @@ int main(int argc, char** argv)
 	auto const args = ParseArgs(argc, argv);
 	if (!args)
 	{
-		std::cout << "Invalid argument count\n"
+		std::cerr << "Invalid argument count\n"
 				  << "Usage: radix.exe <number> <source radix> <destination radix>\n";
 		return EXIT_FAILURE;
 	}
 	if (!args->sourceRadix)
 	{
-		std::cout << "Invalid source radix\n"
+		std::cerr << "Invalid source radix\n"
 				  << "Radix must be a number from 2 to 36\n";
 		return EXIT_FAILURE;
 	}
 	if (!args->destinationRadix)
 	{
-		std::cout << "Invalid destination radix\n"
+		std::cerr << "Invalid destination radix\n"
 				  << "Radix must be a number from 2 to 36\n";
 		return EXIT_FAILURE;
 	}
@@ -47,14 +47,14 @@ int main(int argc, char** argv)
 	int number = StringToInt(args->number, sourceRadix, wasError);
 	if (wasError)
 	{
-		std::cout << "Error while converting number from source radix\n";
+		std::cerr << "Error while converting number from source radix\n";
 		return EXIT_FAILURE;
 	}
 
 	std::string result = IntToString(number, destinationRadix, wasError);
 	if (wasError)
 	{
-		std::cout << "Error while converting number to destination radix\n";
+		std::cerr << "Error while converting number to destination radix\n";
 		return EXIT_FAILURE;
 	}
 
