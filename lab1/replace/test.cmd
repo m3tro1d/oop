@@ -5,40 +5,48 @@ if %SUBJECT% == "" (
 	echo Usage: test.cmd ^<program filename^>
 	goto error
 )
+set OUTPUT="%TEMP%\output.txt"
 
 rem Launching with incorrect argument count returns non-zero exit code
 %SUBJECT% > nul 2> nul && goto failed
+%SUBJECT% tests\regular.txt > nul 2> nul && goto failed
+%SUBJECT% tests\regular.txt %OUTPUT% > nul 2> nul && goto failed
+%SUBJECT% tests\regular.txt %OUTPUT% "work, damn it!" > nul 2> nul && goto failed
 echo Test 1 passed
 
 rem Replacing string in empty file results in the same empty file
-%SUBJECT% tests\empty.txt %TEMP%\output.txt string "other string" > nul 2> nul || goto failed
-fc tests\empty-output.txt %TEMP%\output.txt > nul || goto failed
+%SUBJECT% tests\empty.txt %OUTPUT% string "other string" > nul 2> nul || goto failed
+fc tests\empty-output.txt %OUTPUT% > nul || goto failed
 echo Test 2 passed
 
 rem Replacing pattern in file results in the same file with replacements instead of patterns
-%SUBJECT% tests\regular.txt %TEMP%\output.txt to "bonus ducks" > nul || goto failed
-fc tests\regular-output.txt %TEMP%\output.txt > nul || goto failed
+%SUBJECT% tests\regular.txt %OUTPUT% to "bonus ducks" > nul || goto failed
+fc tests\regular-output.txt %OUTPUT% > nul || goto failed
 echo Test 3 passed
 
-rem Replacing repeatable pattern works correctly
-rem %SUBJECT% tests\repeatable-pattern.txt %TEMP%\output.txt ма мама > nul 2> nul || goto failed
-rem fc tests\repeatable-pattern-output.txt %TEMP%\output.txt > nul || goto failed
-rem echo Test 4 passed
-
 rem Replacing with empty string removes search pattern from the file
-%SUBJECT% tests\regular.txt %TEMP%\output.txt to "" > nul 2> nul || goto failed
-fc tests\regular-remove-output.txt %TEMP%\output.txt > nul || goto failed
+%SUBJECT% tests\regular.txt %OUTPUT% to "" > nul 2> nul || goto failed
+fc tests\regular-remove-output.txt %OUTPUT% > nul || goto failed
+echo Test 4 passed
+
+rem Replacing repeatable pattern works correctly
+%SUBJECT% tests\repeatable-pattern.txt %OUTPUT% cho chocho > nul 2> nul || goto failed
+fc tests\repeatable-pattern-output.txt %OUTPUT% > nul || goto failed
 echo Test 5 passed
 
-rem Providing non-existing input file results in an error
-%SUBJECT% tests\non-existing.txt %TEMP%\output.txt one two > nul 2> nul && goto failed
+rem Replacing non-existing search pattern doesn't change the file
+%SUBJECT% tests\regular.txt %OUTPUT% "the cake is a lie" "bonus ducks" > nul 2> nul || goto failed
+fc tests\regular.txt %OUTPUT% > nul || goto failed
 echo Test 6 passed
+
+rem Providing non-existing input file results in an error
+%SUBJECT% tests\non-existing.txt %OUTPUT% one two > nul 2> nul && goto failed
+echo Test 7 passed
 
 rem Providing unavailable output file results in an error
 %SUBJECT% tests\regular.txt Y:\output.txt one two > nul 2> nul && goto failed
-echo Test 7 passed
+echo Test 8 passed
 
-:done
 exit /B 0
 
 :failed
