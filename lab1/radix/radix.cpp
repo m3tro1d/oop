@@ -132,6 +132,38 @@ int DigitToInt(char ch, int radix, bool& wasError)
 	return value;
 }
 
+bool WillOverflowPositive(int number, int digit, int radix)
+{
+	return number > (std::numeric_limits<int>::max() - digit) / radix;
+}
+
+bool WillOverflowNegative(int number, int digit, int radix)
+{
+	return number < (std::numeric_limits<int>::min() + digit) / radix;
+}
+
+int AppendDigitToPositive(int number, int digit, int radix, bool& wasError)
+{
+	if (WillOverflowPositive(number, digit, radix))
+	{
+		wasError = true;
+		return 0;
+	}
+
+	return number * radix + digit;
+}
+
+int AppendDigitToNegative(int number, int digit, int radix, bool& wasError)
+{
+	if (WillOverflowNegative(number, digit, radix))
+	{
+		wasError = true;
+		return 0;
+	}
+
+	return number * radix - digit;
+}
+
 int StringToInt(const std::string& str, int radix, bool& wasError)
 {
 	size_t length = str.length();
@@ -159,23 +191,16 @@ int StringToInt(const std::string& str, int radix, bool& wasError)
 
 		if (isNegative)
 		{
-			if (result < (std::numeric_limits<int>::min() + digit) / radix)
-			{
-				wasError = true;
-				return 0;
-			}
-
-			result = result * radix - digit;
+			result = AppendDigitToNegative(result, digit, radix, wasError);
 		}
 		else
 		{
-			if (result > (std::numeric_limits<int>::max() - digit) / radix)
-			{
-				wasError = true;
-				return 0;
-			}
+			result = AppendDigitToPositive(result, digit, radix, wasError);
+		}
 
-			result = result * radix + digit;
+		if (wasError)
+		{
+			return 0;
 		}
 	}
 
