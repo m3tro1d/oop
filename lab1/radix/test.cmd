@@ -18,7 +18,11 @@ rem Providing invalid radix (either source or destination) results in an error
 %SUBJECT% 42 37 10 > nul 2> nul && goto failed
 %SUBJECT% 42 10 1 > nul 2> nul && goto failed
 %SUBJECT% 42 10 37 > nul 2> nul && goto failed
-echo Test  passed
+echo Test 2 passed
+
+rem Incompatible source number and radix result in an error
+%SUBJECT% 42 2 10 > nul 2> nul && goto failed
+echo Test 3 passed
 
 exit /B 0
 
