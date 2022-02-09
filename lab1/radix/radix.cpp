@@ -4,9 +4,6 @@
 #include <cmath>
 #include <cctype>
 
-constexpr int SUCCESS = 0;
-constexpr int FAILURE = 1;
-
 constexpr int MIN_RADIX = 2;
 constexpr int MAX_RADIX = 36;
 
@@ -28,19 +25,19 @@ int main(int argc, char** argv)
 	{
 		std::cout << "Invalid argument count\n"
 				  << "Usage: radix.exe <number> <source radix> <destination radix>\n";
-		return FAILURE;
+		return EXIT_FAILURE;
 	}
 	if (!args->sourceRadix)
 	{
 		std::cout << "Invalid source radix\n"
 				  << "Radix must be a number from 2 to 36\n";
-		return FAILURE;
+		return EXIT_FAILURE;
 	}
 	if (!args->destinationRadix)
 	{
 		std::cout << "Invalid destination radix\n"
 				  << "Radix must be a number from 2 to 36\n";
-		return FAILURE;
+		return EXIT_FAILURE;
 	}
 
 	bool wasError;
@@ -51,19 +48,19 @@ int main(int argc, char** argv)
 	if (wasError)
 	{
 		std::cout << "Error while converting number from source radix\n";
-		return FAILURE;
+		return EXIT_FAILURE;
 	}
 
 	std::string result = IntToString(number, destinationRadix, wasError);
 	if (wasError)
 	{
 		std::cout << "Error while converting number to destination radix\n";
-		return FAILURE;
+		return EXIT_FAILURE;
 	}
 
 	std::printf("%s (%d) = %s (%d)\n", args->number.c_str(), sourceRadix, result.c_str(), destinationRadix);
 
-	return SUCCESS;
+	return EXIT_SUCCESS;
 }
 
 std::optional<int> ParseRadix(const std::string& radixString)
