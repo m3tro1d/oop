@@ -1,8 +1,7 @@
 #include <iostream>
 #include <optional>
 #include <string>
-#include <cmath>
-#include <cctype>
+#include <limits>
 
 constexpr int MIN_RADIX = 2;
 constexpr int MAX_RADIX = 36;
@@ -67,12 +66,7 @@ std::optional<int> ParseRadix(const std::string& radixString)
 {
 	bool wasError;
 	int radix = StringToInt(radixString, 10, wasError);
-	if (wasError)
-	{
-		return std::nullopt;
-	}
-
-	if (radix < MIN_RADIX || radix > MAX_RADIX)
+	if (wasError || radix < MIN_RADIX || radix > MAX_RADIX)
 	{
 		return std::nullopt;
 	}
@@ -95,11 +89,21 @@ std::optional<Args> ParseArgs(int argc, char** argv)
 	return args;
 }
 
+bool IsDigit(char ch)
+{
+	return '0' <= ch && ch <= '9';
+}
+
+bool IsUpperAlpha(char ch)
+{
+	return 'A' <= ch && ch <= 'Z';
+}
+
 int DigitToInt(char ch, int radix, bool& wasError)
 {
 	int value;
 
-	if (std::isdigit(ch))
+	if (IsDigit(ch))
 	{
 		value = ch - '0';
 
@@ -112,7 +116,7 @@ int DigitToInt(char ch, int radix, bool& wasError)
 		return value;
 	}
 
-	if (!(std::isalpha(ch) || std::isupper(ch)))
+	if (!IsUpperAlpha(ch))
 	{
 		wasError = true;
 		return -1;
@@ -130,19 +134,49 @@ int DigitToInt(char ch, int radix, bool& wasError)
 
 int StringToInt(const std::string& str, int radix, bool& wasError)
 {
-	int result = 0;
-
-	for (int i = str.length() - 1; i >= 0; --i)
+	size_t length = str.length();
+	if (length == 0)
 	{
-		size_t position = str.length() - i - 1;
+		wasError = true;
+		return 0;
+	}
 
-		int value = DigitToInt(str.at(i), radix, wasError);
+	bool isNegative = false;
+	if (str[0] == '-')
+	{
+		isNegative = true;
+	}
+
+	int result = 0;
+	size_t i = isNegative ? 1 : 0;
+	for (; i < str.length(); ++i)
+	{
+		int digit = DigitToInt(str[i], radix, wasError);
 		if (wasError)
 		{
-			return -1;
+			return 0;
 		}
 
-		result += value * std::pow(radix, position);
+		if (isNegative)
+		{
+			if (result < (std::numeric_limits<int>::min() + digit) / radix)
+			{
+				wasError = true;
+				return 0;
+			}
+
+			result = result * radix - digit;
+		}
+		else
+		{
+			if (result > (std::numeric_limits<int>::max() - digit) / radix)
+			{
+				wasError = true;
+				return 0;
+			}
+
+			result = result * radix + digit;
+		}
 	}
 
 	return result;
