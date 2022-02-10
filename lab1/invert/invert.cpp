@@ -3,7 +3,8 @@
 #include <iostream>
 #include <optional>
 
-using Matrix = std::array<std::array<double, 3>, 3>;
+constexpr size_t MATRIX_SIZE = 3;
+using Matrix = std::array<std::array<double, MATRIX_SIZE>, MATRIX_SIZE>;
 
 std::optional<std::string> GetMatrixFilename(int argc, char** argv);
 std::optional<Matrix> ReadMatrix(std::istream& input);
@@ -65,8 +66,22 @@ std::optional<std::string> GetMatrixFilename(int argc, char** argv)
 
 std::optional<Matrix> ReadMatrix(std::istream& input)
 {
-	// TODO
-	return std::nullopt;
+	Matrix result;
+
+	for (size_t row = 0; row < MATRIX_SIZE; ++row)
+	{
+		for (size_t column = 0; column < MATRIX_SIZE; ++column)
+		{
+			if (input.eof())
+			{
+				return std::nullopt;
+			}
+
+			input >> result[row][column];
+		}
+	}
+
+	return result;
 }
 
 std::optional<Matrix> InvertMatrix(const Matrix matrix)
@@ -79,5 +94,5 @@ std::optional<Matrix> InvertMatrix(const Matrix matrix)
 
 void PrintMatrix(const Matrix matrix)
 {
-	// TODO
+	// TODO: 3 decimal digits
 }
