@@ -94,11 +94,21 @@ Matrix GetAdjacentMatrix(const Matrix matrix, size_t matrixSize, size_t removedR
 		return matrix;
 	}
 
-	for (size_t row = 0; row < matrixSize - 1; ++row)
+	size_t newRow = 0;
+	size_t newColumn = 0;
+	for (size_t row = 0; row < matrixSize; ++row)
 	{
-		for (size_t column = 0; column < matrixSize - 1; ++column)
+		for (size_t column = 0; column < matrixSize; ++column)
 		{
-			result[row][column] = matrix[(row + removedRow) % matrixSize][(column + removedColumn) % matrixSize];
+			if (row != removedRow && column != removedColumn)
+			{
+				result[newRow][newColumn++] = matrix[row][column];
+				if (newColumn == matrixSize - 1)
+				{
+					newColumn = 0;
+					++newRow;
+				}
+			}
 		}
 	}
 
