@@ -8,6 +8,15 @@
 git clone git@github.com:m3tro1d/oop.git --recurse-submodules
 ```
 
+## Обновление материалов курса
+
+```shell
+git submodule update --remote
+git add .
+git commit -m "Update course submodule"
+git push
+```
+
 ## Сборка
 
 В качестве системы сборки используется CMake. Есть два варианта сборки:
