@@ -86,7 +86,7 @@ std::optional<Matrix> ReadMatrix(std::istream& input)
 	return result;
 }
 
-Matrix GetAdjacentMatrix(const Matrix matrix, size_t matrixSize, size_t removedRow, size_t removedColumn)
+Matrix GetMinorMatrix(const Matrix matrix, size_t matrixSize, size_t removedRow, size_t removedColumn)
 {
 	Matrix result;
 	if (matrixSize == 1)
@@ -125,7 +125,7 @@ double CalculateDeterminant(const Matrix matrix, size_t matrixSize)
 	double result = 0;
 	for (size_t column = 0; column < matrixSize; ++column)
 	{
-		Matrix const minorMatrix = GetAdjacentMatrix(matrix, matrixSize, 0, column);
+		Matrix const minorMatrix = GetMinorMatrix(matrix, matrixSize, 0, column);
 		double const minor = CalculateDeterminant(minorMatrix, matrixSize - 1);
 		if (column % 2)
 		{
@@ -145,16 +145,72 @@ bool IsZero(double value)
 	return std::abs(value) < std::numeric_limits<double>::epsilon();
 }
 
+Matrix Transpose(const Matrix matrix)
+{
+	Matrix result;
+	for (size_t row = 0; row < MATRIX_SIZE; ++row)
+	{
+		for (size_t column = 0; column < MATRIX_SIZE; ++column)
+		{
+			result[column][row] = matrix[row][column];
+		}
+	}
+
+	return result;
+}
+
+Matrix GetAdjacentMatrix(const Matrix matrix)
+{
+	Matrix result;
+	for (size_t row = 0; row < MATRIX_SIZE; ++row)
+	{
+		for (size_t column = 0; column < MATRIX_SIZE; ++column)
+		{
+			Matrix const minor = GetMinorMatrix(matrix, MATRIX_SIZE, row, column);
+			if ((row + column) % 2)
+			{
+				result[row][column] = -CalculateDeterminant(minor, MATRIX_SIZE - 1);
+			}
+			else
+			{
+				result[row][column] = CalculateDeterminant(minor, MATRIX_SIZE - 1);
+			}
+
+			if (IsZero(result[row][column]))
+			{
+				result[row][column] = 0;
+			}
+		}
+	}
+
+	return Transpose(result);
+}
+
+Matrix MultiplyNumberAndMatrix(double number, const Matrix matrix)
+{
+	Matrix result;
+	for (size_t row = 0; row < MATRIX_SIZE; ++row)
+	{
+		for (size_t column = 0; column < MATRIX_SIZE; ++column)
+		{
+			result[row][column] = number * matrix[row][column];
+		}
+	}
+
+	return result;
+}
+
 std::optional<Matrix> InvertMatrix(const Matrix matrix)
 {
-	double determinant = CalculateDeterminant(matrix, MATRIX_SIZE);
-	std::cout << determinant << std::endl;
+	double const determinant = CalculateDeterminant(matrix, MATRIX_SIZE);
 	if (IsZero(determinant))
 	{
 		return std::nullopt;
 	}
 
-	return std::nullopt;
+	Matrix const adjacentMatrix = GetAdjacentMatrix(matrix);
+
+	return MultiplyNumberAndMatrix(1 / determinant, adjacentMatrix);
 }
 
 void PrintMatrix(const Matrix matrix)
