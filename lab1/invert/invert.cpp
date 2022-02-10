@@ -72,23 +72,74 @@ std::optional<Matrix> ReadMatrix(std::istream& input)
 	{
 		for (size_t column = 0; column < MATRIX_SIZE; ++column)
 		{
-			if (input.eof())
+			if (!(input >> result[row][column]))
 			{
 				return std::nullopt;
 			}
-
-			input >> result[row][column];
 		}
 	}
 
 	return result;
 }
 
+Matrix GetAdjacentMatrix(const Matrix matrix, size_t matrixSize, size_t removedRow, size_t removedColumn)
+{
+	Matrix result;
+	if (matrixSize == 1)
+	{
+		return matrix;
+	}
+
+	for (size_t row = 0; row < matrixSize - 1; ++row)
+	{
+		for (size_t column = 0; column < matrixSize - 1; ++column)
+		{
+			result[row][column] = matrix[(row + removedRow) % matrixSize][(column + removedColumn) % matrixSize];
+		}
+	}
+
+	return result;
+}
+
+double CalculateDeterminant(const Matrix matrix, size_t matrixSize)
+{
+	if (matrixSize == 1)
+	{
+		return matrix[0][0];
+	}
+
+	double result = 0;
+	for (size_t column = 0; column < matrixSize; ++column)
+	{
+		Matrix const minorMatrix = GetAdjacentMatrix(matrix, matrixSize, 0, column);
+		double const minor = CalculateDeterminant(minorMatrix, matrixSize - 1);
+		if (column % 2)
+		{
+			result -= matrix[0][column] * minor;
+		}
+		else
+		{
+			result += matrix[0][column] * minor;
+		}
+	}
+
+	return result;
+}
+
+bool IsZero(double value)
+{
+	return std::abs(value) < std::numeric_limits<double>::epsilon();
+}
+
 std::optional<Matrix> InvertMatrix(const Matrix matrix)
 {
-	// TODO: 1. Find determinant
-	//       2. Find cofactor matrix
-	//       Both functions can be general for matrices of all sizes
+	double determinant = CalculateDeterminant(matrix, MATRIX_SIZE);
+	std::cout << determinant << std::endl;
+	if (IsZero(determinant))
+	{
+		return std::nullopt;
+	}
+
 	return std::nullopt;
 }
 
