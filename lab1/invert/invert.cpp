@@ -1,7 +1,11 @@
 #include <array>
 #include <fstream>
+#include <iomanip>
 #include <iostream>
 #include <optional>
+
+constexpr int PRECISION = 3;
+constexpr int WIDTH = 6;
 
 constexpr size_t MATRIX_SIZE = 3;
 using Matrix = std::array<std::array<double, MATRIX_SIZE>, MATRIX_SIZE>;
@@ -145,5 +149,14 @@ std::optional<Matrix> InvertMatrix(const Matrix matrix)
 
 void PrintMatrix(const Matrix matrix)
 {
-	// TODO: 3 decimal digits
+	std::cout << std::fixed << std::setprecision(PRECISION);
+	for (size_t row = 0; row < MATRIX_SIZE; ++row)
+	{
+		for (size_t column = 0; column < MATRIX_SIZE; ++column)
+		{
+			std::cout << ' ' << std::setw(WIDTH) << matrix[row][column];
+		}
+
+		std::cout << '\n';
+	}
 }
