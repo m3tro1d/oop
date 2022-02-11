@@ -100,7 +100,7 @@ std::optional<Field> ReadField(std::istream& input, bool& markerOccurred)
 	size_t row = 0;
 	size_t column = 0;
 	Field result;
-	std::fill(&result[0][0], &result[FIELD_SIZE - 1][FIELD_SIZE - 1], EMPTY_CELL);
+	std::fill(&result[0][0], &result[FIELD_SIZE - 1][FIELD_SIZE], EMPTY_CELL);
 	markerOccurred = false;
 
 	while (!input.eof())
@@ -136,29 +136,32 @@ std::optional<Field> ReadField(std::istream& input, bool& markerOccurred)
 void FillCell(Field& field, size_t row, size_t column)
 {
 	char& cell = field[row][column];
-	if (cell == EMPTY_CELL)
+	if (cell == EMPTY_CELL || cell == MARKER_CELL)
 	{
-		cell = FILLED_CELL;
-	}
+		if (cell == EMPTY_CELL)
+		{
+			cell = FILLED_CELL;
+		}
 
-	if (column > 0 && field[row][column - 1] == EMPTY_CELL)
-	{
-		FillCell(field, row, column - 1);
-	}
+		if (column > 0)
+		{
+			FillCell(field, row, column - 1);
+		}
 
-	if (row > 0 && field[row - 1][column] == EMPTY_CELL)
-	{
-		FillCell(field, row - 1, column);
-	}
+		if (row > 0)
+		{
+			FillCell(field, row - 1, column);
+		}
 
-	if (column < FIELD_SIZE - 1 && field[row][column + 1] == EMPTY_CELL)
-	{
-		FillCell(field, row, column + 1);
-	}
+		if (column < FIELD_SIZE - 1)
+		{
+			FillCell(field, row, column + 1);
+		}
 
-	if (row < FIELD_SIZE - 1 && field[row + 1][column] == EMPTY_CELL)
-	{
-		FillCell(field, row + 1, column);
+		if (row < FIELD_SIZE - 1)
+		{
+			FillCell(field, row + 1, column);
+		}
 	}
 }
 
