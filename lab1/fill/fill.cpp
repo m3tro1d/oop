@@ -124,9 +124,15 @@ std::optional<Field> ReadField(std::istream& input, bool& markerOccurred)
 			return std::nullopt;
 		}
 
-		if (row == FIELD_SIZE - 1 && column == FIELD_SIZE - 1)
+		if (column == FIELD_SIZE - 1)
 		{
-			break;
+			column = 0;
+			input.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+			if (row == FIELD_SIZE - 1)
+			{
+				break;
+			}
 		}
 	}
 
