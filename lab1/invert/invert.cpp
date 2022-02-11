@@ -12,8 +12,8 @@ using Matrix = std::array<std::array<double, MATRIX_SIZE>, MATRIX_SIZE>;
 
 std::optional<std::string> GetMatrixFilename(int argc, char** argv);
 std::optional<Matrix> ReadMatrix(std::istream& input);
-std::optional<Matrix> InvertMatrix(Matrix matrix);
-void PrintMatrix(Matrix matrix);
+std::optional<Matrix> InvertMatrix(const Matrix& matrix);
+void PrintMatrix(const Matrix& matrix);
 
 int main(int argc, char** argv)
 {
@@ -86,7 +86,7 @@ std::optional<Matrix> ReadMatrix(std::istream& input)
 	return result;
 }
 
-Matrix GetMinorMatrix(const Matrix matrix, size_t matrixSize, size_t removedRow, size_t removedColumn)
+Matrix GetMinorMatrix(const Matrix& matrix, size_t matrixSize, size_t removedRow, size_t removedColumn)
 {
 	Matrix result;
 	if (matrixSize == 1)
@@ -115,7 +115,7 @@ Matrix GetMinorMatrix(const Matrix matrix, size_t matrixSize, size_t removedRow,
 	return result;
 }
 
-double CalculateDeterminant(const Matrix matrix, size_t matrixSize)
+double CalculateDeterminant(const Matrix& matrix, size_t matrixSize)
 {
 	if (matrixSize == 1)
 	{
@@ -145,7 +145,7 @@ bool IsZero(double value)
 	return std::abs(value) < std::numeric_limits<double>::epsilon();
 }
 
-Matrix Transpose(const Matrix matrix)
+Matrix Transpose(const Matrix& matrix)
 {
 	Matrix result;
 	for (size_t row = 0; row < MATRIX_SIZE; ++row)
@@ -159,7 +159,7 @@ Matrix Transpose(const Matrix matrix)
 	return result;
 }
 
-Matrix GetAdjacentMatrix(const Matrix matrix)
+Matrix GetAdjacentMatrix(const Matrix& matrix)
 {
 	Matrix result;
 	for (size_t row = 0; row < MATRIX_SIZE; ++row)
@@ -186,7 +186,7 @@ Matrix GetAdjacentMatrix(const Matrix matrix)
 	return Transpose(result);
 }
 
-Matrix MultiplyNumberAndMatrix(double number, const Matrix matrix)
+Matrix MultiplyNumberAndMatrix(double number, const Matrix& matrix)
 {
 	Matrix result;
 	for (size_t row = 0; row < MATRIX_SIZE; ++row)
@@ -200,7 +200,7 @@ Matrix MultiplyNumberAndMatrix(double number, const Matrix matrix)
 	return result;
 }
 
-std::optional<Matrix> InvertMatrix(const Matrix matrix)
+std::optional<Matrix> InvertMatrix(const Matrix& matrix)
 {
 	double const determinant = CalculateDeterminant(matrix, MATRIX_SIZE);
 	if (IsZero(determinant))
@@ -213,7 +213,7 @@ std::optional<Matrix> InvertMatrix(const Matrix matrix)
 	return MultiplyNumberAndMatrix(1 / determinant, adjacentMatrix);
 }
 
-void PrintMatrix(const Matrix matrix)
+void PrintMatrix(const Matrix& matrix)
 {
 	std::cout << std::fixed << std::setprecision(PRECISION);
 	for (size_t row = 0; row < MATRIX_SIZE; ++row)
