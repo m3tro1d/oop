@@ -7,8 +7,13 @@ if %SUBJECT% == "" (
 )
 set OUTPUT="%TEMP%\output.txt"
 
-rem TODO
-rem FILE access, argument count!!
+rem Providing invalid argument count results in an error
+%SUBJECT% > nul 2> nul && goto failed
+echo Test 1 passed
+
+rem Providing non-existing input file results in an error
+%SUBJECT% tests\non-existing.txt > nul 2> nul && goto failed
+echo Test 2 passed
 
 exit /B 0
 
