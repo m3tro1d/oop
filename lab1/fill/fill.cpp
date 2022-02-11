@@ -20,7 +20,8 @@ constexpr char FILLED_CELL = '.';
 
 std::optional<Args> ParseArgs(int argc, char** argv);
 std::optional<Field> ReadField(std::istream& input, bool& markerOccurred);
-void PrintField(std::ostream& output, Field field);
+void FillField(Field& field);
+void PrintField(std::ostream& output, const Field& field);
 
 int main(int argc, char** argv)
 {
@@ -66,7 +67,7 @@ int main(int argc, char** argv)
 		return EXIT_FAILURE;
 	}
 
-	// TODO: fill
+	FillField(field.value());
 
 	PrintField(outputFile, field.value());
 
@@ -99,6 +100,8 @@ std::optional<Field> ReadField(std::istream& input, bool& markerOccurred)
 	size_t row = 0;
 	size_t column = 0;
 	Field result;
+	std::fill(&result[0][0], &result[FIELD_SIZE - 1][FIELD_SIZE - 1], EMPTY_CELL);
+	markerOccurred = false;
 
 	while (!input.eof())
 	{
@@ -130,7 +133,50 @@ std::optional<Field> ReadField(std::istream& input, bool& markerOccurred)
 	return result;
 }
 
-void PrintField(std::ostream& output, Field field)
+void FillCell(Field& field, size_t row, size_t column)
+{
+	char& cell = field[row][column];
+	if (cell == EMPTY_CELL)
+	{
+		cell = FILLED_CELL;
+	}
+
+	if (column > 0 && field[row][column - 1] == EMPTY_CELL)
+	{
+		FillCell(field, row, column - 1);
+	}
+
+	if (row > 0 && field[row - 1][column] == EMPTY_CELL)
+	{
+		FillCell(field, row - 1, column);
+	}
+
+	if (column < FIELD_SIZE - 1 && field[row][column + 1] == EMPTY_CELL)
+	{
+		FillCell(field, row, column + 1);
+	}
+
+	if (row < FIELD_SIZE - 1 && field[row + 1][column] == EMPTY_CELL)
+	{
+		FillCell(field, row + 1, column);
+	}
+}
+
+void FillField(Field& field)
+{
+	for (size_t row = 0; row < FIELD_SIZE; ++row)
+	{
+		for (size_t column = 0; column < FIELD_SIZE; ++column)
+		{
+			if (field[row][column] == MARKER_CELL)
+			{
+				FillCell(field, row, column);
+			}
+		}
+	}
+}
+
+void PrintField(std::ostream& output, const Field& field)
 {
 	for (size_t row = 0; row < FIELD_SIZE; ++row)
 	{
