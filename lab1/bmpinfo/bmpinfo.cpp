@@ -137,10 +137,10 @@ std::optional<BMPInfo> TryParseBMPFile(std::istream& input)
 	}
 
 	BMPInfo info;
+	// BMP headers store values using little-endian
 	ReadBytes(input, reinterpret_cast<char*>(&info.width), WIDTH_BYTES_OFFSET, sizeof(info.width));
 	ReadBytes(input, reinterpret_cast<char*>(&info.height), HEIGHT_BYTES_OFFSET, sizeof(info.height));
 	ReadBytes(input, reinterpret_cast<char*>(&info.bitsPerPixel), BITS_PER_PIXEL_OFFSET, sizeof(info.bitsPerPixel));
-	// TODO: replace file size with actual image size (w/o headers)
 	ReadBytes(input, reinterpret_cast<char*>(&info.imageSize), IMAGE_SIZE_OFFSET, sizeof(info.imageSize));
 
 	auto const compressionMethod = ParseCompressionMethod(input);
