@@ -1,3 +1,4 @@
+#include <cmath>
 #include <fstream>
 #include <iostream>
 #include <optional>
@@ -14,10 +15,15 @@ struct BMPInfo
 
 const std::string BMP_SIGNATURE = "BM";
 constexpr int WIDTH_BYTES_OFFSET = 18;
-constexpr int WIDTH_BYTES_SIZE = 4;
+constexpr int HEIGHT_BYTES_OFFSET = 22;
+constexpr int BITS_PER_PIXEL_OFFSET = 28;
+
+constexpr int COLOR_PALETTE_BASE = 2;
+constexpr uint16_t COLOR_PALETTE_THRESHOLD = 2;
 
 std::optional<std::string> GetInputFilename(int argc, char** argv);
 std::optional<BMPInfo> TryParseBMPFile(std::istream& input);
+void PrintBMPInfo(const BMPInfo& info);
 
 int main(int argc, char** argv)
 {
@@ -43,6 +49,14 @@ int main(int argc, char** argv)
 		return EXIT_FAILURE;
 	}
 
+	if (inputFile.bad())
+	{
+		std::cerr << "Failed to read from input file\n";
+		return EXIT_FAILURE;
+	}
+
+	PrintBMPInfo(bmpInfo.value());
+
 	return EXIT_SUCCESS;
 }
 
@@ -64,6 +78,12 @@ bool IsBMPFile(std::istream& input)
 	return signature == BMP_SIGNATURE;
 }
 
+void ReadBytes(std::istream& input, char* dist, int start, int n)
+{
+	input.seekg(start, std::ios_base::beg);
+	input.read(dist, n);
+}
+
 std::optional<BMPInfo> TryParseBMPFile(std::istream& input)
 {
 	if (!IsBMPFile(input))
@@ -72,8 +92,29 @@ std::optional<BMPInfo> TryParseBMPFile(std::istream& input)
 	}
 
 	BMPInfo info;
-	input.seekg(WIDTH_BYTES_OFFSET, std::ios_base::beg);
-	input.read((char*) &info.width, WIDTH_BYTES_SIZE);
+	ReadBytes(input, reinterpret_cast<char*>(&info.width), WIDTH_BYTES_OFFSET, sizeof(info.width));
+	ReadBytes(input, reinterpret_cast<char*>(&info.height), HEIGHT_BYTES_OFFSET, sizeof(info.height));
+	ReadBytes(input, reinterpret_cast<char*>(&info.bitsPerPixel), BITS_PER_PIXEL_OFFSET, sizeof(info.bitsPerPixel));
 
 	return info;
+}
+
+int GetColorsUsed(uint16_t bitsPerPixel)
+{
+	return static_cast<int>(std::pow(COLOR_PALETTE_BASE, bitsPerPixel));
+}
+
+void PrintBMPInfo(const BMPInfo& info)
+{
+	std::cout << "Resolution: " << info.width << 'x' << info.height << '\n'
+			  << "Bits per pixel: " << info.bitsPerPixel << '\n';
+
+	if (info.bitsPerPixel >= COLOR_PALETTE_THRESHOLD)
+	{
+		std::cout << "Colors used: " << GetColorsUsed(info.bitsPerPixel) << '\n';
+	}
+	else
+	{
+		std::cout << "The image is monochrome\n";
+	}
 }
