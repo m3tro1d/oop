@@ -111,7 +111,7 @@ std::optional<Field> ReadField(std::istream& input, bool& markerOccurred)
 		{
 		case MARKER_CELL:
 			markerOccurred = true;
-			// fallthrough
+			[[fallthrough]];
 		case EMPTY_CELL:
 		case CONTOUR_CELL:
 			result[row][column++] = ch;
