@@ -33,6 +33,10 @@ fc tests\regular-output.txt %OUTPUT% > nul || goto failed
 echo Test 6 passed
 
 rem Parsing different bits per pixel color palettes, including monochrome, works correctly
+%SUBJECT% tests\4-bit-depth.bmp > %OUTPUT% 2> nul || goto failed
+fc tests\4-bit-depth-output.txt %OUTPUT% > nul || goto failed
+%SUBJECT% tests\monochrome.bmp > %OUTPUT% 2> nul || goto failed
+fc tests\monochrome-output.txt %OUTPUT% > nul || goto failed
 echo Test 7 passed
 
 rem PNG compression detection works correctly

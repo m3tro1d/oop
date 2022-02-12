@@ -1,0 +1,5 @@
+Resolution: 473x698
+Bits per pixel: 1
+The image is monochrome
+Image size: 42010 bytes
+Compression method: No compression
