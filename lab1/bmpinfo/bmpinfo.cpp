@@ -70,18 +70,19 @@ std::optional<std::string> GetInputFilename(int argc, char** argv)
 	return argv[1];
 }
 
-bool IsBMPFile(std::istream& input)
-{
-	char signature[BMP_SIGNATURE.length() + 1];
-	input.read(signature, static_cast<int>(BMP_SIGNATURE.length()));
-
-	return signature == BMP_SIGNATURE;
-}
-
 void ReadBytes(std::istream& input, char* dist, int start, int n)
 {
 	input.seekg(start, std::ios_base::beg);
 	input.read(dist, n);
+}
+
+bool IsBMPFile(std::istream& input)
+{
+	char signature[BMP_SIGNATURE.length() + 1];
+	ReadBytes(input, signature, 0, static_cast<int>(BMP_SIGNATURE.length()));
+	signature[2] = 0;
+
+	return signature == BMP_SIGNATURE;
 }
 
 std::optional<BMPInfo> TryParseBMPFile(std::istream& input)
