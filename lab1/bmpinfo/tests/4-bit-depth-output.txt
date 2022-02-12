@@ -1,5 +1,5 @@
 Resolution: 473x698
 Bits per pixel: 4
 Colors used: 16
-Image size: 167722 bytes
+Image size: 167668 bytes
 Compression method: No compression

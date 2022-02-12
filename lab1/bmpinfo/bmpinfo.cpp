@@ -40,6 +40,8 @@ constexpr int BITS_PER_PIXEL_OFFSET = 28;
 constexpr int IMAGE_SIZE_OFFSET = 2;
 constexpr int COMPRESSION_METHOD_OFFSET = 30;
 
+constexpr int HEADER_SIZE = 54;
+
 constexpr int COLOR_PALETTE_BASE = 2;
 constexpr uint16_t COLOR_PALETTE_THRESHOLD = 2;
 
@@ -136,12 +138,17 @@ std::optional<BMPInfo> TryParseBMPFile(std::istream& input)
 		return std::nullopt;
 	}
 
-	BMPInfo info;
 	// BMP headers store values using little-endian
+	BMPInfo info;
+
 	ReadBytes(input, reinterpret_cast<char*>(&info.width), WIDTH_BYTES_OFFSET, sizeof(info.width));
+
 	ReadBytes(input, reinterpret_cast<char*>(&info.height), HEIGHT_BYTES_OFFSET, sizeof(info.height));
+
 	ReadBytes(input, reinterpret_cast<char*>(&info.bitsPerPixel), BITS_PER_PIXEL_OFFSET, sizeof(info.bitsPerPixel));
+
 	ReadBytes(input, reinterpret_cast<char*>(&info.imageSize), IMAGE_SIZE_OFFSET, sizeof(info.imageSize));
+	info.imageSize -= HEADER_SIZE;
 
 	auto const compressionMethod = ParseCompressionMethod(input);
 	if (!compressionMethod)
