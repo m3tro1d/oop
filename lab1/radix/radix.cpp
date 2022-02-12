@@ -6,6 +6,7 @@
 
 constexpr int MIN_RADIX = 2;
 constexpr int MAX_RADIX = 36;
+constexpr int RADIX_NUMERAL_SYSTEM = 10;
 
 struct Args
 {
@@ -66,7 +67,7 @@ int main(int argc, char** argv)
 std::optional<int> ParseRadix(const std::string& radixString)
 {
 	bool wasError;
-	int radix = StringToInt(radixString, 10, wasError);
+	int radix = StringToInt(radixString, RADIX_NUMERAL_SYSTEM, wasError);
 	if (wasError || radix < MIN_RADIX || radix > MAX_RADIX)
 	{
 		return std::nullopt;
