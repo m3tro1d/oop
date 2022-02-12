@@ -19,7 +19,7 @@ rem Providing empty input file results in an error
 %SUBJECT% tests\empty.bmp > nul 2> nul && goto failed
 echo Test 3 passed
 
-rem Truncated BMP file header (starts with BM but then nothing)
+rem Providing file with truncated BMP file header (starts with BM but then nothing) results in an error
 %SUBJECT% tests\truncated.bmp > nul 2> nul && goto failed
 echo Test 4 passed
 
@@ -27,19 +27,21 @@ rem Providing not a BMP file results in an error
 %SUBJECT% tests\not-a-bmp.jpg > nul 2> nul && goto failed
 echo Test 5 passed
 
-rem Regular file
+rem Valid BMP file is processed correctly
+%SUBJECT% tests\regular.bmp > %OUTPUT% 2> nul || goto failed
+fc tests\regular-output.txt %OUTPUT% > nul || goto failed
 echo Test 6 passed
 
-rem Different bits per pixel color palettes, including monochrome
+rem Parsing different bits per pixel color palettes, including monochrome, works correctly
 echo Test 7 passed
 
-rem Compressed with PNG
+rem PNG compression detection works correctly
 echo Test 8 passed
 
-rem Compressed with RLE
+rem RLE compression detection works correctly
 echo Test 9 passed
 
-rem Compressed with JPEG
+rem JPEG compression detection works correctly
 echo Test 10 passed
 
 exit /B 0
