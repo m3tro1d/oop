@@ -49,7 +49,7 @@ int main(int argc, char** argv)
 		return EXIT_FAILURE;
 	}
 
-	if (inputFile.bad())
+	if (inputFile.fail())
 	{
 		std::cerr << "Failed to read from input file\n";
 		return EXIT_FAILURE;
