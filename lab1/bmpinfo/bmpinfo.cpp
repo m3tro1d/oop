@@ -17,6 +17,7 @@ const std::string BMP_SIGNATURE = "BM";
 constexpr int WIDTH_BYTES_OFFSET = 18;
 constexpr int HEIGHT_BYTES_OFFSET = 22;
 constexpr int BITS_PER_PIXEL_OFFSET = 28;
+constexpr int IMAGE_SIZE_OFFSET = 2;
 
 constexpr int COLOR_PALETTE_BASE = 2;
 constexpr uint16_t COLOR_PALETTE_THRESHOLD = 2;
@@ -96,6 +97,8 @@ std::optional<BMPInfo> TryParseBMPFile(std::istream& input)
 	ReadBytes(input, reinterpret_cast<char*>(&info.width), WIDTH_BYTES_OFFSET, sizeof(info.width));
 	ReadBytes(input, reinterpret_cast<char*>(&info.height), HEIGHT_BYTES_OFFSET, sizeof(info.height));
 	ReadBytes(input, reinterpret_cast<char*>(&info.bitsPerPixel), BITS_PER_PIXEL_OFFSET, sizeof(info.bitsPerPixel));
+	// TODO: replace file size with actual image size (w/o headers)
+	ReadBytes(input, reinterpret_cast<char*>(&info.imageSize), IMAGE_SIZE_OFFSET, sizeof(info.imageSize));
 
 	return info;
 }
@@ -118,4 +121,6 @@ void PrintBMPInfo(const BMPInfo& info)
 	{
 		std::cout << "The image is monochrome\n";
 	}
+
+	std::cout << "Image size: " << info.imageSize << " bytes\n";
 }
