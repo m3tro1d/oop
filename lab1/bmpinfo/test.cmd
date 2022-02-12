@@ -39,13 +39,15 @@ fc tests\4-bit-depth-output.txt %OUTPUT% > nul || goto failed
 fc tests\monochrome-output.txt %OUTPUT% > nul || goto failed
 echo Test 7 passed
 
-rem PNG compression detection works correctly
+rem RLE compression detection works correctly
+%SUBJECT% tests\rle8-compressed.bmp > %OUTPUT% 2> nul || goto failed
+fc tests\rle8-compressed-output.txt %OUTPUT% > nul || goto failed
 echo Test 8 passed
 
-rem RLE compression detection works correctly
+rem JPEG compression detection works correctly
 echo Test 9 passed
 
-rem JPEG compression detection works correctly
+rem PNG compression detection works correctly
 echo Test 10 passed
 
 exit /B 0
