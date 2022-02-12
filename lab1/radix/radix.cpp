@@ -30,13 +30,13 @@ int main(int argc, char** argv)
 	if (!args->sourceRadix)
 	{
 		std::cerr << "Invalid source radix\n"
-				  << "Radix must be a number from 2 to 36\n";
+				  << "Radix must be a number from " << MIN_RADIX << " to " << MAX_RADIX << "\n";
 		return EXIT_FAILURE;
 	}
 	if (!args->destinationRadix)
 	{
 		std::cerr << "Invalid destination radix\n"
-				  << "Radix must be a number from 2 to 36\n";
+				  << "Radix must be a number from " << MIN_RADIX << " to " << MAX_RADIX << "\n";
 		return EXIT_FAILURE;
 	}
 
