@@ -167,8 +167,7 @@ int AppendDigitToNegative(int number, int digit, int radix, bool& wasError)
 
 int StringToInt(const std::string& str, int radix, bool& wasError)
 {
-	size_t length = str.length();
-	if (length == 0)
+	if (str.length() == 0)
 	{
 		wasError = true;
 		return 0;
