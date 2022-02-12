@@ -1,7 +1,7 @@
 #include <fstream>
 #include <iostream>
-#include <string>
 #include <optional>
+#include <string>
 
 struct Args
 {
@@ -75,21 +75,20 @@ std::optional<Args> ParseArgs(int argc, char** argv)
 
 std::string ReplaceString(const std::string& string, const std::string& searchPattern, const std::string& replaceString)
 {
-	size_t pos = 0;
+	size_t searchPosition = 0;
 	std::string result;
-	while (pos < string.length())
+	while (searchPosition < string.length())
 	{
-		size_t foundPos = string.find(searchPattern, pos);
-		result.append(string, pos, foundPos - pos);
-		if (foundPos != std::string::npos)
-		{
-			result.append(replaceString);
-			pos = foundPos + searchPattern.length();
-		}
-		else
+		size_t replacePosition = string.find(searchPattern, searchPosition);
+		result.append(string, searchPosition, replacePosition - searchPosition);
+
+		if (replacePosition == std::string::npos)
 		{
 			break;
 		}
+
+		result.append(replaceString);
+		searchPosition = replacePosition + searchPattern.length();
 	}
 
 	return result;
