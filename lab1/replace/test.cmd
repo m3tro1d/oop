@@ -44,6 +44,7 @@ rem Uncomment if you have Python 3 installed, because fc takes too long to compa
 rem powershell (Measure-Command { ".\\%SUBJECT%" tests\heavy.txt %OUTPUT% A BB }).ToString() || goto failed
 rem python ..\..\utils\compare.py tests\heavy-output.txt %OUTPUT% > nul || goto failed
 rem echo Test 7 passed
+echo Test 7 skipped
 
 rem Providing non-existing input file results in an error
 %SUBJECT% tests\non-existing.txt %OUTPUT% one two > nul 2> nul && goto failed
