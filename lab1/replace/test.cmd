@@ -39,13 +39,19 @@ rem Replacing non-existing search pattern doesn't change the file
 fc tests\regular.txt %OUTPUT% > nul || goto failed
 echo Test 6 passed
 
+rem Heavy text (over 10000000 occurrences) is processed correctly and fast enough
+rem Uncomment if you have Python 3 installed, because fc takes too long to compare files
+rem powershell (Measure-Command { ".\\%SUBJECT%" tests\heavy.txt %OUTPUT% A BB }).ToString() || goto failed
+rem python ..\..\utils\compare.py tests\heavy-output.txt %OUTPUT% > nul || goto failed
+rem echo Test 7 passed
+
 rem Providing non-existing input file results in an error
 %SUBJECT% tests\non-existing.txt %OUTPUT% one two > nul 2> nul && goto failed
-echo Test 7 passed
+echo Test 8 passed
 
 rem Providing unavailable output file results in an error
 %SUBJECT% tests\regular.txt Y:\output.txt one two > nul 2> nul && goto failed
-echo Test 8 passed
+echo Test 9 passed
 
 exit /B 0
 
