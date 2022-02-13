@@ -20,7 +20,7 @@ int main(int argc, char** argv)
 	auto const matrixFilename = GetMatrixFilename(argc, argv);
 	if (!matrixFilename)
 	{
-		std::cerr << "Invalid argument count"
+		std::cerr << "Invalid argument count\n"
 				  << "Usage: invert.exe <matrix file>\n";
 		return EXIT_FAILURE;
 	}
