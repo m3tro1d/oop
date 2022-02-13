@@ -6,51 +6,89 @@ if %SUBJECT% == "" (
 	goto error
 )
 set OUTPUT="%TEMP%\output.txt"
+set TEST_NUMBER=1
 
 rem Launching with incorrect argument count returns non-zero exit code
-%SUBJECT% > nul 2> nul && goto failed
-%SUBJECT% 42 > nul 2> nul && goto failed
-%SUBJECT% 42 10 > nul 2> nul && goto failed
-echo Test 1 passed
+%SUBJECT% > %OUTPUT% 2>&1 && goto failed
+fc tests\invalid-arguments-output.txt %OUTPUT% > nul || goto failed
+
+%SUBJECT% 42 > %OUTPUT% 2>&1 && goto failed
+fc tests\invalid-arguments-output.txt %OUTPUT% > nul || goto failed
+
+%SUBJECT% 42 10 > %OUTPUT% 2>&1 && goto failed
+fc tests\invalid-arguments-output.txt %OUTPUT% > nul || goto failed
+
+echo Test %TEST_NUMBER% passed
+set /a "TEST_NUMBER=%TEST_NUMBER%+1"
 
 rem Providing invalid radix (either source or destination) results in an error
-%SUBJECT% 42 1 10 > nul 2> nul && goto failed
-%SUBJECT% 42 37 10 > nul 2> nul && goto failed
-%SUBJECT% 42 10 1 > nul 2> nul && goto failed
-%SUBJECT% 42 10 37 > nul 2> nul && goto failed
-echo Test 2 passed
+%SUBJECT% 42 1 10 > %OUTPUT% 2>&1 && goto failed
+fc tests\invalid-source-radix-output.txt %OUTPUT% > nul || goto failed
+
+%SUBJECT% 42 37 10 > %OUTPUT% 2>&1 && goto failed
+fc tests\invalid-source-radix-output.txt %OUTPUT% > nul || goto failed
+
+%SUBJECT% 42 10 1 > %OUTPUT% 2>&1 && goto failed
+fc tests\invalid-destination-radix-output.txt %OUTPUT% > nul || goto failed
+
+%SUBJECT% 42 10 37 > %OUTPUT% 2>&1 && goto failed
+fc tests\invalid-destination-radix-output.txt %OUTPUT% > nul || goto failed
+
+echo Test %TEST_NUMBER% passed
+set /a "TEST_NUMBER=%TEST_NUMBER%+1"
 
 rem Incompatible source number and radix result in an error
-%SUBJECT% 42 2 10 > nul 2> nul && goto failed
-echo Test 3 passed
+%SUBJECT% 42 2 10 > %OUTPUT% 2>&1 && goto failed
+fc tests\invalid-source-output.txt %OUTPUT% > nul || goto failed
+echo Test %TEST_NUMBER% passed
+set /a "TEST_NUMBER=%TEST_NUMBER%+1"
 
 rem Converting from hexadecimal to binary works correctly
-%SUBJECT% A 16 2 > %OUTPUT% 2> nul || goto failed
+%SUBJECT% A 16 2 > %OUTPUT% 2>&1 || goto failed
 fc tests\A-16-2.txt %OUTPUT% > nul || goto failed
-echo Test 4 passed
+echo Test %TEST_NUMBER% passed
+set /a "TEST_NUMBER=%TEST_NUMBER%+1"
 
 rem Converting from and to arbitrary numeric systems works correctly
-%SUBJECT% GUNS 36 10 > %OUTPUT% 2> nul || goto failed
+%SUBJECT% GUNS 36 10 > %OUTPUT% 2>&1 || goto failed
 fc tests\GUNS-36-10.txt %OUTPUT% > nul || goto failed
-%SUBJECT% 786232 10 36 > %OUTPUT% 2> nul || goto failed
+
+%SUBJECT% 786232 10 36 > %OUTPUT% 2>&1 || goto failed
 fc tests\786232-10-36.txt %OUTPUT% > nul || goto failed
-echo Test 5 passed
+
+echo Test %TEST_NUMBER% passed
+set /a "TEST_NUMBER=%TEST_NUMBER%+1"
 
 rem Providing really big number as either source number or radix results in an error
-%SUBJECT% WHATTHEFUCKISTHISNUMBER 36 10 > nul 2> nul && goto failed
-%SUBJECT% 42 WHATTHEFUCKISTHISNUMBER 10 > nul 2> nul && goto failed
-%SUBJECT% 42 10 WHATTHEFUCKISTHISNUMBER > nul 2> nul && goto failed
-echo Test 6 passed
+%SUBJECT% WHATTHEFUCKISTHISNUMBER 36 10 > %OUTPUT% 2>&1 && goto failed
+fc tests\invalid-source-output.txt %OUTPUT% > nul || goto failed
+
+%SUBJECT% 42 WHATTHEFUCKISTHISNUMBER 10 > %OUTPUT% 2>&1 && goto failed
+fc tests\invalid-source-radix-output.txt %OUTPUT% > nul || goto failed
+
+%SUBJECT% 42 10 WHATTHEFUCKISTHISNUMBER > %OUTPUT% 2>&1 && goto failed
+fc tests\invalid-destination-radix-output.txt %OUTPUT% > nul || goto failed
+
+echo Test %TEST_NUMBER% passed
+set /a "TEST_NUMBER=%TEST_NUMBER%+1"
 
 rem Negative number conversion works correctly
-%SUBJECT% -75 8 10 > %OUTPUT% 2> nul || goto failed
+%SUBJECT% -75 8 10 > %OUTPUT% 2>&1 || goto failed
 fc tests\-75-8-10.txt %OUTPUT% > nul || goto failed
-echo Test 7 passed
+echo Test %TEST_NUMBER% passed
+set /a "TEST_NUMBER=%TEST_NUMBER%+1"
 
 rem Providing really small negative number as a source results in an error
-%SUBJECT% -WHATTHEFUCKISTHISNUMBER 36 10 > nul 2> nul && goto failed
-echo Test 8 passed
+%SUBJECT% -WHATTHEFUCKISTHISNUMBER 36 10 > %OUTPUT% 2>&1 && goto failed
+fc tests\invalid-source-output.txt %OUTPUT% > nul || goto failed
+echo Test %TEST_NUMBER% passed
+set /a "TEST_NUMBER=%TEST_NUMBER%+1"
 
+rem Add borderline overflow tests
+rem 2147483647
+
+echo.
+echo All tests passed
 exit /B 0
 
 :failed

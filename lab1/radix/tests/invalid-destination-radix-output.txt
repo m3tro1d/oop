@@ -1,0 +1,2 @@
+Invalid destination radix
+Radix must be a number from 2 to 36
