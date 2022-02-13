@@ -84,8 +84,15 @@ fc tests\invalid-source-output.txt %OUTPUT% > nul || goto failed
 echo Test %TEST_NUMBER% passed
 set /a "TEST_NUMBER=%TEST_NUMBER%+1"
 
-rem Add borderline overflow tests
-rem 2147483647
+rem Borderline overflowing numbers are processed correctly
+%SUBJECT% 2147483647 10 16 > %OUTPUT% 2>&1 || goto failed
+fc tests\positive-no-overflow.txt %OUTPUT% > nul || goto failed
+
+%SUBJECT% -2147483648 10 16 > %OUTPUT% 2>&1 || goto failed
+fc tests\negative-no-overflow.txt %OUTPUT% > nul || goto failed
+
+echo Test %TEST_NUMBER% passed
+set /a "TEST_NUMBER=%TEST_NUMBER%+1"
 
 echo.
 echo All tests passed

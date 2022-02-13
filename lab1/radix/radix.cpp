@@ -238,12 +238,11 @@ std::string IntToString(int number, int radix, bool& wasError)
 	if (number < 0)
 	{
 		isNegative = true;
-		number = -number;
 	}
 
-	while (number > 0)
+	while (number != 0)
 	{
-		int digit = number % radix;
+		int digit = std::abs(number % radix);
 		result.push_back(IntToDigit(digit, radix, wasError));
 		if (wasError)
 		{
