@@ -53,7 +53,7 @@ int main(int argc, char** argv)
 	auto field = ReadField(inputFile, markerOccurred);
 	if (!field)
 	{
-		std::cerr << "Invalid matrix format\n";
+		std::cerr << "Invalid field format\n";
 		return EXIT_FAILURE;
 	}
 	if (!markerOccurred)
