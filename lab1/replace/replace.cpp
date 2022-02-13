@@ -24,16 +24,14 @@ int main(int argc, char** argv)
 		return EXIT_FAILURE;
 	}
 
-	std::ifstream inputFile;
-	inputFile.open(args->inputFilename);
+	std::ifstream inputFile(args->inputFilename);
 	if (!inputFile.is_open())
 	{
 		std::cerr << "Failed to open input file '" << args->inputFilename << "' for reading\n";
 		return EXIT_FAILURE;
 	}
 
-	std::ofstream outputFile;
-	outputFile.open(args->outputFilename);
+	std::ofstream outputFile(args->outputFilename);
 	if (!outputFile.is_open())
 	{
 		std::cerr << "Failed to open output file '" << args->outputFilename << "' for writing\n";
