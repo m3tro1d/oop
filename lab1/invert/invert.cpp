@@ -11,7 +11,9 @@ constexpr size_t MATRIX_SIZE = 3;
 using Matrix = std::array<std::array<double, MATRIX_SIZE>, MATRIX_SIZE>;
 
 std::optional<std::string> GetMatrixFilename(int argc, char** argv);
+bool InitializeFile(std::ifstream& matrixFile, const std::string& filename);
 std::optional<Matrix> ReadMatrix(std::istream& input);
+bool CheckReadMatrix(std::optional<Matrix> matrix, std::ifstream& matrixFile);
 std::optional<Matrix> InvertMatrix(const Matrix& matrix);
 void PrintMatrix(const Matrix& matrix);
 
@@ -26,23 +28,14 @@ int main(int argc, char** argv)
 	}
 
 	std::ifstream matrixFile;
-	matrixFile.open(matrixFilename.value());
-	if (!matrixFile.is_open())
+	if (!InitializeFile(matrixFile, matrixFilename.value()))
 	{
-		std::cerr << "Failed to open matrix file '" << matrixFilename.value() << "' for reading\n";
 		return EXIT_FAILURE;
 	}
 
 	auto const matrix = ReadMatrix(matrixFile);
 	if (!matrix)
 	{
-		std::cerr << "Invalid matrix format\n";
-		return EXIT_FAILURE;
-	}
-
-	if (matrixFile.bad())
-	{
-		std::cerr << "Failed to read from matrix file\n";
 		return EXIT_FAILURE;
 	}
 
@@ -68,6 +61,18 @@ std::optional<std::string> GetMatrixFilename(int argc, char** argv)
 	return argv[1];
 }
 
+bool InitializeFile(std::ifstream& matrixFile, const std::string& filename)
+{
+	matrixFile.open(filename);
+	if (!matrixFile.is_open())
+	{
+		std::cerr << "Failed to open matrix file '" << filename << "' for reading\n";
+		return false;
+	}
+
+	return true;
+}
+
 std::optional<Matrix> ReadMatrix(std::istream& input)
 {
 	Matrix result;
@@ -78,9 +83,16 @@ std::optional<Matrix> ReadMatrix(std::istream& input)
 		{
 			if (!(input >> result[row][column]))
 			{
+				std::cerr << "Invalid matrix format\n";
 				return std::nullopt;
 			}
 		}
+	}
+
+	if (input.bad())
+	{
+		std::cerr << "Failed to read from matrix file\n";
+		return std::nullopt;
 	}
 
 	return result;
