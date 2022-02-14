@@ -4,6 +4,8 @@
 #include <optional>
 #include <string>
 
+using Byte = char;
+
 enum class Mode
 {
 	CRYPT,
@@ -15,7 +17,7 @@ struct Args
 	Mode mode;
 	std::string inputFilename;
 	std::string outputFilename;
-	int key;
+	Byte key;
 };
 
 const std::string MODE_CRYPT = "crypt";
@@ -23,10 +25,8 @@ const std::string MODE_DECRYPT = "decrypt";
 constexpr int MIN_KEY = 0;
 constexpr int MAX_KEY = 255;
 
-using Byte = char;
-
 constexpr int BITS_IN_BYTE = 8;
-const std::array<size_t, BITS_IN_BYTE> BITS_SHUFFLE_POSITIONS = {
+const std::array<size_t, BITS_IN_BYTE> BIT_MASK = {
 	2,
 	3,
 	4,
@@ -137,7 +137,7 @@ std::optional<Args> ParseArgs(int argc, char** argv)
 	{
 		return std::nullopt;
 	}
-	args.key = key.value();
+	args.key = static_cast<Byte>(key.value());
 
 	return args;
 }
@@ -162,11 +162,6 @@ Byte GetBitAtPosition(Byte byte, size_t position)
 	return static_cast<Byte>((byte >> position) & 1);
 }
 
-void ReplaceBitAtPosition(Byte& byte, Byte bit, size_t position)
-{
-	byte = static_cast<Byte>((byte & (~(1 << position))) | (bit << position));
-}
-
 Byte EncryptByte(Byte byte, int key)
 {
 	byte ^= static_cast<Byte>(key);
@@ -174,9 +169,7 @@ Byte EncryptByte(Byte byte, int key)
 	Byte result;
 	for (size_t sourcePosition = 0; sourcePosition < BITS_IN_BYTE; ++sourcePosition)
 	{
-		size_t destinationPosition = BITS_SHUFFLE_POSITIONS[sourcePosition];
-		Byte sourceBit = GetBitAtPosition(byte, sourcePosition);
-		ReplaceBitAtPosition(result, sourceBit, destinationPosition);
+		result |= GetBitAtPosition(byte, sourcePosition) << BIT_MASK[sourcePosition];
 	}
 
 	return result;
@@ -206,9 +199,7 @@ Byte DecryptByte(Byte byte, int key)
 	Byte result;
 	for (size_t sourcePosition = 0; sourcePosition < BITS_IN_BYTE; ++sourcePosition)
 	{
-		size_t destinationPosition = BITS_SHUFFLE_POSITIONS[sourcePosition];
-		Byte sourceBit = GetBitAtPosition(byte, destinationPosition);
-		ReplaceBitAtPosition(result, sourceBit, sourcePosition);
+		result |= GetBitAtPosition(byte, BIT_MASK[sourcePosition]) << sourcePosition;
 	}
 
 	result ^= static_cast<Byte>(key);
