@@ -2,6 +2,7 @@
 #include <iostream>
 #include <optional>
 #include <string>
+#include <unordered_map>
 
 enum class Mode
 {
@@ -23,6 +24,17 @@ constexpr int MIN_KEY = 0;
 constexpr int MAX_KEY = 255;
 
 using Byte = char;
+
+const std::unordered_map<int, int> BITS_SHUFFLE_ORDER = {
+	{ 7, 5 },
+	{ 6, 1 },
+	{ 5, 0 },
+	{ 4, 7 },
+	{ 3, 6 },
+	{ 2, 4 },
+	{ 1, 3 },
+	{ 0, 2 },
+};
 
 std::optional<Args> ParseArgs(int argc, char** argv);
 void InitializeFiles(std::ifstream& inputFile, std::ofstream& outputFile, const Args& args);
@@ -144,12 +156,37 @@ void InitializeFiles(std::ifstream& inputFile, std::ofstream& outputFile, const 
 	}
 }
 
+Byte GetBitAtPosition(Byte byte, int position)
+{
+	return static_cast<Byte>((byte >> position) & 1);
+}
+
+void ReplaceBitAtPosition(Byte& byte, Byte bit, int position)
+{
+	byte = static_cast<Byte>((byte & (~(1 << position))) | (bit << position));
+}
+
+Byte EncryptByte(Byte byte, int key)
+{
+	byte ^= static_cast<Byte>(key);
+
+	Byte result;
+	for (auto const& [sourcePosition, destinationPosition] : BITS_SHUFFLE_ORDER)
+	{
+		Byte sourceBit = GetBitAtPosition(byte, sourcePosition);
+		ReplaceBitAtPosition(result, sourceBit, destinationPosition);
+	}
+
+	return result;
+}
+
 void Encrypt(std::istream& input, std::ostream& output, int key)
 {
 	Byte byte;
 	while (input.read(&byte, sizeof(byte)))
 	{
-		output.write(&byte, sizeof(byte));
+		Byte encryptedByte = EncryptByte(byte, key);
+		output.write(&encryptedByte, sizeof(byte));
 	}
 
 	if (input.bad())
@@ -162,15 +199,30 @@ void Encrypt(std::istream& input, std::ostream& output, int key)
 	}
 }
 
+Byte DecryptByte(Byte byte, int key)
+{
+	Byte result;
+	for (auto const& [sourcePosition, destinationPosition] : BITS_SHUFFLE_ORDER)
+	{
+		Byte sourceBit = GetBitAtPosition(byte, destinationPosition);
+		ReplaceBitAtPosition(result, sourceBit, sourcePosition);
+	}
+
+	result ^= static_cast<Byte>(key);
+
+	return result;
+}
+
 void Decrypt(std::istream& input, std::ostream& output, int key)
 {
 	Byte byte;
 	while (input.read(&byte, sizeof(byte)))
 	{
-		output.write(&byte, sizeof(byte));
+		Byte decryptedByte = DecryptByte(byte, key);
+		output.write(&decryptedByte, sizeof(byte));
 	}
 
-	if (!input.bad())
+	if (input.bad())
 	{
 		throw std::runtime_error("Failed to read from input file");
 	}
