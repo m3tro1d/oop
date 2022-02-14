@@ -1,8 +1,8 @@
+#include <array>
 #include <fstream>
 #include <iostream>
 #include <optional>
 #include <string>
-#include <unordered_map>
 
 enum class Mode
 {
@@ -25,15 +25,16 @@ constexpr int MAX_KEY = 255;
 
 using Byte = char;
 
-const std::unordered_map<int, int> BITS_SHUFFLE_ORDER = {
-	{ 7, 5 },
-	{ 6, 1 },
-	{ 5, 0 },
-	{ 4, 7 },
-	{ 3, 6 },
-	{ 2, 4 },
-	{ 1, 3 },
-	{ 0, 2 },
+constexpr int BITS_IN_BYTE = 8;
+const std::array<int, BITS_IN_BYTE> BITS_SHUFFLE_POSITIONS = {
+	2,
+	3,
+	4,
+	6,
+	7,
+	0,
+	1,
+	5,
 };
 
 std::optional<Args> ParseArgs(int argc, char** argv);
@@ -171,8 +172,9 @@ Byte EncryptByte(Byte byte, int key)
 	byte ^= static_cast<Byte>(key);
 
 	Byte result;
-	for (auto const& [sourcePosition, destinationPosition] : BITS_SHUFFLE_ORDER)
+	for (int sourcePosition = 0; sourcePosition < BITS_IN_BYTE; ++sourcePosition)
 	{
+		int destinationPosition = BITS_SHUFFLE_POSITIONS[sourcePosition];
 		Byte sourceBit = GetBitAtPosition(byte, sourcePosition);
 		ReplaceBitAtPosition(result, sourceBit, destinationPosition);
 	}
@@ -202,8 +204,9 @@ void Encrypt(std::istream& input, std::ostream& output, int key)
 Byte DecryptByte(Byte byte, int key)
 {
 	Byte result;
-	for (auto const& [sourcePosition, destinationPosition] : BITS_SHUFFLE_ORDER)
+	for (int sourcePosition = 0; sourcePosition < BITS_IN_BYTE; ++sourcePosition)
 	{
+		int destinationPosition = BITS_SHUFFLE_POSITIONS[sourcePosition];
 		Byte sourceBit = GetBitAtPosition(byte, destinationPosition);
 		ReplaceBitAtPosition(result, sourceBit, sourcePosition);
 	}
