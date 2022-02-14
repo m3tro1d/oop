@@ -6,6 +6,7 @@ if %SUBJECT% == "" (
 	goto error
 )
 set OUTPUT="%TEMP%\output.txt"
+set TRASH="%TEMP%\%RANDOM%.txt"
 
 rem Launching with incorrect argument count results in an error
 %SUBJECT% > %OUTPUT% 2>&1 && goto failed
@@ -14,16 +15,16 @@ fc tests\invalid-arguments-output.txt %OUTPUT% > nul || goto failed
 %SUBJECT% tests\regular.txt > %OUTPUT% 2>&1 && goto failed
 fc tests\invalid-arguments-output.txt %OUTPUT% > nul || goto failed
 
-%SUBJECT% tests\regular.txt %OUTPUT% > %OUTPUT% 2>&1 && goto failed
+%SUBJECT% tests\regular.txt %TRASH% > %OUTPUT% 2>&1 && goto failed
 fc tests\invalid-arguments-output.txt %OUTPUT% > nul || goto failed
 
-%SUBJECT% tests\regular.txt %OUTPUT% "work, damn it!" > %OUTPUT% 2>&1 && goto failed
+%SUBJECT% tests\regular.txt %TRASH% "work, damn it!" > %OUTPUT% 2>&1 && goto failed
 fc tests\invalid-arguments-output.txt %OUTPUT% > nul || goto failed
 
 echo Test 1 passed
 
 rem Providing non-existing input file results in an error
-%SUBJECT% tests\non-existing.txt %OUTPUT% one two > %OUTPUT% 2>&1 && goto failed
+%SUBJECT% tests\non-existing.txt %TRASH% one two > %OUTPUT% 2>&1 && goto failed
 fc tests\non-existing-output.txt %OUTPUT% > nul || goto failed
 echo Test 2 passed
 
@@ -57,12 +58,17 @@ rem Replacing non-existing search pattern doesn't change the file
 fc tests\regular.txt %OUTPUT% > nul || goto failed
 echo Test 8 passed
 
+rem Existing but not available for writing output file results in an error
+%SUBJECT% tests\regular.txt %SUBJECT% one two > %OUTPUT% 2>&1 && goto failed
+fc tests\not-writable-output.txt %OUTPUT% > nul || goto failed
+echo Test 9 passed
+
 rem Heavy text (over 10000000 occurrences) is processed correctly and fast enough
 rem Uncomment if you have Python 3 installed, because fc takes too long to compare files
-rem powershell (Measure-Command { ".\\%SUBJECT%" tests\heavy.txt %OUTPUT% A BB }).ToString() || goto failed
-rem python ..\..\utils\compare.py tests\heavy-output.txt %OUTPUT% > nul 2>&1 || goto failed
-rem echo Test 9 passed
-echo Test 9 skipped
+powershell (Measure-Command { ".\\%SUBJECT%" tests\heavy.txt %OUTPUT% A BB }).ToString() || goto failed
+python ..\..\utils\compare.py tests\heavy-output.txt %OUTPUT% > nul 2>&1 || goto failed
+echo Test 10 passed
+rem echo Test 10 skipped
 
 echo.
 echo All test passed

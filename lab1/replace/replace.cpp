@@ -12,45 +12,29 @@ struct Args
 };
 
 std::optional<Args> ParseArgs(int argc, char** argv);
+bool InitializeFiles(std::ifstream& inputFile, std::ofstream& outputFile, const Args& args);
 void CopyWithReplace(std::istream& input, std::ostream& output, const std::string& searchPattern, const std::string& replaceString);
+bool CleanUpFiles(std::ifstream& inputFile, std::ofstream& outputFile);
 
 int main(int argc, char** argv)
 {
 	auto const args = ParseArgs(argc, argv);
-	if (!args)
+	if (!args.has_value())
 	{
 		std::cerr << "Invalid argument count\n"
 				  << "Usage: replace.exe <input file> <output file> <search pattern> <replace string>\n";
 		return EXIT_FAILURE;
 	}
 
-	std::ifstream inputFile(args->inputFilename);
-	if (!inputFile.is_open())
+	std::ifstream inputFile;
+	std::ofstream outputFile;
+	if (!InitializeFiles(inputFile, outputFile, args.value()))
 	{
-		std::cerr << "Failed to open input file '" << args->inputFilename << "' for reading\n";
-		return EXIT_FAILURE;
-	}
-
-	std::ofstream outputFile(args->outputFilename);
-	if (!outputFile.is_open())
-	{
-		std::cerr << "Failed to open output file '" << args->outputFilename << "' for writing\n";
 		return EXIT_FAILURE;
 	}
 
 	CopyWithReplace(inputFile, outputFile, args->searchPattern, args->replaceString);
-
-	if (inputFile.bad())
-	{
-		std::cerr << "Failed to read from input file\n";
-		return EXIT_FAILURE;
-	}
-
-	if (!outputFile.flush())
-	{
-		std::cerr << "Failed to write to output file\n";
-		return EXIT_FAILURE;
-	}
+	CleanUpFiles(inputFile, outputFile);
 
 	return EXIT_SUCCESS;
 }
@@ -69,6 +53,25 @@ std::optional<Args> ParseArgs(int argc, char** argv)
 	args.replaceString = argv[4];
 
 	return args;
+}
+
+bool InitializeFiles(std::ifstream& inputFile, std::ofstream& outputFile, const Args& args)
+{
+	inputFile.open(args.inputFilename);
+	if (!inputFile.is_open())
+	{
+		std::cerr << "Failed to open input file '" << args.inputFilename << "' for reading\n";
+		return false;
+	}
+
+	outputFile.open(args.outputFilename);
+	if (!outputFile.is_open())
+	{
+		std::cerr << "Failed to open output file '" << args.outputFilename << "' for writing\n";
+		return false;
+	}
+
+	return true;
 }
 
 std::string ReplaceString(const std::string& string, const std::string& searchPattern, const std::string& replaceString)
@@ -99,4 +102,21 @@ void CopyWithReplace(std::istream& input, std::ostream& output, const std::strin
 	{
 		output << ReplaceString(line, searchPattern, replaceString) << "\n";
 	}
+}
+
+bool CleanUpFiles(std::ifstream& inputFile, std::ofstream& outputFile)
+{
+	if (inputFile.bad())
+	{
+		std::cerr << "Failed to read from input file\n";
+		return false;
+	}
+
+	if (!outputFile.flush())
+	{
+		std::cerr << "Failed to write to output file\n";
+		return false;
+	}
+
+	return true;
 }
