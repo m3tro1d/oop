@@ -19,7 +19,8 @@ constexpr char MARKER_CELL = 'O';
 constexpr char FILLED_CELL = '.';
 
 std::optional<Args> ParseArgs(int argc, char** argv);
-std::optional<Field> ReadField(std::istream& input, bool& markerOccurred);
+void InitializeFiles(std::ifstream& inputFile, std::ofstream& outputFile, const Args& args);
+Field ReadField(std::istream& input);
 void FillField(Field& field);
 void PrintField(std::ostream& output, const Field& field);
 
@@ -33,47 +34,19 @@ int main(int argc, char** argv)
 		return EXIT_FAILURE;
 	}
 
-	std::ifstream inputFile;
-	inputFile.open(args->inputFilename);
-	if (!inputFile.is_open())
+	try
 	{
-		std::cerr << "Failed to open input file '" << args->inputFilename << "' for reading\n";
-		return EXIT_FAILURE;
-	}
+		std::ifstream inputFile;
+		std::ofstream outputFile;
+		InitializeFiles(inputFile, outputFile, args.value());
 
-	std::ofstream outputFile;
-	outputFile.open(args->outputFilename);
-	if (!outputFile.is_open())
-	{
-		std::cerr << "Failed to open output file '" << args->outputFilename << "' for writing\n";
-		return EXIT_FAILURE;
+		Field field = ReadField(inputFile);
+		FillField(field);
+		PrintField(outputFile, field);
 	}
-
-	bool markerOccurred;
-	auto field = ReadField(inputFile, markerOccurred);
-	if (!field)
+	catch (const std::exception& e)
 	{
-		std::cerr << "Invalid field format\n";
-		return EXIT_FAILURE;
-	}
-	if (!markerOccurred)
-	{
-		std::cerr << "There is no markers - nothing to fill!\n";
-		return EXIT_FAILURE;
-	}
-	if (inputFile.bad())
-	{
-		std::cerr << "Failed to read from input file\n";
-		return EXIT_FAILURE;
-	}
-
-	FillField(field.value());
-
-	PrintField(outputFile, field.value());
-
-	if (!outputFile.flush())
-	{
-		std::cerr << "Failed to write to output file\n";
+		std::cerr << e.what() << '\n';
 		return EXIT_FAILURE;
 	}
 
@@ -94,14 +67,29 @@ std::optional<Args> ParseArgs(int argc, char** argv)
 	return args;
 }
 
-std::optional<Field> ReadField(std::istream& input, bool& markerOccurred)
+void InitializeFiles(std::ifstream& inputFile, std::ofstream& outputFile, const Args& args)
+{
+	inputFile.open(args.inputFilename);
+	if (!inputFile.is_open())
+	{
+		throw std::runtime_error("Failed to open input file for reading");
+	}
+
+	outputFile.open(args.outputFilename);
+	if (!outputFile.is_open())
+	{
+		throw std::runtime_error("Failed to open output file for writing");
+	}
+}
+
+Field ReadField(std::istream& input)
 {
 	char ch;
 	size_t row = 0;
 	size_t column = 0;
 	Field result;
 	std::fill(&result[0][0], &result[FIELD_SIZE - 1][FIELD_SIZE], EMPTY_CELL);
-	markerOccurred = false;
+	bool markerOccurred = false;
 
 	while (!input.eof())
 	{
@@ -121,19 +109,28 @@ std::optional<Field> ReadField(std::istream& input, bool& markerOccurred)
 			column = 0;
 			break;
 		default:
-			return std::nullopt;
+			throw std::invalid_argument("Invalid field format");
 		}
 
 		if (column == FIELD_SIZE - 1)
 		{
 			column = 0;
 			input.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-
-			if (row == FIELD_SIZE - 1)
-			{
-				break;
-			}
 		}
+
+		if (row == FIELD_SIZE - 1)
+		{
+			break;
+		}
+	}
+
+	if (!markerOccurred)
+	{
+		throw std::logic_error("There is no markers - nothing to fill!");
+	}
+	if (input.bad())
+	{
+		throw std::runtime_error("Failed to read from input file");
 	}
 
 	return result;
@@ -194,5 +191,10 @@ void PrintField(std::ostream& output, const Field& field)
 			output << field[row][column];
 		}
 		output << '\n';
+	}
+
+	if (!output.flush())
+	{
+		throw std::runtime_error("Failed to write to output file");
 	}
 }

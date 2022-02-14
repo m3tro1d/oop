@@ -1,1 +1,1 @@
-Failed to open output file 'Y:\output.txt' for writing
+Failed to open output file for writing
