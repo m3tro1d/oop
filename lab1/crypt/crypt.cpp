@@ -26,7 +26,7 @@ constexpr int MAX_KEY = 255;
 using Byte = char;
 
 constexpr int BITS_IN_BYTE = 8;
-const std::array<int, BITS_IN_BYTE> BITS_SHUFFLE_POSITIONS = {
+const std::array<size_t, BITS_IN_BYTE> BITS_SHUFFLE_POSITIONS = {
 	2,
 	3,
 	4,
@@ -157,12 +157,12 @@ void InitializeFiles(std::ifstream& inputFile, std::ofstream& outputFile, const 
 	}
 }
 
-Byte GetBitAtPosition(Byte byte, int position)
+Byte GetBitAtPosition(Byte byte, size_t position)
 {
 	return static_cast<Byte>((byte >> position) & 1);
 }
 
-void ReplaceBitAtPosition(Byte& byte, Byte bit, int position)
+void ReplaceBitAtPosition(Byte& byte, Byte bit, size_t position)
 {
 	byte = static_cast<Byte>((byte & (~(1 << position))) | (bit << position));
 }
@@ -172,9 +172,9 @@ Byte EncryptByte(Byte byte, int key)
 	byte ^= static_cast<Byte>(key);
 
 	Byte result;
-	for (int sourcePosition = 0; sourcePosition < BITS_IN_BYTE; ++sourcePosition)
+	for (size_t sourcePosition = 0; sourcePosition < BITS_IN_BYTE; ++sourcePosition)
 	{
-		int destinationPosition = BITS_SHUFFLE_POSITIONS[sourcePosition];
+		size_t destinationPosition = BITS_SHUFFLE_POSITIONS[sourcePosition];
 		Byte sourceBit = GetBitAtPosition(byte, sourcePosition);
 		ReplaceBitAtPosition(result, sourceBit, destinationPosition);
 	}
@@ -204,9 +204,9 @@ void Encrypt(std::istream& input, std::ostream& output, int key)
 Byte DecryptByte(Byte byte, int key)
 {
 	Byte result;
-	for (int sourcePosition = 0; sourcePosition < BITS_IN_BYTE; ++sourcePosition)
+	for (size_t sourcePosition = 0; sourcePosition < BITS_IN_BYTE; ++sourcePosition)
 	{
-		int destinationPosition = BITS_SHUFFLE_POSITIONS[sourcePosition];
+		size_t destinationPosition = BITS_SHUFFLE_POSITIONS[sourcePosition];
 		Byte sourceBit = GetBitAtPosition(byte, destinationPosition);
 		ReplaceBitAtPosition(result, sourceBit, sourcePosition);
 	}
