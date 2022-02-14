@@ -81,6 +81,15 @@ rem Trying to decrypt file encrypted with different key doesn't produce the same
 fc /b tests\regular.jpg %BIN_OUTPUT% > nul 2>&1 && goto failed
 echo Test 10 passed
 
+rem Heavy file (~18 M) is processed correctly and fast enough
+powershell (Measure-Command { ".\\%SUBJECT%" crypt tests\heavy.gif %BIN_OUTPUT% 200 }).ToString() || goto failed
+fc /b tests\heavy-output.bin %BIN_OUTPUT% > nul || goto failed
+
+powershell (Measure-Command { ".\\%SUBJECT%" decrypt tests\heavy-output.bin %BIN_OUTPUT% 200 }).ToString() || goto failed
+fc /b tests\heavy.gif %BIN_OUTPUT% > nul || goto failed
+
+echo Test 10 passed
+
 echo.
 echo All tests passed
 exit /B 0
