@@ -11,8 +11,8 @@ constexpr int RADIX_NUMERAL_SYSTEM = 10;
 struct Args
 {
 	std::string number;
-	std::optional<int> sourceRadix;
-	std::optional<int> destinationRadix;
+	int sourceRadix;
+	int destinationRadix;
 };
 
 std::optional<Args> ParseArgs(int argc, char** argv);
@@ -22,44 +22,28 @@ std::string IntToString(int n, int radix, bool& wasError);
 int main(int argc, char** argv)
 {
 	auto const args = ParseArgs(argc, argv);
-	if (!args)
+	if (!args.has_value())
 	{
-		std::cerr << "Invalid argument count\n"
-				  << "Usage: radix.exe <number> <source radix> <destination radix>\n";
-		return EXIT_FAILURE;
-	}
-	if (!args->sourceRadix)
-	{
-		std::cerr << "Invalid source radix\n"
-				  << "Radix must be a number from " << MIN_RADIX << " to " << MAX_RADIX << "\n";
-		return EXIT_FAILURE;
-	}
-	if (!args->destinationRadix)
-	{
-		std::cerr << "Invalid destination radix\n"
-				  << "Radix must be a number from " << MIN_RADIX << " to " << MAX_RADIX << "\n";
 		return EXIT_FAILURE;
 	}
 
 	bool wasError;
-	int const sourceRadix = args->sourceRadix.value();
-	int const destinationRadix = args->destinationRadix.value();
 
-	int number = StringToInt(args->number, sourceRadix, wasError);
+	int number = StringToInt(args->number, args->sourceRadix, wasError);
 	if (wasError)
 	{
 		std::cerr << "Error while converting number from source radix\n";
 		return EXIT_FAILURE;
 	}
 
-	std::string result = IntToString(number, destinationRadix, wasError);
+	std::string result = IntToString(number, args->destinationRadix, wasError);
 	if (wasError)
 	{
 		std::cerr << "Error while converting number to destination radix\n";
 		return EXIT_FAILURE;
 	}
 
-	std::printf("%s (%d) = %s (%d)\n", args->number.c_str(), sourceRadix, result.c_str(), destinationRadix);
+	std::printf("%s (%d) = %s (%d)\n", args->number.c_str(), args->sourceRadix, result.c_str(), args->destinationRadix);
 
 	return EXIT_SUCCESS;
 }
@@ -80,13 +64,32 @@ std::optional<Args> ParseArgs(int argc, char** argv)
 {
 	if (argc != 4)
 	{
+		std::cerr << "Invalid argument count\n"
+				  << "Usage: radix.exe <number> <source radix> <destination radix>\n";
 		return std::nullopt;
 	}
 
 	Args args;
 	args.number = argv[1];
-	args.sourceRadix = ParseRadix(argv[2]);
-	args.destinationRadix = ParseRadix(argv[3]);
+
+	auto const sourceRadix = ParseRadix(argv[2]);
+	if (!sourceRadix.has_value())
+	{
+		std::cerr << "Invalid source radix\n"
+				  << "Radix must be a number from " << MIN_RADIX << " to " << MAX_RADIX << "\n";
+		return std::nullopt;
+	}
+
+	auto const destinationRadix = ParseRadix(argv[3]);
+	if (!destinationRadix.has_value())
+	{
+		std::cerr << "Invalid destination radix\n"
+				  << "Radix must be a number from " << MIN_RADIX << " to " << MAX_RADIX << "\n";
+		return std::nullopt;
+	}
+
+	args.sourceRadix = sourceRadix.value();
+	args.destinationRadix = destinationRadix.value();
 
 	return args;
 }
@@ -181,8 +184,7 @@ int StringToInt(const std::string& str, int radix, bool& wasError)
 	}
 
 	int result = 0;
-	size_t i = isNegative ? 1 : 0;
-	for (; i < str.length(); ++i)
+	for (size_t i = isNegative ? 1 : 0; i < str.length(); ++i)
 	{
 		int digit = DigitToInt(str[i], radix, wasError);
 		if (wasError)
