@@ -1,0 +1,1 @@
+Invalid mode: should be either 'crypt' or 'decrypt'

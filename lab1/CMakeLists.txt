@@ -1,5 +1,6 @@
 add_subdirectory(replace)
 add_subdirectory(radix)
 add_subdirectory(invert)
-add_subdirectory(bmpinfo)
+#add_subdirectory(bmpinfo)
+add_subdirectory(crypt)
 add_subdirectory(fill)
