@@ -22,8 +22,12 @@ const std::string MODE_DECRYPT = "decrypt";
 constexpr int MIN_KEY = 0;
 constexpr int MAX_KEY = 255;
 
+using Byte = char;
+
 std::optional<Args> ParseArgs(int argc, char** argv);
 void InitializeFiles(std::ifstream& inputFile, std::ofstream& outputFile, const Args& args);
+void Encrypt(std::istream& input, std::ostream& output, int key);
+void Decrypt(std::istream& input, std::ostream& output, int key);
 
 int main(int argc, char** argv)
 {
@@ -39,7 +43,15 @@ int main(int argc, char** argv)
 		std::ofstream outputFile;
 		InitializeFiles(inputFile, outputFile, args.value());
 
-		// TODO
+		switch (args->mode)
+		{
+		case Mode::CRYPT:
+			Encrypt(inputFile, outputFile, args->key);
+			break;
+		case Mode::DECRYPT:
+			Decrypt(inputFile, outputFile, args->key);
+			break;
+		}
 	}
 	catch (const std::exception& e)
 	{
@@ -119,15 +131,51 @@ std::optional<Args> ParseArgs(int argc, char** argv)
 
 void InitializeFiles(std::ifstream& inputFile, std::ofstream& outputFile, const Args& args)
 {
-	inputFile.open(args.inputFilename);
+	inputFile.open(args.inputFilename, std::ios::in | std::ios::binary);
 	if (!inputFile.is_open())
 	{
 		throw std::runtime_error("Failed to open input file for reading");
 	}
 
-	outputFile.open(args.outputFilename);
+	outputFile.open(args.outputFilename, std::ios::out | std::ios::binary);
 	if (!outputFile.is_open())
 	{
 		throw std::runtime_error("Failed to open output file for writing");
+	}
+}
+
+void Encrypt(std::istream& input, std::ostream& output, int key)
+{
+	Byte byte;
+	while (input.read(&byte, sizeof(byte)))
+	{
+		output.write(&byte, sizeof(byte));
+	}
+
+	if (input.bad())
+	{
+		throw std::runtime_error("Failed to read from input file");
+	}
+	if (!output.flush())
+	{
+		throw std::runtime_error("Failed to write to output file");
+	}
+}
+
+void Decrypt(std::istream& input, std::ostream& output, int key)
+{
+	Byte byte;
+	while (input.read(&byte, sizeof(byte)))
+	{
+		output.write(&byte, sizeof(byte));
+	}
+
+	if (!input.bad())
+	{
+		throw std::runtime_error("Failed to read from input file");
+	}
+	if (!output.flush())
+	{
+		throw std::runtime_error("Failed to write to output file");
 	}
 }
