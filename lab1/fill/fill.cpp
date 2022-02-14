@@ -27,7 +27,7 @@ void PrintField(std::ostream& output, const Field& field);
 int main(int argc, char** argv)
 {
 	auto const args = ParseArgs(argc, argv);
-	if (!args)
+	if (!args.has_value())
 	{
 		std::cerr << "Invalid argument count\n"
 				  << "Usage: fill.exe <input file> <output file>\n";
