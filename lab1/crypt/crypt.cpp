@@ -39,8 +39,8 @@ const std::array<size_t, BITS_IN_BYTE> BIT_MASK = {
 
 std::optional<Args> ParseArgs(int argc, char** argv);
 void InitializeFiles(std::ifstream& inputFile, std::ofstream& outputFile, const Args& args);
-void Encrypt(std::istream& input, std::ostream& output, int key);
-void Decrypt(std::istream& input, std::ostream& output, int key);
+void Encrypt(std::istream& input, std::ostream& output, Byte key);
+void Decrypt(std::istream& input, std::ostream& output, Byte key);
 
 int main(int argc, char** argv)
 {
@@ -162,9 +162,9 @@ Byte GetBitAtPosition(Byte byte, size_t position)
 	return static_cast<Byte>((byte >> position) & 1);
 }
 
-Byte EncryptByte(Byte byte, int key)
+Byte EncryptByte(Byte byte, Byte key)
 {
-	byte ^= static_cast<Byte>(key);
+	byte ^= key;
 
 	Byte result;
 	for (size_t sourcePosition = 0; sourcePosition < BITS_IN_BYTE; ++sourcePosition)
@@ -175,7 +175,20 @@ Byte EncryptByte(Byte byte, int key)
 	return result;
 }
 
-void Encrypt(std::istream& input, std::ostream& output, int key)
+Byte DecryptByte(Byte byte, Byte key)
+{
+	Byte result;
+	for (size_t sourcePosition = 0; sourcePosition < BITS_IN_BYTE; ++sourcePosition)
+	{
+		result |= GetBitAtPosition(byte, BIT_MASK[sourcePosition]) << sourcePosition;
+	}
+
+	result ^= key;
+
+	return result;
+}
+
+void Encrypt(std::istream& input, std::ostream& output, Byte key)
 {
 	Byte byte;
 	while (input.read(&byte, sizeof(byte)))
@@ -194,20 +207,7 @@ void Encrypt(std::istream& input, std::ostream& output, int key)
 	}
 }
 
-Byte DecryptByte(Byte byte, int key)
-{
-	Byte result;
-	for (size_t sourcePosition = 0; sourcePosition < BITS_IN_BYTE; ++sourcePosition)
-	{
-		result |= GetBitAtPosition(byte, BIT_MASK[sourcePosition]) << sourcePosition;
-	}
-
-	result ^= static_cast<Byte>(key);
-
-	return result;
-}
-
-void Decrypt(std::istream& input, std::ostream& output, int key)
+void Decrypt(std::istream& input, std::ostream& output, Byte key)
 {
 	Byte byte;
 	while (input.read(&byte, sizeof(byte)))
