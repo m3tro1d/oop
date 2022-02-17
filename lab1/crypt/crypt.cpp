@@ -166,7 +166,7 @@ Byte EncryptByte(Byte byte, Byte key)
 {
 	byte ^= key;
 
-	Byte result;
+	Byte result = 0;
 	for (size_t sourcePosition = 0; sourcePosition < BITS_IN_BYTE; ++sourcePosition)
 	{
 		result |= GetBitAtPosition(byte, sourcePosition) << BIT_MASK[sourcePosition];
@@ -177,7 +177,7 @@ Byte EncryptByte(Byte byte, Byte key)
 
 Byte DecryptByte(Byte byte, Byte key)
 {
-	Byte result;
+	Byte result = 0;
 	for (size_t sourcePosition = 0; sourcePosition < BITS_IN_BYTE; ++sourcePosition)
 	{
 		result |= GetBitAtPosition(byte, BIT_MASK[sourcePosition]) << sourcePosition;
