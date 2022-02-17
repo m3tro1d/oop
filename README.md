@@ -12,7 +12,7 @@ git clone git@github.com:m3tro1d/oop.git --recurse-submodules
 
 ```shell
 git submodule update --remote
-git add .
+git add -A
 git commit -m "Update course submodule"
 git push
 ```
