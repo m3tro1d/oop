@@ -1,6 +1,6 @@
 #define CATCH_CONFIG_MAIN
-#include <catch.hpp>
-#include <vector.h>
+#include "../vector_utils.h"
+#include "catch.hpp"
 
 TEST_CASE("Empty string input produces empty vector", "[input]")
 {

@@ -1,6 +1,4 @@
-#include <vector.h>
-
-constexpr int SUCCESS = 0;
+#include "vector_utils.h"
 
 int main()
 {
@@ -10,5 +8,5 @@ int main()
 	AddPositiveMeanToEachElement(vector);
 	PrintVector(std::cout, vector);
 
-	return SUCCESS;
+	return EXIT_SUCCESS;
 }
