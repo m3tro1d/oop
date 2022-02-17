@@ -1,6 +1,7 @@
 #define CATCH_CONFIG_MAIN
 #include "../vector_utils.h"
 #include "catch.hpp"
+#include <sstream>
 
 TEST_CASE("Empty string input produces empty vector", "[input]")
 {
@@ -83,5 +84,5 @@ TEST_CASE("Output contains vector's contents", "[output]")
 	std::vector<double> vector{ 1, 2, -3, 2.4 };
 
 	PrintVector(output, vector);
-	REQUIRE(output.str() == "1 2 -3 2.4 \n");
+	REQUIRE(output.str() == "1.000 2.000 -3.000 2.400 \n");
 }

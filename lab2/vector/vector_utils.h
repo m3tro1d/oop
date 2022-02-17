@@ -1,12 +1,14 @@
 #include <algorithm>
-#include <numeric>
+#include <iomanip>
 #include <iostream>
 #include <iterator>
-#include <sstream>
+#include <numeric>
 #include <vector>
 
-void InputVector(std::istream& stream, std::vector<double>& vector);
+constexpr int PRINT_PRECISION = 3;
+
+void InputVector(std::istream& input, std::vector<double>& vector);
 
 void AddPositiveMeanToEachElement(std::vector<double>& vector);
 
-void PrintVector(std::ostream& stream, std::vector<double>& vector);
+void PrintVector(std::ostream& output, std::vector<double>& vector);
