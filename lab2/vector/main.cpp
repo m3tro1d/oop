@@ -2,11 +2,15 @@
 
 int main()
 {
-	std::vector<double> vector;
-
-	InputVector(std::cin, vector);
-	AddPositiveMeanToEachElement(vector);
-	PrintVector(std::cout, vector);
+	try
+	{
+		auto vector = InputVector(std::cin);
+		PrintVector(std::cout, vector);
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << e.what() << '\n';
+	}
 
 	return EXIT_SUCCESS;
 }

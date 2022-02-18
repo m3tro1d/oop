@@ -5,10 +5,6 @@
 #include <numeric>
 #include <vector>
 
-constexpr int PRINT_PRECISION = 3;
+std::vector<double> InputVector(std::istream& input);
 
-void InputVector(std::istream& input, std::vector<double>& vector);
-
-void AddPositiveMeanToEachElement(std::vector<double>& vector);
-
-void PrintVector(std::ostream& output, std::vector<double>& vector);
+void PrintVector(std::ostream& output, const std::vector<double>& vector);
