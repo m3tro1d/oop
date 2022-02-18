@@ -19,26 +19,47 @@ std::vector<double> ReadVector(std::istream& input)
 	return result;
 }
 
-bool IsZero(double value)
+std::optional<double> FindPositivesAverage(const std::vector<double>& vector)
 {
-	return std::abs(value) < std::numeric_limits<double>::epsilon();
+	double sum = 0;
+	int count = 0;
+	std::for_each(
+		vector.begin(),
+		vector.end(),
+		[&](double element) {
+			if (element > 0)
+			{
+				sum += element;
+				++count;
+			}
+		});
+
+	if (count == 0)
+	{
+		return std::nullopt;
+	}
+
+	return sum / static_cast<double>(count);
 }
 
-void MultiplyEachByMaxAndDivideByMin(std::vector<double>& vector)
+void AddPositivesAverageToEachElement(std::vector<double>& vector)
 {
-	auto const max = std::max_element(vector.begin(), vector.end());
-	auto const min = std::min_element(vector.begin(), vector.end());
-
-	if (IsZero(*min))
+	if (vector.empty())
 	{
-		throw std::logic_error("Minimum element is 0, can not divide");
+		return;
+	}
+
+	auto const positivesAverage = FindPositivesAverage(vector);
+	if (!positivesAverage.has_value())
+	{
+		throw std::logic_error("Can't find average if there's no positive elements");
 	}
 
 	std::for_each(
 		vector.begin(),
 		vector.end(),
-		[max, min](double& value) {
-			value *= *max / *min;
+		[positivesAverage](double& element) {
+			element += positivesAverage.value();
 		});
 }
 

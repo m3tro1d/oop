@@ -5,7 +5,7 @@ int main()
 	try
 	{
 		auto vector = ReadVector(std::cin);
-		MultiplyEachByMaxAndDivideByMin(vector);
+		AddPositivesAverageToEachElement(vector);
 		PrintVector(std::cout, vector);
 	}
 	catch (const std::exception& e)

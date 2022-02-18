@@ -37,6 +37,35 @@ TEST_CASE("vector is read correctly")
 
 TEST_CASE("vector is processed correctly")
 {
+	SECTION("empty vector results in an empty vector")
+	{
+		std::vector<double> vector;
+		AddPositivesAverageToEachElement(vector);
+		REQUIRE(vector.empty());
+	}
+
+	SECTION("vector of all positive elements is processed correctly")
+	{
+		std::vector<double> vector{ 1, 2, 3 };
+		AddPositivesAverageToEachElement(vector);
+		REQUIRE(vector == std::vector<double>{ 3, 4, 5 });
+	}
+
+	SECTION("vector of all negative elements results in an exception")
+	{
+		std::vector<double> vector{ -1, -2, -3 };
+		REQUIRE_THROWS_AS(AddPositivesAverageToEachElement(vector), std::logic_error);
+	}
+
+	SECTION("mixed positive-negative and zeros vector is processed correctly")
+	{
+		// TODO
+	}
+
+	SECTION("all zeros vector results in an exception")
+	{
+		// TODO
+	}
 }
 
 TEST_CASE("vector is printed correctly")
