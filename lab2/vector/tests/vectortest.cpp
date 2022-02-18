@@ -54,8 +54,8 @@ TEST_CASE("vector is printed correctly")
 	SECTION("usual vector results in a fixed-number output")
 	{
 		output.clear();
-		std::vector<double> vector{ 1, 2.5431, 2.5 };
+		std::vector<double> vector{ 1, 2.5431, 2.5, 3.5439 };
 		PrintVector(output, vector);
-		REQUIRE(output.str() == "1.000 2.543 2.500 \n");
+		REQUIRE(output.str() == "1.000 2.543 2.500 3.544 \n");
 	}
 }
