@@ -4,12 +4,13 @@ int main()
 {
 	try
 	{
-		auto vector = InputVector(std::cin);
+		auto vector = ReadVector(std::cin);
+		MultiplyEachByMaxAndDivideByMin(vector);
 		PrintVector(std::cout, vector);
 	}
 	catch (const std::exception& e)
 	{
-		std::cout << e.what() << '\n';
+		std::cerr << e.what() << '\n';
 	}
 
 	return EXIT_SUCCESS;
