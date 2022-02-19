@@ -10,7 +10,8 @@ const std::unordered_map<std::string, std::string> PATTERNS = {
 	{ "&amp;", "&" },
 };
 
-constexpr size_t LOOKUP_SIZE = 6;
+// Maximum HTML entity length
+constexpr size_t LOOKUP_SIZE = 8;
 
 std::string TryFindReplacePattern(const std::string& html, size_t& replacePosition)
 {
