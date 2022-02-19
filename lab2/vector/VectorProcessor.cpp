@@ -1,4 +1,4 @@
-#include "vector_utils.h"
+#include "VectorProcessor.h"
 
 constexpr int PRINT_PRECISION = 3;
 
@@ -11,7 +11,7 @@ std::vector<double> ReadVector(std::istream& input)
 		result.push_back(value);
 	}
 
-	if (!input.eof() || input.bad())
+	if (input.bad())
 	{
 		throw std::invalid_argument("Invalid input");
 	}
@@ -58,9 +58,14 @@ void AddPositivesAverageToEachElement(std::vector<double>& vector)
 	std::for_each(
 		vector.begin(),
 		vector.end(),
-		[positivesAverage](double& element) {
+		[&](double& element) {
 			element += positivesAverage.value();
 		});
+}
+
+void SortVector(std::vector<double>& vector)
+{
+	std::sort(vector.begin(), vector.end());
 }
 
 void PrintVector(std::ostream& output, const std::vector<double>& vector)

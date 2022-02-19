@@ -1,6 +1,6 @@
 add_executable(vector
-               vector_utils.h
-               vector_utils.cpp
+               VectorProcessor.h
+               VectorProcessor.cpp
                main.cpp)
 
 add_subdirectory(tests)

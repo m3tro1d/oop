@@ -1,4 +1,4 @@
-#include "vector_utils.h"
+#include "VectorProcessor.h"
 
 int main()
 {
@@ -6,6 +6,7 @@ int main()
 	{
 		auto vector = ReadVector(std::cin);
 		AddPositivesAverageToEachElement(vector);
+		SortVector(vector);
 		PrintVector(std::cout, vector);
 	}
 	catch (const std::exception& e)
