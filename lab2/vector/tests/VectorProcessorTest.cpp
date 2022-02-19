@@ -71,11 +71,13 @@ TEST_CASE("vector is processed correctly")
 		REQUIRE(ApproximatelyEquals(vector, result));
 	}
 
-	SECTION("vector of all negative elements results in an exception")
+	SECTION("vector of all negative elements is not changed")
 	{
 		std::vector<double> vector{ -1, -2, -3 };
+		AddPositivesAverageToEachElement(vector);
+		std::vector<double> result{ -1, -2, -3 };
 
-		REQUIRE_THROWS_AS(AddPositivesAverageToEachElement(vector), std::logic_error);
+		REQUIRE(vector == result);
 	}
 
 	SECTION("mixed positive-negative and zeros vector is processed correctly")
@@ -87,11 +89,13 @@ TEST_CASE("vector is processed correctly")
 		REQUIRE(ApproximatelyEquals(vector, result));
 	}
 
-	SECTION("all zeros vector results in an exception")
+	SECTION("all zeros vector results is not changed")
 	{
 		std::vector<double> vector(42, 0);
+		AddPositivesAverageToEachElement(vector);
+		std::vector<double> result(42, 0);
 
-		REQUIRE_THROWS_AS(AddPositivesAverageToEachElement(vector), std::logic_error);
+		REQUIRE(vector == result);
 	}
 }
 

@@ -52,7 +52,7 @@ void AddPositivesAverageToEachElement(std::vector<double>& vector)
 	auto const positivesAverage = FindPositivesAverage(vector);
 	if (!positivesAverage.has_value())
 	{
-		throw std::logic_error("Can't find average if there's no positive elements");
+		return;
 	}
 
 	std::for_each(
