@@ -1,5 +1,0 @@
-Resolution: 473x698
-Bits per pixel: 8
-Colors used: 256
-Image size: 67954 bytes
-Compression method: RLE 8-bit/pixel
