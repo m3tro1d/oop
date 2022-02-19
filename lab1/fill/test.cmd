@@ -57,6 +57,11 @@ rem If the marker is placed outside, all surrounding area is filled
 fc tests\who-spilled-the-bucket-output.txt %OUTPUT% > nul 2>&1 || goto failed
 echo Test 9 passed
 
+rem Maximum fill field is not causing stack overflow
+%SUBJECT% tests\max-field.txt %OUTPUT% > nul 2>&1 || goto failed
+fc tests\max-field-output.txt %OUTPUT% > nul 2>&1 || goto failed
+echo Test 10 passed
+
 echo.
 echo All tests passed
 exit /B 0

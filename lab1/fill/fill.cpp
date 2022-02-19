@@ -95,11 +95,14 @@ Field ReadField(std::istream& input)
 	{
 		input.get(ch);
 
+		if (ch == MARKER_CELL)
+		{
+			markerOccurred = true;
+		}
+
 		switch (ch)
 		{
 		case MARKER_CELL:
-			markerOccurred = true;
-			[[fallthrough]];
 		case EMPTY_CELL:
 		case CONTOUR_CELL:
 			result[row][column++] = ch;
