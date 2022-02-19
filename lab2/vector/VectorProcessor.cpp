@@ -11,7 +11,7 @@ std::vector<double> ReadVector(std::istream& input)
 		result.push_back(value);
 	}
 
-	if (input.bad())
+	if (!input.eof() || input.bad())
 	{
 		throw std::invalid_argument("Invalid input");
 	}

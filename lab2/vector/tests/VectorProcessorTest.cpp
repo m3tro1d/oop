@@ -1,7 +1,18 @@
 #define CATCH_CONFIG_MAIN
-#include "../vector_utils.h"
+#include "../VectorProcessor.h"
 #include "catch.hpp"
 #include <sstream>
+
+bool ApproximatelyEquals(const std::vector<double>& one, const std::vector<double>& two)
+{
+	return std::equal(
+		one.begin(),
+		one.end(),
+		two.begin(),
+		[](double a, double b) -> bool {
+			return std::abs(a - b) < std::numeric_limits<double>::epsilon();
+		});
+}
 
 TEST_CASE("vector is read correctly")
 {
@@ -11,6 +22,7 @@ TEST_CASE("vector is read correctly")
 	{
 		input.str("");
 		auto vector = ReadVector(input);
+
 		REQUIRE(vector.empty());
 	}
 
@@ -18,20 +30,25 @@ TEST_CASE("vector is read correctly")
 	{
 		input.str("1 2 3");
 		auto vector = ReadVector(input);
-		REQUIRE(vector == std::vector<double>{ 1, 2, 3 });
+		std::vector<double> result = { 1, 2, 3 };
+
+		REQUIRE(vector == result);
 	}
 
 	SECTION("no numbers input results in an exception")
 	{
 		input.str("not a number");
+
 		REQUIRE_THROWS_AS(ReadVector(input), std::invalid_argument);
 	}
 
-	SECTION("several lines of input are read correctly")
+	SECTION("input containing several lines is read correctly")
 	{
 		input.str("1\n2\n3\n");
 		auto vector = ReadVector(input);
-		REQUIRE(vector == std::vector<double>{ 1, 2, 3 });
+		std::vector<double> result = { 1, 2, 3 };
+
+		REQUIRE(vector == result);
 	}
 }
 
@@ -41,30 +58,40 @@ TEST_CASE("vector is processed correctly")
 	{
 		std::vector<double> vector;
 		AddPositivesAverageToEachElement(vector);
+
 		REQUIRE(vector.empty());
 	}
 
 	SECTION("vector of all positive elements is processed correctly")
 	{
-		std::vector<double> vector{ 1, 2, 3 };
+		std::vector<double> vector = { 1, 2, 3 };
 		AddPositivesAverageToEachElement(vector);
-		REQUIRE(vector == std::vector<double>{ 3, 4, 5 });
+		std::vector<double> result = { 3, 4, 5 };
+
+		REQUIRE(ApproximatelyEquals(vector, result));
 	}
 
 	SECTION("vector of all negative elements results in an exception")
 	{
 		std::vector<double> vector{ -1, -2, -3 };
+
 		REQUIRE_THROWS_AS(AddPositivesAverageToEachElement(vector), std::logic_error);
 	}
 
 	SECTION("mixed positive-negative and zeros vector is processed correctly")
 	{
-		// TODO
+		std::vector<double> vector = { 1, 0, 0, -1, 2, 3, -5 };
+		AddPositivesAverageToEachElement(vector);
+		std::vector<double> result = { 3, 2, 2, 1, 4, 5, -3 };
+
+		REQUIRE(ApproximatelyEquals(vector, result));
 	}
 
 	SECTION("all zeros vector results in an exception")
 	{
-		// TODO
+		std::vector<double> vector(42, 0);
+
+		REQUIRE_THROWS_AS(AddPositivesAverageToEachElement(vector), std::logic_error);
 	}
 }
 

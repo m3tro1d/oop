@@ -1,6 +1,6 @@
-add_executable(vectortest
-               ../vector_utils.h
-               ../vector_utils.cpp
-               vectortest.cpp)
-target_link_libraries(vectortest PUBLIC catch2)
-add_test(NAME vectortest COMMAND vectortest)
+add_executable(VectorProcessorTest
+               ../VectorProcessor.h
+               ../VectorProcessor.cpp
+               VectorProcessorTest.cpp)
+target_link_libraries(VectorProcessorTest PUBLIC catch2)
+add_test(NAME VectorProcessorTest COMMAND VectorProcessorTest)
