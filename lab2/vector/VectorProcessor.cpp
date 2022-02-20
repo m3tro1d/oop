@@ -5,11 +5,10 @@ constexpr int PRINT_PRECISION = 3;
 std::vector<double> ReadVector(std::istream& input)
 {
 	std::vector<double> result;
-	double value;
-	while (input >> value)
-	{
-		result.push_back(value);
-	}
+	std::copy(
+		std::istream_iterator<double>(input),
+		std::istream_iterator<double>(),
+		std::back_inserter(result));
 
 	if (!input.eof() || input.bad())
 	{
