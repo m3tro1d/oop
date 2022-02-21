@@ -2,7 +2,7 @@
 
 constexpr char PATTERN_START = '&';
 
-const std::unordered_map<std::string, std::string> PATTERNS = {
+const std::vector<std::pair<std::string, std::string>> PATTERNS = {
 	{ "&quot;", "\"" },
 	{ "&apos;", "'" },
 	{ "&lt;", "<" },
@@ -10,23 +10,19 @@ const std::unordered_map<std::string, std::string> PATTERNS = {
 	{ "&amp;", "&" },
 };
 
-// Maximum HTML entity length
-constexpr size_t LOOKUP_SIZE = 8;
-
 std::string TryFindReplacePattern(const std::string& html, size_t& replacePosition)
 {
-	auto match = html.substr(replacePosition, LOOKUP_SIZE);
-	for (auto const& pattern : PATTERNS)
+	for (auto const& [pattern, replacement] : PATTERNS)
 	{
-		if (match.find(pattern.first) == 0)
+		if (html.compare(replacePosition, pattern.length(), pattern) == 0)
 		{
-			replacePosition += pattern.first.length();
-			return pattern.second;
+			replacePosition += pattern.length();
+			return replacement;
 		}
 	}
 
-	replacePosition += match.length();
-	return match;
+	++replacePosition;
+	return std::string(1, PATTERN_START);
 }
 
 std::string HtmlDecode(const std::string& html)
