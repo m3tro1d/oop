@@ -13,9 +13,17 @@ TEST_CASE("encoded string is processed correctly")
 		REQUIRE(decoded.empty());
 	}
 
-	SECTION("string with no escape sequences is unchanged")
+		SECTION("string with no escape sequences is unchanged")
+		{
+			const std::string input = "so let it be written, so let it be done";
+			auto const decoded = HtmlDecode(input);
+
+			REQUIRE(decoded == input);
+		}
+
+	SECTION("string with only pattern start is unchanged")
 	{
-		const std::string input = "so let it be written & so let it be done";
+		const std::string input = "so let it be written & so let it be &; done";
 		auto const decoded = HtmlDecode(input);
 
 		REQUIRE(decoded == input);
@@ -34,6 +42,33 @@ TEST_CASE("encoded string is processed correctly")
 	{
 		const std::string input = "Cat &lt;says&gt; &quotted;Meow&quot;. M&ampersand;M&apos;s";
 		const std::string result = "Cat <says> &quotted;Meow\". M&ampersand;M's";
+		auto const decoded = HtmlDecode(input);
+
+		REQUIRE(decoded == result);
+	}
+
+	SECTION("doubling ampersand sequence is replaced correctly")
+	{
+		const std::string input = "&amp&lt;";
+		const std::string result = "&amp<";
+		auto const decoded = HtmlDecode(input);
+
+		REQUIRE(decoded == result);
+	}
+
+	SECTION("doubling ampersand sequence is replaced correctly")
+	{
+		const std::string input = "&amp&lt;";
+		const std::string result = "&amp<";
+		auto const decoded = HtmlDecode(input);
+
+		REQUIRE(decoded == result);
+	}
+
+	SECTION("stacked sequences are replaced correctly")
+	{
+		const std::string input = "&amp;&lt;";
+		const std::string result = "&<";
 		auto const decoded = HtmlDecode(input);
 
 		REQUIRE(decoded == result);
