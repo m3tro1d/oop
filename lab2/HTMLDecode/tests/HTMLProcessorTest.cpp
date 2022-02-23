@@ -56,19 +56,19 @@ TEST_CASE("encoded string is processed correctly")
 		REQUIRE(decoded == result);
 	}
 
-	SECTION("doubling ampersand sequence is replaced correctly")
+	SECTION("stacked sequences are replaced correctly")
 	{
-		const std::string input = "&amp&lt;";
-		const std::string result = "&amp<";
+		const std::string input = "&amp;&lt;";
+		const std::string result = "&<";
 		auto const decoded = HtmlDecode(input);
 
 		REQUIRE(decoded == result);
 	}
 
-	SECTION("stacked sequences are replaced correctly")
+	SECTION("expanded valid sequences is not replaced")
 	{
-		const std::string input = "&amp;&lt;";
-		const std::string result = "&<";
+		const std::string input = "&amp;lt;";
+		const std::string result = "&lt;";
 		auto const decoded = HtmlDecode(input);
 
 		REQUIRE(decoded == result);
