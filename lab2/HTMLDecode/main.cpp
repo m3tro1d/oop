@@ -2,14 +2,7 @@
 
 int main()
 {
-	try
-	{
-		HtmlDecode(std::cin, std::cout);
-	}
-	catch (const std::exception& e)
-	{
-		std::cerr << e.what() << '\n';
-	}
+	HtmlDecode(std::cin, std::cout);
 
 	return EXIT_SUCCESS;
 }

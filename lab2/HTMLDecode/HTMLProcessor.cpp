@@ -2,7 +2,9 @@
 
 constexpr char PATTERN_START = '&';
 
-const std::vector<std::pair<std::string, std::string>> PATTERNS = {
+using PatternDictionary = std::vector<std::pair<std::string, std::string>>;
+
+const PatternDictionary PATTERNS = {
 	{ "&quot;", "\"" },
 	{ "&apos;", "'" },
 	{ "&lt;", "<" },
@@ -22,7 +24,7 @@ std::string TryFindReplacePattern(const std::string& html, size_t& replacePositi
 	}
 
 	++replacePosition;
-	return std::string(1, PATTERN_START);
+	return { PATTERN_START };
 }
 
 std::string HtmlDecode(const std::string& html)
