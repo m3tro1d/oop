@@ -1,7 +1,17 @@
 #include "DictionaryLib.h"
 
-int main()
+int main(int argc, char** argv)
 {
-	// TODO
+	auto const dictionaryFilename = GetDictionaryPath(argc, argv);
+
+	try
+	{
+		StartTranslationConsole(dictionaryFilename);
+	}
+	catch (const std::exception& e)
+	{
+		std::cerr << e.what() << '\n';
+	}
+
 	return EXIT_SUCCESS;
 }
