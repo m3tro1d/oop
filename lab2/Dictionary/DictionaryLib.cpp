@@ -10,9 +10,9 @@ std::string GetDictionaryPath(int argc, char** argv)
 	return argv[1];
 }
 
-void LoadDictionary(const std::string& dictionaryFilename, Dictionary& dictionary)
+void LoadDictionary(const std::string& dictionaryPath, Dictionary& dictionary)
 {
-	std::ifstream dictionaryFile(dictionaryFilename);
+	std::ifstream dictionaryFile(dictionaryPath);
 	if (!dictionaryFile.is_open())
 	{
 		return;
@@ -37,9 +37,9 @@ void LoadDictionary(const std::string& dictionaryFilename, Dictionary& dictionar
 	dictionaryFile.close();
 }
 
-void SaveDictionary(const std::string& dictionaryFilename, const Dictionary& dictionary)
+void SaveDictionary(const std::string& dictionaryPath, const Dictionary& dictionary)
 {
-	std::ofstream dictionaryFile(dictionaryFilename);
+	std::ofstream dictionaryFile(dictionaryPath);
 	if (!dictionaryFile.is_open())
 	{
 		throw std::runtime_error("Failed to open dictionary file for writing");
@@ -75,15 +75,16 @@ void AddTranslation(Dictionary& dictionary, const std::string& phrase, const std
 	dictionary[phrase] = translation;
 }
 
-void StartTranslationConsole(const std::string& dictionaryFilename)
+void StartTranslationConsole(const std::string& dictionaryPath)
 {
 	Dictionary dictionary;
-	LoadDictionary(dictionaryFilename, dictionary);
+	LoadDictionary(dictionaryPath, dictionary);
 
 	std::string userInput;
+	bool dictionaryChanged = false;
 	while (true)
 	{
-		std::cout << "> ";
+		std::cout << PROMPT;
 		std::getline(std::cin, userInput);
 		if (userInput == "...")
 		{
@@ -98,14 +99,37 @@ void StartTranslationConsole(const std::string& dictionaryFilename)
 		}
 		else
 		{
-			std::cout << "> ";
+			std::cout << "Unknown word '" << source << "'. Enter translation or empty string to abort.\n"
+					  << PROMPT;
 			std::getline(std::cin, userInput);
 			if (!userInput.empty())
 			{
 				AddTranslation(dictionary, source, userInput);
+				dictionaryChanged = true;
+				std::cout << "Word '" << source << "' saved in the dictionary as '" << userInput << "'.\n";
+			}
+			else
+			{
+				std::cout << "Word '" << source << "' ignored. Good riddance.\n";
 			}
 		}
 	}
 
-	SaveDictionary(dictionaryFilename, dictionary);
+	if (dictionaryChanged)
+	{
+		std::cout << "Dictionary has been changed. Enter Y or y to save changes.\n"
+				  << PROMPT;
+
+		char answer;
+		std::cin >> std::noskipws >> answer;
+		if (std::tolower(answer) == 'y')
+		{
+			SaveDictionary(dictionaryPath, dictionary);
+			std::cout << "Changes saved successfully. Farewell!\n";
+		}
+		else
+		{
+			std::cout << "Changes discarded. Have a nice day!\n";
+		}
+	}
 }
