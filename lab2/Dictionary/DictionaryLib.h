@@ -1,11 +1,14 @@
 #pragma once
 
+#include <algorithm>
 #include <fstream>
+#include <iomanip>
 #include <iostream>
 #include <map>
-#include <algorithm>
 #include <optional>
+#include <set>
 #include <sstream>
+#include <stdexcept>
 #include <string>
 
 const std::string DEFAULT_DICTIONARY_PATH = "dictionary.txt";
