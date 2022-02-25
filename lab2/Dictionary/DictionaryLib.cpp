@@ -24,17 +24,16 @@ std::string GetDictionaryPath(int argc, char** argv)
 	return argv[1];
 }
 
-void LoadDictionary(const std::string& dictionaryPath, Dictionary& dictionary)
+void ReadDictionaryFile(std::istream& dictionaryFile, Dictionary& dictionary)
 {
-	std::ifstream dictionaryFile(dictionaryPath);
-	if (!dictionaryFile.is_open())
-	{
-		return;
-	}
-
 	std::string line;
 	while (std::getline(dictionaryFile, line))
 	{
+		if (line.empty())
+		{
+			continue;
+		}
+
 		std::string source;
 		std::string translation;
 
@@ -46,9 +45,35 @@ void LoadDictionary(const std::string& dictionaryPath, Dictionary& dictionary)
 		{
 			throw std::invalid_argument("Invalid dictionary file format");
 		}
+
+		dictionary[source] = translation;
+	}
+}
+
+void LoadDictionary(const std::string& dictionaryPath, Dictionary& dictionary)
+{
+	std::ifstream dictionaryFile(dictionaryPath);
+	if (!dictionaryFile.is_open())
+	{
+		return;
+	}
+
+	ReadDictionaryFile(dictionaryFile, dictionary);
+
+	if (dictionaryFile.bad())
+	{
+		throw std::runtime_error("failed to read from input file");
 	}
 
 	dictionaryFile.close();
+}
+
+void WriteDictionaryFile(std::ostream& dictionaryFile, const Dictionary& dictionary)
+{
+	for (auto const& [source, translation] : dictionary)
+	{
+		dictionaryFile << source << ':' << translation << '\n';
+	}
 }
 
 void SaveDictionary(const std::string& dictionaryPath, const Dictionary& dictionary)
@@ -59,10 +84,7 @@ void SaveDictionary(const std::string& dictionaryPath, const Dictionary& diction
 		throw std::runtime_error("Failed to open dictionary file for writing");
 	}
 
-	for (auto const& [source, translation] : dictionary)
-	{
-		dictionaryFile << source << ':' << translation << '\n';
-	}
+	WriteDictionaryFile(dictionaryFile, dictionary);
 
 	if (!dictionaryFile.flush())
 	{

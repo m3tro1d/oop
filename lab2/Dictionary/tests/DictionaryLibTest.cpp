@@ -30,7 +30,43 @@ TEST_CASE("dictionary file operations work correctly")
 
 	SECTION("dictionary file initial parsing works correctly")
 	{
-		// TODO
+		SECTION("empty file results in an empty array")
+		{
+			std::stringstream input("\n");
+			Dictionary dictionary;
+			ReadDictionaryFile(input, dictionary);
+
+			REQUIRE(dictionary.empty());
+		}
+
+		SECTION("valid translations are parsed correctly")
+		{
+			std::stringstream input("cat:кот, кошка\nThe Red Square:Красная Площадь\n");
+			Dictionary dictionary;
+			ReadDictionaryFile(input, dictionary);
+
+			REQUIRE(dictionary.size() == 2);
+			REQUIRE(dictionary["cat"] == "кот, кошка");
+			REQUIRE(dictionary["The Red Square"] == "Красная Площадь");
+		}
+
+		SECTION("invalid translation file results in an exception")
+		{
+			std::stringstream input;
+			Dictionary dictionary;
+
+			input.str(":кот, кошка\n");
+			REQUIRE_THROWS_AS(ReadDictionaryFile(input, dictionary), std::invalid_argument);
+
+			input.str("cat:\n");
+			REQUIRE_THROWS_AS(ReadDictionaryFile(input, dictionary), std::invalid_argument);
+
+			input.str("whatever\n");
+			REQUIRE_THROWS_AS(ReadDictionaryFile(input, dictionary), std::invalid_argument);
+
+			input.str(":\n");
+			REQUIRE_THROWS_AS(ReadDictionaryFile(input, dictionary), std::invalid_argument);
+		}
 	}
 
 	SECTION("dictionary file saving works correctly")
