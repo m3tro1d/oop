@@ -8,7 +8,15 @@ TEST_CASE("dictionary file operations work correctly")
 	{
 		SECTION("dictionary file path grabs value from the arguments if they are present")
 		{
-			// TODO
+			int const argc = 2;
+			char** argv = new char*[2];
+			argv[1] = new char[10];
+			std::strcpy(argv[1], "test.txt");
+			auto const dictionaryPath = GetDictionaryPath(argc, argv);
+			delete[] argv[1];
+			delete[] argv;
+
+			REQUIRE(dictionaryPath == "test.txt");
 		}
 
 		SECTION("dictionary file path fallbacks to the default value if incorrect arguments were provided")
