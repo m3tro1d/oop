@@ -1,5 +1,19 @@
 #include "DictionaryLib.h"
 
+std::string tolower(const std::string& string)
+{
+	std::string result;
+	std::transform(
+		string.begin(),
+		string.end(),
+		std::back_inserter(result),
+		[](char ch) {
+			return std::tolower(ch);
+		});
+
+	return result;
+}
+
 std::string GetDictionaryPath(int argc, char** argv)
 {
 	if (argc != 2)
@@ -109,7 +123,7 @@ void StartTranslationConsole(const std::string& dictionaryPath)
 			break;
 		}
 
-		auto const source = userInput;
+		auto const source = tolower(userInput);
 		auto const translation = LookupTranslation(dictionary, source);
 		if (translation.has_value())
 		{
