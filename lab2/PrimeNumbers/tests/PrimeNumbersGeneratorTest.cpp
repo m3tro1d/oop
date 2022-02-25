@@ -3,7 +3,7 @@
 #include "../PrimeNumbersGenerator.h"
 #include "catch.hpp"
 
-TEST_CASE("prime generation is working correctly")
+TEST_CASE("borderline cases are processed correctly")
 {
 	SECTION("wrong upper bound results in an exception")
 	{
@@ -19,29 +19,28 @@ TEST_CASE("prime generation is working correctly")
 		REQUIRE(primes == result);
 	}
 
-	SECTION("prime numbers are generated correctly")
-	{
-		auto const primes = GeneratePrimeNumbersSet(10);
-		std::set<int> result = { 2, 3, 5, 7 };
-
-		REQUIRE(primes == result);
-	}
-
 	SECTION("generated set includes the upper bound if it is prime")
 	{
-		auto const primes = GeneratePrimeNumbersSet(5);
+		auto const primes1 = GeneratePrimeNumbersSet(5);
+		auto const primes2 = GeneratePrimeNumbersSet(6);
 		std::set<int> result = { 2, 3, 5 };
 
-		REQUIRE(primes.find(5) != primes.end());
+		REQUIRE(primes1 == result);
+		REQUIRE(primes2 == result);
 	}
+}
+
+TEST_CASE("usual cases are working correctly")
+{
+	auto const primes1000 = GeneratePrimeNumbersSet(1000);
+	REQUIRE(primes1000.size() == 168);
+
+	auto const primes1009 = GeneratePrimeNumbersSet(1009);
+	REQUIRE(primes1009.size() == 169);
 }
 
 TEST_CASE("heavy case is working correctly")
 {
-	SECTION("prime numbers up to 100 million are generated correctly")
-	{
-		auto const primes = GeneratePrimeNumbersSet(100000000);
-
-		REQUIRE(primes.size() == 5761455);
-	}
+	auto const primes = GeneratePrimeNumbersSet(100000000);
+	REQUIRE(primes.size() == 5761455);
 }
