@@ -84,11 +84,45 @@ TEST_CASE("dictionary file operations work correctly")
 		{
 			std::stringstream output;
 			Dictionary dictionary;
-			dictionary["cat"] = "кот, кошка";
-			dictionary["The Red Square"] = "Красная Площадь";
+			AddTranslation(dictionary, "cat", "кот, кошка");
+			AddTranslation(dictionary, "The Red Square", "Красная Площадь");
 			WriteDictionaryFile(output, dictionary);
 
 			REQUIRE(output.str() == "The Red Square:Красная Площадь\ncat:кот, кошка\n");
 		}
+	}
+}
+
+TEST_CASE("dictionary manipulations are working correctly")
+{
+	SECTION("adding translations works correctly")
+	{
+		Dictionary dictionary;
+		std::string const source = "cat";
+		std::string const translation = "кот, кошка";
+		AddTranslation(dictionary, source, translation);
+
+		REQUIRE(dictionary.size() == 1);
+		REQUIRE(dictionary[source] == translation);
+	}
+
+	SECTION("looking up an existing source returns its translation")
+	{
+		Dictionary dictionary;
+		std::string const source = "cat";
+		std::string const translation = "кот, кошка";
+		AddTranslation(dictionary, source, translation);
+		auto const lookedUp = LookupTranslation(dictionary, source);
+
+		REQUIRE(lookedUp.has_value());
+		REQUIRE(lookedUp.value() == translation);
+	}
+
+	SECTION("looking up non existing source returns empty translation")
+	{
+		Dictionary dictionary;
+		auto const lookedUp = LookupTranslation(dictionary, "cat");
+
+		REQUIRE(!lookedUp.has_value());
 	}
 }

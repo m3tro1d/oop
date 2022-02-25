@@ -26,5 +26,4 @@ std::optional<std::string> LookupTranslation(const Dictionary& dictionary, const
 void AddTranslation(Dictionary& dictionary, const std::string& phrase, const std::string& translation);
 
 void PromptForSave(const std::string& dictionaryPath, const Dictionary& dictionary);
-
 void StartTranslationConsole(const std::string& dictionaryFilename);
