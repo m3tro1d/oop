@@ -126,3 +126,8 @@ TEST_CASE("dictionary manipulations are working correctly")
 		REQUIRE(!lookedUp.has_value());
 	}
 }
+
+TEST_CASE("user interactions work correctly")
+{
+	// TODO
+}
