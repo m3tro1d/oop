@@ -15,6 +15,12 @@ const std::string DEFAULT_DICTIONARY_PATH = "dictionary.txt";
 
 const std::string PROMPT = "> ";
 
+// TODO: separate on modules:
+//    1. Dictionary, Lookup and Adding translations
+//    2. File operations
+//    3. User interaction
+//  Separated test cases for each module
+
 using Dictionary = std::map<std::string, std::string>;
 
 std::string tolower(const std::string& string);
