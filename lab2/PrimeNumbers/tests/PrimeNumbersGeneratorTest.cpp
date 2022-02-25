@@ -35,3 +35,13 @@ TEST_CASE("prime generation is working correctly")
 		REQUIRE(primes.find(5) != primes.end());
 	}
 }
+
+TEST_CASE("heavy case is working correctly")
+{
+	SECTION("prime numbers up to 100 million are generated correctly")
+	{
+		auto const primes = GeneratePrimeNumbersSet(100000000);
+
+		REQUIRE(primes.size() == 5761455);
+	}
+}
