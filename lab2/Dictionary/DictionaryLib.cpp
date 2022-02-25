@@ -111,6 +111,32 @@ void AddTranslation(Dictionary& dictionary, const std::string& phrase, const std
 	dictionary[phrase] = translation;
 }
 
+bool PromptForNewWord(
+	std::istream& input,
+	std::ostream& output,
+	Dictionary& dictionary,
+	const std::string& source)
+{
+	std::string userInput;
+	bool saved = false;
+
+	output << "Unknown word '" << source << "'. Enter translation or empty string to abort.\n"
+		   << PROMPT;
+	std::getline(input, userInput);
+	if (!userInput.empty())
+	{
+		AddTranslation(dictionary, tolower(source), userInput);
+		saved = true;
+		output << "Word '" << source << "' saved in the dictionary as '" << userInput << "'.\n";
+	}
+	else
+	{
+		output << "Word '" << source << "' ignored. Good riddance.\n";
+	}
+
+	return saved;
+}
+
 void PromptForSave(
 	std::istream& input,
 	std::ostream& output,
@@ -121,7 +147,7 @@ void PromptForSave(
 		   << PROMPT;
 
 	char answer;
-	input >> std::noskipws >> answer;
+	input >> answer;
 	if (std::tolower(answer) == 'y')
 	{
 		SaveDictionary(dictionaryPath, dictionary);
@@ -144,32 +170,19 @@ void StartTranslationConsole(std::istream& input, std::ostream& output, const st
 	{
 		output << PROMPT;
 		std::getline(input, userInput);
-		if (userInput == "...")
+		if (userInput == EXIT_INPUT)
 		{
 			break;
 		}
 
-		auto const source = tolower(userInput);
-		auto const translation = LookupTranslation(dictionary, source);
+		auto const translation = LookupTranslation(dictionary, tolower(userInput));
 		if (translation.has_value())
 		{
 			output << translation.value() << '\n';
 		}
 		else
 		{
-			output << "Unknown word '" << userInput << "'. Enter translation or empty string to abort.\n"
-				   << PROMPT;
-			std::getline(input, userInput);
-			if (!userInput.empty())
-			{
-				AddTranslation(dictionary, source, userInput);
-				dictionaryChanged = true;
-				output << "Word '" << source << "' saved in the dictionary as '" << userInput << "'.\n";
-			}
-			else
-			{
-				output << "Word '" << source << "' ignored. Good riddance.\n";
-			}
+			dictionaryChanged = PromptForNewWord(input, output, dictionary, userInput);
 		}
 	}
 

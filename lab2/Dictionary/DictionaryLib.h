@@ -14,6 +14,7 @@
 const std::string DEFAULT_DICTIONARY_PATH = "dictionary.txt";
 
 const std::string PROMPT = "> ";
+const std::string EXIT_INPUT = "...";
 
 // TODO: separate on modules:
 //    1. Dictionary, Lookup and Adding translations
@@ -34,6 +35,11 @@ void SaveDictionary(const std::string& dictionaryFilename, const Dictionary& dic
 std::optional<std::string> LookupTranslation(const Dictionary& dictionary, const std::string& phrase);
 void AddTranslation(Dictionary& dictionary, const std::string& phrase, const std::string& translation);
 
+bool PromptForNewWord(
+	std::istream& input,
+	std::ostream& output,
+	Dictionary& dictionary,
+	const std::string& source);
 void PromptForSave(
 	std::istream& input,
 	std::ostream& output,
