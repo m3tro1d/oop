@@ -153,7 +153,7 @@ void StartTranslationConsole(const std::string& dictionaryPath)
 		}
 		else
 		{
-			std::cout << "Unknown word '" << source << "'. Enter translation or empty string to abort.\n"
+			std::cout << "Unknown word '" << userInput << "'. Enter translation or empty string to abort.\n"
 					  << PROMPT;
 			std::getline(std::cin, userInput);
 			if (!userInput.empty())
