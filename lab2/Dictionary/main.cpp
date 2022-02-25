@@ -6,7 +6,7 @@ int main(int argc, char** argv)
 
 	try
 	{
-		StartTranslationConsole(dictionaryFilename);
+		StartTranslationConsole(std::cin, std::cout, dictionaryFilename);
 	}
 	catch (const std::exception& e)
 	{

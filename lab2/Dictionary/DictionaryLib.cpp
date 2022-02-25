@@ -111,25 +111,29 @@ void AddTranslation(Dictionary& dictionary, const std::string& phrase, const std
 	dictionary[phrase] = translation;
 }
 
-void PromptForSave(const std::string& dictionaryPath, const Dictionary& dictionary)
+void PromptForSave(
+	std::istream& input,
+	std::ostream& output,
+	const std::string& dictionaryPath,
+	const Dictionary& dictionary)
 {
-	std::cout << "Dictionary has been changed. Enter Y or y to save changes.\n"
-			  << PROMPT;
+	output << "Dictionary has been changed. Enter Y or y to save changes.\n"
+		   << PROMPT;
 
 	char answer;
-	std::cin >> std::noskipws >> answer;
+	input >> std::noskipws >> answer;
 	if (std::tolower(answer) == 'y')
 	{
 		SaveDictionary(dictionaryPath, dictionary);
-		std::cout << "Changes saved successfully. Farewell!\n";
+		output << "Changes saved successfully. Farewell!\n";
 	}
 	else
 	{
-		std::cout << "Changes discarded. Have a nice day!\n";
+		output << "Changes discarded. Have a nice day!\n";
 	}
 }
 
-void StartTranslationConsole(const std::string& dictionaryPath)
+void StartTranslationConsole(std::istream& input, std::ostream& output, const std::string& dictionaryPath)
 {
 	Dictionary dictionary;
 	LoadDictionary(dictionaryPath, dictionary);
@@ -138,8 +142,8 @@ void StartTranslationConsole(const std::string& dictionaryPath)
 	bool dictionaryChanged = false;
 	while (true)
 	{
-		std::cout << PROMPT;
-		std::getline(std::cin, userInput);
+		output << PROMPT;
+		std::getline(input, userInput);
 		if (userInput == "...")
 		{
 			break;
@@ -149,32 +153,32 @@ void StartTranslationConsole(const std::string& dictionaryPath)
 		auto const translation = LookupTranslation(dictionary, source);
 		if (translation.has_value())
 		{
-			std::cout << translation.value() << '\n';
+			output << translation.value() << '\n';
 		}
 		else
 		{
-			std::cout << "Unknown word '" << userInput << "'. Enter translation or empty string to abort.\n"
-					  << PROMPT;
-			std::getline(std::cin, userInput);
+			output << "Unknown word '" << userInput << "'. Enter translation or empty string to abort.\n"
+				   << PROMPT;
+			std::getline(input, userInput);
 			if (!userInput.empty())
 			{
 				AddTranslation(dictionary, source, userInput);
 				dictionaryChanged = true;
-				std::cout << "Word '" << source << "' saved in the dictionary as '" << userInput << "'.\n";
+				output << "Word '" << source << "' saved in the dictionary as '" << userInput << "'.\n";
 			}
 			else
 			{
-				std::cout << "Word '" << source << "' ignored. Good riddance.\n";
+				output << "Word '" << source << "' ignored. Good riddance.\n";
 			}
 		}
 	}
 
 	if (dictionaryChanged)
 	{
-		PromptForSave(dictionaryPath, dictionary);
+		PromptForSave(input, output, dictionaryPath, dictionary);
 	}
 	else
 	{
-		std::cout << "No changes in the dictionary. Come back soon!\n";
+		output << "No changes in the dictionary. Come back soon!\n";
 	}
 }
