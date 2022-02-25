@@ -41,7 +41,7 @@ TEST_CASE("dictionary file operations work correctly")
 
 		SECTION("valid translations are parsed correctly")
 		{
-			std::stringstream input("cat:кот, кошка\nThe Red Square:Красная Площадь\n");
+			std::stringstream input("The Red Square:Красная Площадь\ncat:кот, кошка\n");
 			Dictionary dictionary;
 			ReadDictionaryFile(input, dictionary);
 
@@ -71,6 +71,24 @@ TEST_CASE("dictionary file operations work correctly")
 
 	SECTION("dictionary file saving works correctly")
 	{
-		// TODO
+		SECTION("saving empty dictionary results in an empty file")
+		{
+			std::stringstream output;
+			Dictionary dictionary;
+			WriteDictionaryFile(output, dictionary);
+
+			REQUIRE(output.str().empty());
+		}
+
+		SECTION("saving populated dictionary works correctly")
+		{
+			std::stringstream output;
+			Dictionary dictionary;
+			dictionary["cat"] = "кот, кошка";
+			dictionary["The Red Square"] = "Красная Площадь";
+			WriteDictionaryFile(output, dictionary);
+
+			REQUIRE(output.str() == "The Red Square:Красная Площадь\ncat:кот, кошка\n");
+		}
 	}
 }
