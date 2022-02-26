@@ -4,6 +4,9 @@
 #include "DictionaryLib.h"
 #include <iomanip>
 
+const std::string PROMPT = "> ";
+const std::string EXIT_INPUT = "...";
+
 bool PromptForNewWord(
 	std::istream& input,
 	std::ostream& output,
