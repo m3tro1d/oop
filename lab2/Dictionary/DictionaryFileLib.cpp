@@ -21,18 +21,18 @@ void ReadDictionaryFile(std::istream& dictionaryFile, Dictionary& dictionary)
 		}
 
 		std::string source;
-		std::string translation;
+		std::string translations;
 
 		std::stringstream translationUnit(line);
 		std::getline(translationUnit, source, ':');
-		std::getline(translationUnit, translation);
+		std::getline(translationUnit, translations);
 
-		if (source.empty() || translation.empty())
+		if (source.empty() || translations.empty())
 		{
 			throw std::invalid_argument("Invalid dictionary file format");
 		}
 
-		dictionary[source] = translation;
+		AddTranslations(dictionary, source, translations);
 	}
 }
 
@@ -58,7 +58,7 @@ void WriteDictionaryFile(std::ostream& dictionaryFile, const Dictionary& diction
 {
 	for (auto const& [source, translation] : dictionary)
 	{
-		dictionaryFile << source << ':' << translation << '\n';
+		dictionaryFile << source << ':' << SerializeTranslationsAsString(translation) << '\n';
 	}
 }
 

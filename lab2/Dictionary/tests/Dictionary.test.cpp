@@ -84,8 +84,8 @@ TEST_CASE("dictionary file operations work correctly")
 		{
 			std::stringstream output;
 			Dictionary dictionary;
-			AddTranslation(dictionary, "cat", "кот, кошка");
-			AddTranslation(dictionary, "The Red Square", "Красная Площадь");
+			AddTranslations(dictionary, "cat", "кот, кошка");
+			AddTranslations(dictionary, "The Red Square", "Красная Площадь");
 			WriteDictionaryFile(output, dictionary);
 
 			REQUIRE(output.str() == "cat:кот, кошка\nthe red square:Красная Площадь\n");
@@ -100,7 +100,7 @@ TEST_CASE("dictionary manipulations are working correctly")
 		Dictionary dictionary;
 		std::string const source = "cat";
 		std::string const translation = "кот, кошка";
-		AddTranslation(dictionary, source, translation);
+		AddTranslations(dictionary, source, translation);
 
 		REQUIRE(dictionary.size() == 1);
 		REQUIRE(dictionary[source] == translation);
@@ -111,7 +111,7 @@ TEST_CASE("dictionary manipulations are working correctly")
 		Dictionary dictionary;
 		std::string const source = "cat";
 		std::string const translation = "кот, кошка";
-		AddTranslation(dictionary, source, translation);
+		AddTranslations(dictionary, source, translation);
 		auto const lookedUp = LookupTranslation(dictionary, source);
 
 		REQUIRE(lookedUp.has_value());
@@ -131,7 +131,7 @@ TEST_CASE("dictionary manipulations are working correctly")
 		Dictionary dictionary;
 		std::string const source = "cat";
 		std::string const translation = "кот, кошка";
-		AddTranslation(dictionary, source, translation);
+		AddTranslations(dictionary, source, translation);
 		auto const lookedUp = LookupTranslation(dictionary, "CaT");
 
 		REQUIRE(lookedUp.has_value());

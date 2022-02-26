@@ -4,13 +4,22 @@
 #include <iostream>
 #include <map>
 #include <optional>
+#include <set>
+#include <sstream>
 #include <stdexcept>
 #include <string>
 
-using Dictionary = std::map<std::string, std::string>;
+using Translations = std::set<std::string>;
+using Dictionary = std::map<std::string, Translations>;
 
 std::string ToLower(const std::string& string);
 
-std::optional<std::string> LookupTranslation(const Dictionary& dictionary, const std::string& phrase);
+Translations ParseStringForTranslations(const std::string& translationsString);
 
-void AddTranslation(Dictionary& dictionary, const std::string& phrase, const std::string& translation);
+std::string SerializeTranslationsAsString(const Translations& translations);
+
+std::optional<Translations> LookupTranslation(const Dictionary& dictionary, const std::string& phrase);
+
+void AddTranslations(Dictionary& dictionary, const std::string& phrase, const Translations& translations);
+
+void AddTranslations(Dictionary& dictionary, const std::string& phrase, const std::string& translationsString);

@@ -14,12 +14,38 @@ std::string ToLower(const std::string& string)
 	return result;
 }
 
-void AddTranslation(Dictionary& dictionary, const std::string& phrase, const std::string& translation)
+Translations ParseStringForTranslations(const std::string& translationsString)
 {
-	dictionary[ToLower(phrase)] = translation;
+	std::stringstream ss(translationsString);
+	std::string translation;
+	Translations result;
+
+	while (std::getline(ss, translation))
+	{
+		result.insert(translation);
+	}
+
+	return result;
 }
 
-std::optional<std::string> LookupTranslation(const Dictionary& dictionary, const std::string& phrase)
+std::string SerializeTranslationsAsString(const Translations& translations)
+{
+	std::string result;
+	auto last = translations.end();
+	--last;
+	for (auto it = translations.begin(); it != translations.end(); ++it)
+	{
+		result.append(*it);
+		if (it != last)
+		{
+			result.append(", ");
+		}
+	}
+
+	return result;
+}
+
+std::optional<Translations> LookupTranslation(const Dictionary& dictionary, const std::string& phrase)
 {
 	try
 	{
@@ -29,4 +55,27 @@ std::optional<std::string> LookupTranslation(const Dictionary& dictionary, const
 	{
 		return std::nullopt;
 	}
+}
+
+void AddTranslations(Dictionary& dictionary, const std::string& phrase, const Translations& translations)
+{
+	auto it = dictionary.find(phrase);
+	if (it == dictionary.end())
+	{
+		dictionary[ToLower(phrase)] = translations;
+		return;
+	}
+
+	it->second.insert(translations.begin(), translations.end());
+}
+
+void AddTranslations(Dictionary& dictionary, const std::string& phrase, const std::string& translationsString)
+{
+	auto const translations = ParseStringForTranslations(translationsString);
+	if (translations.empty())
+	{
+		throw std::logic_error("empty translation");
+	}
+
+	AddTranslations(dictionary, phrase, translations);
 }
