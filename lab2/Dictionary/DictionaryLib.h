@@ -14,6 +14,8 @@ using Dictionary = std::map<std::string, Translations>;
 
 std::string ToLower(const std::string& string);
 
+void Trim(std::string& string);
+
 Translations ParseStringForTranslations(const std::string& translationsString);
 
 std::string SerializeTranslationsAsString(const Translations& translations);

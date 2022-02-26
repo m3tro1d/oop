@@ -14,15 +14,25 @@ std::string ToLower(const std::string& string)
 	return result;
 }
 
+void Trim(std::string& string)
+{
+	string.erase(string.find_last_not_of(' ') + 1);
+	string.erase(0, string.find_first_not_of(' '));
+}
+
 Translations ParseStringForTranslations(const std::string& translationsString)
 {
 	std::stringstream ss(translationsString);
 	std::string translation;
 	Translations result;
 
-	while (std::getline(ss, translation))
+	while (std::getline(ss, translation, ','))
 	{
-		result.insert(translation);
+		Trim(translation);
+		if (!translation.empty())
+		{
+			result.insert(translation);
+		}
 	}
 
 	return result;

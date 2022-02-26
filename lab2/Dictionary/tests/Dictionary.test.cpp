@@ -41,13 +41,13 @@ TEST_CASE("dictionary file operations work correctly")
 
 		SECTION("valid translations are parsed correctly")
 		{
-			std::stringstream input("The Red Square:Красная Площадь\ncat:кот, кошка\n");
+			std::stringstream input("the red square:Красная Площадь\ncat:кот, кошка\n");
 			Dictionary dictionary;
 			ReadDictionaryFile(input, dictionary);
 
 			REQUIRE(dictionary.size() == 2);
-			REQUIRE(dictionary["cat"] == "кот, кошка");
-			REQUIRE(dictionary["The Red Square"] == "Красная Площадь");
+			REQUIRE(dictionary["cat"] == std::set<std::string>{ "кот", "кошка" });
+			REQUIRE(dictionary["the red square"] == std::set<std::string>{ "Красная Площадь" });
 		}
 
 		SECTION("invalid translation file results in an exception")
@@ -97,28 +97,57 @@ TEST_CASE("dictionary manipulations are working correctly")
 {
 	SECTION("adding translations works correctly")
 	{
-		Dictionary dictionary;
-		std::string const source = "cat";
-		std::string const translation = "кот, кошка";
-		AddTranslations(dictionary, source, translation);
+		SECTION("adding one translation works correctly")
+		{
+			Dictionary dictionary;
+			std::string const source = "cat";
+			std::string const translationsString = "кот";
+			std::set<std::string> const translations = { "кот" };
+			AddTranslations(dictionary, source, translationsString);
 
-		REQUIRE(dictionary.size() == 1);
-		REQUIRE(dictionary[source] == translation);
+			REQUIRE(dictionary.size() == 1);
+			REQUIRE(dictionary[source] == translations);
+		}
+
+		SECTION("adding several translations at once works correctly")
+		{
+			Dictionary dictionary;
+			std::string const source = "cat";
+			std::string const translationsString = "кот, кошка";
+			std::set<std::string> const translations = { "кот", "кошка" };
+			AddTranslations(dictionary, source, translationsString);
+
+			REQUIRE(dictionary.size() == 1);
+			REQUIRE(dictionary[source] == translations);
+		}
+
+		SECTION("adding translations to the existing word works correctly")
+		{
+			Dictionary dictionary;
+			std::string const source = "cat";
+			std::set<std::string> const translations = { "кот", "кошка" };
+			AddTranslations(dictionary, source, "кот");
+			AddTranslations(dictionary, source, "кошка");
+
+			REQUIRE(dictionary.size() == 1);
+			REQUIRE(dictionary[source] == translations);
+		}
 	}
 
-	SECTION("looking up an existing source returns its translation")
+	SECTION("looking up an existing source returns its translations")
 	{
 		Dictionary dictionary;
 		std::string const source = "cat";
-		std::string const translation = "кот, кошка";
-		AddTranslations(dictionary, source, translation);
+		std::string const translationsString = "кот, кошка";
+		std::set<std::string> const translations = { "кот", "кошка" };
+		AddTranslations(dictionary, source, translationsString);
 		auto const lookedUp = LookupTranslation(dictionary, source);
 
 		REQUIRE(lookedUp.has_value());
-		REQUIRE(lookedUp.value() == translation);
+		REQUIRE(lookedUp.value() == translations);
 	}
 
-	SECTION("looking up non existing source returns empty translation")
+	SECTION("looking up non existing source returns empty translations")
 	{
 		Dictionary dictionary;
 		auto const lookedUp = LookupTranslation(dictionary, "cat");
@@ -130,12 +159,13 @@ TEST_CASE("dictionary manipulations are working correctly")
 	{
 		Dictionary dictionary;
 		std::string const source = "cat";
-		std::string const translation = "кот, кошка";
-		AddTranslations(dictionary, source, translation);
+		std::string const translationsString = "кот, кошка";
+		std::set<std::string> const translations = { "кот", "кошка" };
+		AddTranslations(dictionary, source, translationsString);
 		auto const lookedUp = LookupTranslation(dictionary, "CaT");
 
 		REQUIRE(lookedUp.has_value());
-		REQUIRE(lookedUp == translation);
+		REQUIRE(lookedUp == translations);
 	}
 }
 
