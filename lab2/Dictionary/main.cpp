@@ -1,4 +1,4 @@
-#include "DictionaryLib.h"
+#include "DictionaryConsoleLib.h"
 
 int main(int argc, char** argv)
 {
