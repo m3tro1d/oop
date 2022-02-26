@@ -125,6 +125,18 @@ TEST_CASE("dictionary manipulations are working correctly")
 
 		REQUIRE(!lookedUp.has_value());
 	}
+
+	SECTION("source search works case-insensitively, but translations case is preserved")
+	{
+		Dictionary dictionary;
+		std::string const source = "cat";
+		std::string const translation = "кот, кошка";
+		AddTranslation(dictionary, source, translation);
+		auto const lookedUp = LookupTranslation(dictionary, "CaT");
+
+		REQUIRE(lookedUp.has_value());
+		REQUIRE(lookedUp == translation);
+	}
 }
 
 TEST_CASE("user interactions work correctly")
