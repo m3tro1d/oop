@@ -88,7 +88,7 @@ TEST_CASE("dictionary file operations work correctly")
 			AddTranslation(dictionary, "The Red Square", "Красная Площадь");
 			WriteDictionaryFile(output, dictionary);
 
-			REQUIRE(output.str() == "The Red Square:Красная Площадь\ncat:кот, кошка\n");
+			REQUIRE(output.str() == "cat:кот, кошка\nthe red square:Красная Площадь\n");
 		}
 	}
 }
