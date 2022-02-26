@@ -1,6 +1,6 @@
-add_executable(DictionaryLibTest
+add_executable(DictionaryTest
                ../DictionaryLib.h
                ../DictionaryLib.cpp
-               DictionaryLibTest.cpp)
-target_link_libraries(DictionaryLibTest PUBLIC catch2)
-add_test(NAME DictionaryLibTest COMMAND DictionaryLibTest)
+               Dictionary.test.cpp)
+target_link_libraries(DictionaryTest PUBLIC catch2)
+add_test(NAME DictionaryTest COMMAND DictionaryTest)
