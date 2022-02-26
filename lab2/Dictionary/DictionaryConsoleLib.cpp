@@ -14,7 +14,7 @@ bool PromptForNewWord(
 	std::getline(input, userInput);
 	if (!userInput.empty())
 	{
-		AddTranslation(dictionary, tolower(source), userInput);
+		AddTranslation(dictionary, source, userInput);
 		saved = true;
 		output << "Word '" << source << "' saved in the dictionary as '" << userInput << "'.\n";
 	}
@@ -64,7 +64,7 @@ void StartTranslationConsole(std::istream& input, std::ostream& output, const st
 			break;
 		}
 
-		auto const translation = LookupTranslation(dictionary, tolower(userInput));
+		auto const translation = LookupTranslation(dictionary, userInput);
 		if (translation.has_value())
 		{
 			output << translation.value() << '\n';

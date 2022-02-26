@@ -1,14 +1,11 @@
 #pragma once
 
 #include "DictionaryLib.h"
-#include <algorithm>
 #include <fstream>
 #include <sstream>
 #include <string>
 
 const std::string DEFAULT_DICTIONARY_PATH = "dictionary.txt";
-
-std::string tolower(const std::string& string);
 
 std::string GetDictionaryPath(int argc, char** argv);
 
