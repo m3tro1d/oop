@@ -54,5 +54,65 @@ SCENARIO("car is operated correctly")
 				REQUIRE(car.IsTurnedOn());
 			}
 		}
+
+		WHEN("the engine is turned on")
+		{
+			car.TurnOnEngine();
+
+			THEN("it is at zeroth gear")
+			{
+				REQUIRE(car.GetGear() == 0);
+			}
+
+			THEN("it has zero speed")
+			{
+				REQUIRE(car.GetSpeed() == 0);
+			}
+
+			THEN("it is not moving")
+			{
+				REQUIRE(car.GetDirection() == Direction::Still);
+			}
+
+			THEN("the engine can be turned off")
+			{
+				REQUIRE(car.TurnOffEngine());
+				REQUIRE(!car.IsTurnedOn());
+			}
+
+			THEN("the engine can't be turned on")
+			{
+				REQUIRE(!car.TurnOnEngine());
+				REQUIRE(car.IsTurnedOn());
+			}
+
+			THEN("it can set first gear")
+			{
+				REQUIRE(car.SetGear(1));
+				REQUIRE(car.GetGear() == 1);
+			}
+
+			THEN("it can set reverse gear")
+			{
+				REQUIRE(car.SetGear(-1));
+				REQUIRE(car.GetGear() == -1);
+			}
+		}
+
+		WHEN("it is turned on and first gear is set")
+		{
+			car.TurnOnEngine();
+			car.SetGear(1);
+
+			// TODO
+		}
+
+		WHEN("it is turned on and reverse gear is set")
+		{
+			car.TurnOnEngine();
+			car.SetGear(-1);
+
+			// TODO
+		}
 	}
 }
