@@ -64,9 +64,8 @@ fc tests\not-writable-output.txt %OUTPUT% > nul || goto failed
 echo Test 9 passed
 
 rem Heavy text (over 10000000 occurrences) is processed correctly and fast enough
-rem Uncomment if you have Python 3 installed, because fc takes too long to compare files
 powershell (Measure-Command { ".\\%SUBJECT%" tests\heavy.txt %OUTPUT% A BB }).ToString() || goto failed
-python ..\..\utils\compare.py tests\heavy-output.txt %OUTPUT% > nul 2>&1 || goto failed
+fc tests\heavy-output.txt %OUTPUT% > nul 2>&1 || goto failed
 echo Test 10 passed
 rem echo Test 10 skipped
 
