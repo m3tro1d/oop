@@ -8,6 +8,7 @@ std::set<int> PopulateSet(int upperBound)
 	std::set<int> result;
 
 	result.insert(2);
+	const double sizeSquareRoot = std::sqrt(primes.size());
 
 	for (size_t i = 3; i < primes.size(); i += 2)
 	{
@@ -15,9 +16,12 @@ std::set<int> PopulateSet(int upperBound)
 		{
 			result.insert(static_cast<int>(i));
 
-			for (size_t j = i * i; j < primes.size(); j += i)
+			if (i < sizeSquareRoot)
 			{
-				primes[j] = false;
+				for (size_t j = i * i; j < primes.size(); j += i)
+				{
+					primes[j] = false;
+				}
 			}
 		}
 	}
