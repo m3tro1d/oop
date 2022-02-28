@@ -41,7 +41,7 @@ std::optional<int> GetUpperBound(int argc, char** argv)
 	{
 		upperBound = std::stoi(argv[1]);
 	}
-	catch (const std::exception& e)
+	catch (const std::exception&)
 	{
 		std::cerr << "Invalid upper bound - should be a number\n";
 		return std::nullopt;
@@ -55,6 +55,6 @@ void PrintPrimes(std::ostream& output, const std::set<int>& primes)
 	std::copy(
 		primes.begin(),
 		primes.end(),
-		std::ostream_iterator<int>(std::cout, " "));
-	std::cout << '\n';
+		std::ostream_iterator<int>(output, " "));
+	output << '\n';
 }
