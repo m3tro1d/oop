@@ -39,8 +39,10 @@ TEST_CASE("usual cases are working correctly")
 	REQUIRE(primes1009.size() == 169);
 }
 
+#ifdef NDEBUG
 TEST_CASE("heavy case is working correctly")
 {
 	auto const primes = GeneratePrimeNumbersSet(100000000);
 	REQUIRE(primes.size() == 5761455);
 }
+#endif
