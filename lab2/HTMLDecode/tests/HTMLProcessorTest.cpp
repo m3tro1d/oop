@@ -13,13 +13,13 @@ TEST_CASE("encoded string is processed correctly")
 		REQUIRE(decoded.empty());
 	}
 
-		SECTION("string with no escape sequences is unchanged")
-		{
-			const std::string input = "so let it be written, so let it be done";
-			auto const decoded = HtmlDecode(input);
+	SECTION("string with no escape sequences is unchanged")
+	{
+		const std::string input = "so let it be written, so let it be done";
+		auto const decoded = HtmlDecode(input);
 
-			REQUIRE(decoded == input);
-		}
+		REQUIRE(decoded == input);
+	}
 
 	SECTION("string with only pattern start is unchanged")
 	{
