@@ -2,31 +2,23 @@
 
 using Sieve = std::vector<bool>;
 
-Sieve GenerateSieve(int upperBound)
+std::set<int> PopulateSet(int upperBound)
 {
 	Sieve primes(upperBound + 1, true);
-	for (size_t i = 2; i * i <= upperBound; ++i)
-	{
-		if (primes[i])
-		{
-			for (size_t j = i * i; j <= upperBound; j += i)
-			{
-				primes[j] = false;
-			}
-		}
-	}
-
-	return primes;
-}
-
-std::set<int> PopulateSet(const Sieve& primes)
-{
 	std::set<int> result;
-	for (size_t i = 2; i < primes.size(); ++i)
+
+	result.insert(2);
+
+	for (size_t i = 3; i < primes.size(); i += 2)
 	{
 		if (primes[i])
 		{
 			result.insert(static_cast<int>(i));
+
+			for (size_t j = i * i; j < primes.size(); j += i)
+			{
+				primes[j] = false;
+			}
 		}
 	}
 
@@ -40,6 +32,5 @@ std::set<int> GeneratePrimeNumbersSet(int upperBound)
 		throw std::out_of_range("Invalid upper bound value");
 	}
 
-	auto const& primes = GenerateSieve(upperBound);
-	return PopulateSet(primes);
+	return PopulateSet(upperBound);
 }
