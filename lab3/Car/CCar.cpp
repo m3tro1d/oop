@@ -18,6 +18,11 @@ bool CCar::TurnOffEngine()
 		return false;
 	}
 
+	if (m_gear != 0 || m_speed != 0)
+	{
+		return false;
+	}
+
 	m_isEngineOn = false;
 	return true;
 }
@@ -51,7 +56,17 @@ bool CCar::IsTurnedOn() const
 
 Direction CCar::GetDirection() const
 {
-	return Direction::Still;
+	if (m_speed == 0)
+	{
+		return Direction::Still;
+	}
+
+	if (m_gear < 0)
+	{
+		return Direction::Backward;
+	}
+
+	return Direction::Forward;
 }
 
 int CCar::GetGear() const

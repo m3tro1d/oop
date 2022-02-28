@@ -104,7 +104,31 @@ SCENARIO("car is operated correctly")
 			car.TurnOnEngine();
 			car.SetGear(1);
 
-			// TODO
+			THEN("the engine can't be turned off")
+			{
+				REQUIRE(!car.TurnOffEngine());
+				REQUIRE(car.IsTurnedOn());
+			}
+
+			THEN("speed from 0 to 30 can be set")
+			{
+				REQUIRE(car.SetSpeed(30));
+				REQUIRE(car.GetSpeed() == 30);
+				REQUIRE(car.SetSpeed(0));
+				REQUIRE(car.GetSpeed() == 0);
+			}
+
+			THEN("speed exceeding limit can't be set")
+			{
+				REQUIRE(!car.SetSpeed(31));
+				REQUIRE(car.GetSpeed() == 0);
+			}
+
+			THEN("setting speed more than 0 makes car move forward")
+			{
+				REQUIRE(car.SetSpeed(20));
+				REQUIRE(car.GetDirection() == Direction::Forward);
+			}
 		}
 
 		WHEN("it is turned on and reverse gear is set")
@@ -112,7 +136,31 @@ SCENARIO("car is operated correctly")
 			car.TurnOnEngine();
 			car.SetGear(-1);
 
-			// TODO
+			THEN("the engine can't be turned off")
+			{
+				REQUIRE(!car.TurnOffEngine());
+				REQUIRE(car.IsTurnedOn());
+			}
+
+			THEN("speed from 0 to 20 can be set")
+			{
+				REQUIRE(car.SetSpeed(20));
+				REQUIRE(car.GetSpeed() == 20);
+				REQUIRE(car.SetSpeed(0));
+				REQUIRE(car.GetSpeed() == 0);
+			}
+
+			THEN("speed exceeding limit can't be set")
+			{
+				REQUIRE(!car.SetSpeed(21));
+				REQUIRE(car.GetSpeed() == 0);
+			}
+
+			THEN("setting speed more than 0 makes car move backward")
+			{
+				REQUIRE(car.SetSpeed(10));
+				REQUIRE(car.GetDirection() == Direction::Backward);
+			}
 		}
 	}
 }

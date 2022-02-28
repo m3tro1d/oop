@@ -1,5 +1,6 @@
 #pragma once
 
+#include <array>
 #include <iostream>
 
 enum class Direction
@@ -9,12 +10,13 @@ enum class Direction
 	Backward,
 };
 
+constexpr int MIN_GEAR = -1;
+constexpr int MAX_GEAR = 5;
+
+// TODO: limit gear speed ranges
+
 class CCar
 {
-public:
-	static constexpr int MIN_GEAR = -1;
-	static constexpr int MAX_GEAR = 5;
-
 public:
 	bool TurnOnEngine();
 	bool TurnOffEngine();

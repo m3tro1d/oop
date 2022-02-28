@@ -168,8 +168,3 @@ TEST_CASE("dictionary manipulations are working correctly")
 		REQUIRE(lookedUp == translations);
 	}
 }
-
-TEST_CASE("user interactions work correctly")
-{
-	// TODO
-}
