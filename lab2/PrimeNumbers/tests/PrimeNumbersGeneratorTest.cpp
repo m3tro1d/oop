@@ -7,8 +7,8 @@ TEST_CASE("borderline cases are processed correctly")
 {
 	SECTION("wrong upper bound results in an exception")
 	{
-		REQUIRE_THROWS_AS(GeneratePrimeNumbersSet(MIN_BOUND - 1), std::logic_error);
-		REQUIRE_THROWS_AS(GeneratePrimeNumbersSet(MAX_BOUND + 1), std::logic_error);
+		REQUIRE_THROWS_AS(GeneratePrimeNumbersSet(MIN_BOUND - 1), std::out_of_range);
+		REQUIRE_THROWS_AS(GeneratePrimeNumbersSet(MAX_BOUND + 1), std::out_of_range);
 	}
 
 	SECTION("minimal upper bound results in the only number")

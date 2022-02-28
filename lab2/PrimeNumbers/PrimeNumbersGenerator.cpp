@@ -37,7 +37,7 @@ std::set<int> GeneratePrimeNumbersSet(int upperBound)
 {
 	if (upperBound < MIN_BOUND || upperBound > MAX_BOUND)
 	{
-		throw std::logic_error("Invalid upper bound value");
+		throw std::out_of_range("Invalid upper bound value");
 	}
 
 	auto const& primes = GenerateSieve(upperBound);
