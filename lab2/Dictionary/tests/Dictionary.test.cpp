@@ -127,6 +127,11 @@ TEST_CASE("general string operations work correctly")
 	}
 }
 
+TEST_CASE("dictionary manipulations work correctly")
+{
+	// TODO
+}
+
 TEST_CASE("dictionary file operations work correctly")
 {
 	SECTION("dictionary file path is determined correctly")
@@ -227,11 +232,6 @@ TEST_CASE("dictionary file operations work correctly")
 			REQUIRE(output.str() == "cat\nкот, котейка\n");
 		}
 	}
-}
-
-TEST_CASE("dictionary manipulations work correctly")
-{
-	// TODO
 }
 
 TEST_CASE("user interactions work correctly")
