@@ -40,6 +40,11 @@ std::set<std::string> StringToSet(const std::string& string, char delimiter)
 
 std::string SetToString(const std::set<std::string>& set, const std::string& delimiter)
 {
+	if (set.empty())
+	{
+		return {};
+	}
+
 	std::string result;
 	auto last = set.end();
 	--last;

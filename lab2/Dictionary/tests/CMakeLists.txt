@@ -1,4 +1,6 @@
 add_executable(DictionaryTest
+               ../StringLib.h
+               ../StringLib.cpp
                ../DictionaryLib.h
                ../DictionaryLib.cpp
                ../DictionaryFileLib.h

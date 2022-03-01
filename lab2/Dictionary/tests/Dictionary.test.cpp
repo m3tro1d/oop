@@ -2,6 +2,131 @@
 #include "../DictionaryConsoleLib.h"
 #include "catch.hpp"
 
+TEST_CASE("general string operations work correctly")
+{
+	SECTION("getting a string in lower case works correctly")
+	{
+		SECTION("empty string lowered is an empty nevertheless")
+		{
+			const std::string input;
+			auto const result = ToLower(input);
+			REQUIRE(result.empty());
+		}
+
+		SECTION("string in all lower case is unchanged")
+		{
+			const std::string input = "hello";
+			auto const result = ToLower(input);
+			REQUIRE(result == input);
+		}
+
+		SECTION("string with mixed lower and upper case turns to only lower case")
+		{
+			const std::string input = "HelLo ThErE ";
+			auto const result = ToLower(input);
+			REQUIRE(result == "hello there ");
+		}
+
+		SECTION("string in all upper case turns to only lower case")
+		{
+			const std::string input = "HELLO MOTHERFUCKING WORLD OLOLO!!";
+			auto const result = ToLower(input);
+			REQUIRE(result == "hello motherfucking world ololo!!");
+		}
+	}
+
+	SECTION("string trimming works correctly")
+	{
+		SECTION("empty string trimmed is empty nevertheless")
+		{
+			std::string input;
+			Trim(input);
+			REQUIRE(input.empty());
+		}
+
+		SECTION("left-padded whitespaces are deleted")
+		{
+			std::string input = "   hello";
+			Trim(input);
+			REQUIRE(input == "hello");
+		}
+
+		SECTION("right-padded whitespaces are deleted")
+		{
+			std::string input = "hello    ";
+			Trim(input);
+			REQUIRE(input == "hello");
+		}
+
+		SECTION("both-sides-padded whitespaces are deleted")
+		{
+			std::string input = " hello    ";
+			Trim(input);
+			REQUIRE(input == "hello");
+		}
+	}
+
+	SECTION("parsing string to set works correctly")
+	{
+		SECTION("empty string results in an empty set")
+		{
+			const std::string input;
+			auto const result = StringToSet(input, ',');
+			REQUIRE(result.empty());
+		}
+
+		SECTION("string with one value results in set with one value")
+		{
+			const std::string input = "one";
+			auto const result = StringToSet(input, ',');
+			REQUIRE(result.find("one") != result.end());
+		}
+
+		SECTION("string with several values results in corresponding set")
+		{
+			const std::string input = "one,two, three  , four";
+			auto const result = StringToSet(input, ',');
+			REQUIRE(result.find("one") != result.end());
+			REQUIRE(result.find("two") != result.end());
+			REQUIRE(result.find("three") != result.end());
+			REQUIRE(result.find("four") != result.end());
+		}
+
+		SECTION("empty values are not saved")
+		{
+			const std::string input = "one,,two";
+			auto const result = StringToSet(input, ',');
+			REQUIRE(result.find("one") != result.end());
+			REQUIRE(result.find("two") != result.end());
+			REQUIRE(result.size() == 2);
+		}
+	}
+
+	SECTION("serializing set as string works correctly")
+	{
+		SECTION("empty set results in an empty string")
+		{
+			const std::set<std::string> input;
+			auto const result = SetToString(input, "");
+			REQUIRE(result.empty());
+		}
+
+		SECTION("set with one value results in a standalone value without delimiters")
+		{
+			const std::set<std::string> input{ "one" };
+			auto const result = SetToString(input, ", ");
+			REQUIRE(result == "one");
+		}
+
+		SECTION("set with several values results in separated elements")
+		{
+			const std::set<std::string> input{ "one", "two" };
+			auto const result = SetToString(input, ", ");
+			REQUIRE(result == "one, two");
+		}
+	}
+}
+
 TEST_CASE("dictionary file operations work correctly")
 {
 	SECTION("dictionary file path is determined correctly")
@@ -76,102 +201,13 @@ TEST_CASE("dictionary file operations work correctly")
 
 	SECTION("dictionary file saving works correctly")
 	{
-		SECTION("saving empty dictionary results in an empty file")
-		{
-			std::stringstream output;
-			Dictionary dictionary;
-			WriteDictionaryFile(output, dictionary);
-
-			REQUIRE(output.str().empty());
-		}
-
-		SECTION("saving populated dictionary works correctly")
-		{
-			std::stringstream output;
-			Dictionary dictionary;
-			AddTranslations(dictionary, "cat", "кот, кошка");
-			AddTranslations(dictionary, "The Red Square", "Красная Площадь");
-			WriteDictionaryFile(output, dictionary);
-
-			REQUIRE(output.str() == "cat\nкот, кошка\nthe red square\nКрасная Площадь\n");
-		}
+		// TODO
 	}
 }
 
-TEST_CASE("dictionary manipulations are working correctly")
+TEST_CASE("dictionary manipulations work correctly")
 {
-	SECTION("adding translations works correctly")
-	{
-		SECTION("adding one translation works correctly")
-		{
-			Dictionary dictionary;
-			std::string const source = "cat";
-			std::string const translationsString = "кот";
-			std::set<std::string> const translations = { "кот" };
-			AddTranslations(dictionary, source, translationsString);
-
-			REQUIRE(dictionary.size() == 1);
-			REQUIRE(dictionary[source] == translations);
-		}
-
-		SECTION("adding several translations at once works correctly")
-		{
-			Dictionary dictionary;
-			std::string const source = "cat";
-			std::string const translationsString = "кот, кошка";
-			std::set<std::string> const translations = { "кот", "кошка" };
-			AddTranslations(dictionary, source, translationsString);
-
-			REQUIRE(dictionary.size() == 1);
-			REQUIRE(dictionary[source] == translations);
-		}
-
-		SECTION("adding translations to the existing word works correctly")
-		{
-			Dictionary dictionary;
-			std::string const source = "cat";
-			std::set<std::string> const translations = { "кот", "кошка" };
-			AddTranslations(dictionary, source, "кот");
-			AddTranslations(dictionary, source, "кошка");
-
-			REQUIRE(dictionary.size() == 1);
-			REQUIRE(dictionary[source] == translations);
-		}
-	}
-
-	SECTION("looking up an existing source returns its translations")
-	{
-		Dictionary dictionary;
-		std::string const source = "cat";
-		std::string const translationsString = "кот, кошка";
-		std::set<std::string> const translations = { "кот", "кошка" };
-		AddTranslations(dictionary, source, translationsString);
-		auto const lookedUp = LookupTranslation(dictionary, source);
-
-		REQUIRE(lookedUp.has_value());
-		REQUIRE(lookedUp.value() == translations);
-	}
-
-	SECTION("looking up non existing source returns empty translations")
-	{
-		Dictionary dictionary;
-		auto const lookedUp = LookupTranslation(dictionary, "cat");
-
-		REQUIRE(!lookedUp.has_value());
-	}
-
-	SECTION("source search works case-insensitively, but translations case is preserved")
-	{
-		Dictionary dictionary;
-		std::string const source = "cat";
-		std::string const translationsString = "кот, кошка";
-		std::set<std::string> const translations = { "кот", "кошка" };
-		AddTranslations(dictionary, source, translationsString);
-		auto const lookedUp = LookupTranslation(dictionary, "CaT");
-
-		REQUIRE(lookedUp.has_value());
-		REQUIRE(lookedUp == translations);
-	}
+	// TODO
 }
 
 TEST_CASE("user interactions work correctly")
