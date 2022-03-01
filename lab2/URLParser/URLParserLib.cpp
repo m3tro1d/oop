@@ -60,17 +60,18 @@ URLInfo ParseURL(const std::string& url)
 		std::regex::icase);
 
 	std::smatch matches;
-	if (!std::regex_search(url, matches, urlRegex))
+	if (!std::regex_match(url, matches, urlRegex))
 	{
 		throw std::invalid_argument("invalid URL");
 	}
 
-	URLInfo result;
-	result.url = url;
-	result.protocol = ParseProtocol(matches[1].str());
-	result.host = ParseHost(matches[2].str());
-	result.port = ParsePort(matches[3].str(), result.protocol);
-	result.document = matches[4].str();
+	URLInfo result{
+		.url = url,
+		.protocol = ParseProtocol(matches[1].str()),
+		.host = ParseHost(matches[2].str()),
+		.port = ParsePort(matches[3].str(), result.protocol),
+		.document = matches[4].str(),
+	};
 
 	return result;
 }

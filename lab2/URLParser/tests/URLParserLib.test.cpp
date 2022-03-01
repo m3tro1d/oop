@@ -89,6 +89,12 @@ TEST_CASE("URL parsing works correctly")
 			const std::string url = "hello there";
 			REQUIRE_THROWS_AS(ParseURL(url), std::invalid_argument);
 		}
+
+		SECTION("only a substring is valid URL")
+		{
+			const std::string url = "hhttps://github.com/m3tro1d";
+			REQUIRE_THROWS_AS(ParseURL(url), std::invalid_argument);
+		}
 	}
 }
 
