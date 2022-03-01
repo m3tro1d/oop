@@ -13,7 +13,7 @@ bool CCar::TurnOnEngine()
 
 bool CCar::TurnOffEngine()
 {
-	if (!m_isEngineOn)
+	if (!m_isEngineOn || m_gear != 0)
 	{
 		return false;
 	}
