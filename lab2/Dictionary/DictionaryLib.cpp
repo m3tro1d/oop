@@ -69,6 +69,7 @@ std::optional<Translations> LookupTranslation(const Dictionary& dictionary, cons
 
 void AddTranslations(Dictionary& dictionary, const std::string& phrase, const Translations& translations)
 {
+	// TODO: add translation and vice-versa for double-sided translation
 	auto it = dictionary.find(phrase);
 	if (it == dictionary.end())
 	{

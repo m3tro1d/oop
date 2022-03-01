@@ -24,6 +24,8 @@ void ReadDictionaryFile(std::istream& dictionaryFile, Dictionary& dictionary)
 		std::string translations;
 
 		std::stringstream translationUnit(line);
+		// TODO write source and translations on separate lines
+		//  possible problem cat: - кот:
 		std::getline(translationUnit, source, ':');
 		std::getline(translationUnit, translations);
 
