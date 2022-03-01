@@ -174,34 +174,58 @@ TEST_CASE("dictionary file operations work correctly")
 			std::stringstream input("the red square\nКрасная Площадь\ncat\nкот, кошка\n");
 			Dictionary dictionary;
 			ReadDictionaryFile(input, dictionary);
-
 			REQUIRE(dictionary.size() == 2);
 			REQUIRE(dictionary["cat"] == std::set<std::string>{ "кот", "кошка" });
 			REQUIRE(dictionary["the red square"] == std::set<std::string>{ "Красная Площадь" });
+		}
+
+		SECTION("parsing doesn't rely on special separators")
+		{
+			std::stringstream input("cat:\n:кисулькен\n");
+			Dictionary dictionary;
+			ReadDictionaryFile(input, dictionary);
+			REQUIRE(dictionary.size() == 1);
+			REQUIRE(dictionary["cat:"] == std::set<std::string>{ ":кисулькен" });
 		}
 
 		SECTION("invalid translation file results in an exception")
 		{
 			std::stringstream input("\ncat\n");
 			Dictionary dictionary;
-
 			REQUIRE_THROWS_AS(ReadDictionaryFile(input, dictionary), std::invalid_argument);
-		}
 
-		SECTION("parsing doesn't rely on special separators")
-		{
-			std::istringstream input("cat:\n:кисулькен\n");
-			Dictionary dictionary;
-			ReadDictionaryFile(input, dictionary);
-
-			REQUIRE(dictionary.size() == 1);
-			REQUIRE(dictionary["cat:"] == std::set<std::string>{ ":кисулькен" });
+			input.str("cat\n\n");
+			REQUIRE_THROWS_AS(ReadDictionaryFile(input, dictionary), std::invalid_argument);
 		}
 	}
 
 	SECTION("dictionary file saving works correctly")
 	{
-		// TODO
+		SECTION("saving empty dictionary results in an empty file")
+		{
+			Dictionary dictionary;
+			std::stringstream output;
+			WriteDictionaryFile(output, dictionary);
+			REQUIRE(output.str().empty());
+		}
+
+		SECTION("saving dictionary with one-to-one values results in populated file")
+		{
+			Dictionary dictionary;
+			dictionary["cat"] = { "кот" };
+			std::stringstream output;
+			WriteDictionaryFile(output, dictionary);
+			REQUIRE(output.str() == "cat\nкот\n");
+		}
+
+		SECTION("saving dictionary with values results in populated file")
+		{
+			Dictionary dictionary;
+			dictionary["cat"] = { "кот", "котейка" };
+			std::stringstream output;
+			WriteDictionaryFile(output, dictionary);
+			REQUIRE(output.str() == "cat\nкот, котейка\n");
+		}
 	}
 }
 
