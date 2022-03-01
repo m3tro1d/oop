@@ -347,5 +347,30 @@ TEST_CASE("dictionary file operations work correctly")
 
 TEST_CASE("user interactions work correctly")
 {
-	// TODO
+	SECTION("prompting for new word works correctly")
+	{
+		SECTION("empty user input discards new word addition")
+		{
+			Dictionary dictionary;
+			std::stringstream input;
+			std::stringstream output;
+			const std::string source = "cat";
+			REQUIRE(!PromptForNewWord(input, output, dictionary, source));
+			REQUIRE(dictionary.empty());
+			REQUIRE(output.str() == "Unknown word 'cat'. Enter translation or empty string to abort.\n> "
+									"Word 'cat' ignored. Good riddance.\n");
+		}
+
+		SECTION("empty user input discards new word addition")
+		{
+			Dictionary dictionary;
+			std::stringstream input("кот\n");
+			std::stringstream output;
+			const std::string source = "cat";
+			REQUIRE(PromptForNewWord(input, output, dictionary, source));
+			REQUIRE(dictionary.size() == 2);
+			REQUIRE(output.str() == "Unknown word 'cat'. Enter translation or empty string to abort.\n> "
+									"Word 'cat' saved in the dictionary as 'кот'.\n");
+		}
+	}
 }
