@@ -12,22 +12,14 @@ std::string GetDictionaryPath(int argc, char** argv)
 
 void ReadDictionaryFile(std::istream& dictionaryFile, Dictionary& dictionary)
 {
-	std::string line;
-	while (std::getline(dictionaryFile, line))
+	std::string source;
+	std::string translations;
+	while (std::getline(dictionaryFile, source))
 	{
-		if (line.empty())
+		if (!std::getline(dictionaryFile, translations))
 		{
-			continue;
+			return;
 		}
-
-		std::string source;
-		std::string translations;
-
-		std::stringstream translationUnit(line);
-		// TODO write source and translations on separate lines
-		//  possible problem cat: - кот:
-		std::getline(translationUnit, source, ':');
-		std::getline(translationUnit, translations);
 
 		if (source.empty() || translations.empty())
 		{
@@ -35,6 +27,11 @@ void ReadDictionaryFile(std::istream& dictionaryFile, Dictionary& dictionary)
 		}
 
 		AddTranslations(dictionary, source, translations);
+	}
+
+	if (dictionaryFile.eof() && !source.empty())
+	{
+		throw std::invalid_argument("Invalid dictionary file format");
 	}
 }
 
@@ -60,7 +57,8 @@ void WriteDictionaryFile(std::ostream& dictionaryFile, const Dictionary& diction
 {
 	for (auto const& [source, translation] : dictionary)
 	{
-		dictionaryFile << source << ':' << SerializeTranslationsAsString(translation) << '\n';
+		dictionaryFile << source << '\n'
+					   << SerializeTranslationsAsString(translation) << '\n';
 	}
 }
 

@@ -30,18 +30,23 @@ TEST_CASE("dictionary file operations work correctly")
 
 	SECTION("dictionary file initial parsing works correctly")
 	{
-		SECTION("empty file results in an empty array")
+		SECTION("empty file results in an empty dictionary")
 		{
-			std::stringstream input("\n");
+			std::stringstream input;
 			Dictionary dictionary;
-			ReadDictionaryFile(input, dictionary);
 
+			input.str("");
+			ReadDictionaryFile(input, dictionary);
+			REQUIRE(dictionary.empty());
+
+			input.str("\n");
+			ReadDictionaryFile(input, dictionary);
 			REQUIRE(dictionary.empty());
 		}
 
 		SECTION("valid translations are parsed correctly")
 		{
-			std::stringstream input("the red square:Красная Площадь\ncat:кот, кошка\n");
+			std::stringstream input("the red square\nКрасная Площадь\ncat\nкот, кошка\n");
 			Dictionary dictionary;
 			ReadDictionaryFile(input, dictionary);
 
@@ -52,20 +57,20 @@ TEST_CASE("dictionary file operations work correctly")
 
 		SECTION("invalid translation file results in an exception")
 		{
-			std::stringstream input;
+			std::stringstream input("\ncat\n");
 			Dictionary dictionary;
 
-			input.str(":кот, кошка\n");
 			REQUIRE_THROWS_AS(ReadDictionaryFile(input, dictionary), std::invalid_argument);
+		}
 
-			input.str("cat:\n");
-			REQUIRE_THROWS_AS(ReadDictionaryFile(input, dictionary), std::invalid_argument);
+		SECTION("parsing doesn't rely on special separators")
+		{
+			std::istringstream input("cat:\n:кисулькен\n");
+			Dictionary dictionary;
+			ReadDictionaryFile(input, dictionary);
 
-			input.str("whatever\n");
-			REQUIRE_THROWS_AS(ReadDictionaryFile(input, dictionary), std::invalid_argument);
-
-			input.str(":\n");
-			REQUIRE_THROWS_AS(ReadDictionaryFile(input, dictionary), std::invalid_argument);
+			REQUIRE(dictionary.size() == 1);
+			REQUIRE(dictionary["cat:"] == std::set<std::string>{ ":кисулькен" });
 		}
 	}
 
@@ -88,7 +93,7 @@ TEST_CASE("dictionary file operations work correctly")
 			AddTranslations(dictionary, "The Red Square", "Красная Площадь");
 			WriteDictionaryFile(output, dictionary);
 
-			REQUIRE(output.str() == "cat:кот, кошка\nthe red square:Красная Площадь\n");
+			REQUIRE(output.str() == "cat\nкот, кошка\nthe red square\nКрасная Площадь\n");
 		}
 	}
 }
@@ -167,4 +172,9 @@ TEST_CASE("dictionary manipulations are working correctly")
 		REQUIRE(lookedUp.has_value());
 		REQUIRE(lookedUp == translations);
 	}
+}
+
+TEST_CASE("user interactions work correctly")
+{
+	// TODO
 }
