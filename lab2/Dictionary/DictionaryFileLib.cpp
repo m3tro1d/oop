@@ -26,7 +26,7 @@ void ReadDictionaryFile(std::istream& dictionaryFile, Dictionary& dictionary)
 			throw std::invalid_argument("Invalid dictionary file format");
 		}
 
-		AddTranslations(dictionary, source, translations);
+		AddDirectTranslations(dictionary, source, ParseStringForTranslations(translations));
 	}
 
 	if (dictionaryFile.eof() && !source.empty())

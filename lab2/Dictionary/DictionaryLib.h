@@ -22,6 +22,10 @@ std::string SerializeTranslationsAsString(const Translations& translations);
 
 std::optional<Translations> LookupTranslation(const Dictionary& dictionary, const std::string& phrase);
 
+void AddDirectTranslations(Dictionary& dictionary, const std::string& phrase, const Translations& translations);
+
+void AddReverseTranslations(Dictionary& dictionary, const Translations& translations, const std::string& phrase);
+
 void AddTranslations(Dictionary& dictionary, const std::string& phrase, const Translations& translations);
 
 void AddTranslations(Dictionary& dictionary, const std::string& phrase, const std::string& translationsString);
