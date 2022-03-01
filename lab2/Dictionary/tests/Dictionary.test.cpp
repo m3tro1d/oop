@@ -163,14 +163,83 @@ TEST_CASE("dictionary manipulations work correctly")
 
 	SECTION("adding direct translations works correctly")
 	{
+		SECTION("adding non-existing phrase works correctly")
+		{
+			Dictionary dictionary;
+			const std::string phrase = "cat";
+			const Translations translations{ "кот" };
+			AddDirectTranslations(dictionary, phrase, translations);
+			REQUIRE(dictionary.size() == 1);
+			REQUIRE(dictionary[phrase] == translations);
+		}
+
+		SECTION("adding existing phrase populates its existing translations")
+		{
+			Dictionary dictionary;
+			const std::string phrase = "cat";
+			Translations translations{ "кот" };
+			const Translations translations1{ "кисулькен", "котейка" };
+			AddDirectTranslations(dictionary, phrase, translations);
+			AddDirectTranslations(dictionary, phrase, translations1);
+			translations.insert(translations1.begin(), translations1.end());
+			REQUIRE(dictionary.size() == 1);
+			REQUIRE(dictionary[phrase] == translations);
+		}
+
+		SECTION("phrases are saved in lower case, but translations case is preserved")
+		{
+			Dictionary dictionary;
+			const std::string phrase = "CaT";
+			const Translations translations{ "Кот", "кошечка" };
+			AddDirectTranslations(dictionary, phrase, translations);
+			REQUIRE(dictionary["cat"] == translations);
+		}
 	}
 
 	SECTION("adding reverse translations works correctly")
 	{
+		SECTION("adding non-existing translations works correctly")
+		{
+			Dictionary dictionary;
+			const std::string phrase = "кот";
+			const Translations translations{ "cat", "kitty" };
+			AddReverseTranslations(dictionary, translations, phrase);
+			REQUIRE(dictionary.size() == 2);
+			REQUIRE(dictionary["cat"] == Translations{ phrase });
+			REQUIRE(dictionary["kitty"] == Translations{ phrase });
+		}
+
+		SECTION("adding existing translations populates their existing phrases")
+		{
+			Dictionary dictionary;
+			const std::string phrase = "кот";
+			const std::string phrase1 = "кошка";
+			const Translations translations{ "cat" };
+			AddReverseTranslations(dictionary, translations, phrase);
+			AddReverseTranslations(dictionary, translations, phrase1);
+			REQUIRE(dictionary.size() == 1);
+			REQUIRE(dictionary["cat"] == Translations{ "кот", "кошка" });
+		}
+
+		SECTION("translations are saved in lower case, but phrases case is preserved")
+		{
+			Dictionary dictionary;
+			const std::string phrase = "Кот";
+			const Translations translations{ "Cat", "Kitty" };
+			AddReverseTranslations(dictionary, translations, phrase);
+			REQUIRE(dictionary.size() == 2);
+			REQUIRE(dictionary["cat"] == Translations{ phrase });
+			REQUIRE(dictionary["kitty"] == Translations{ phrase });
+		}
 	}
 
 	SECTION("general translations adding works correctly")
 	{
+		SECTION("empty translations string results in an exception")
+		{
+			Dictionary dictionary;
+			REQUIRE_THROWS_AS(AddTranslations(dictionary, "cat", ""), std::invalid_argument);
+		}
 	}
 }
 
@@ -222,8 +291,8 @@ TEST_CASE("dictionary file operations work correctly")
 			Dictionary dictionary;
 			ReadDictionaryFile(input, dictionary);
 			REQUIRE(dictionary.size() == 2);
-			REQUIRE(dictionary["cat"] == std::set<std::string>{ "кот", "кошка" });
-			REQUIRE(dictionary["the red square"] == std::set<std::string>{ "Красная Площадь" });
+			REQUIRE(dictionary["cat"] == Translations{ "кот", "кошка" });
+			REQUIRE(dictionary["the red square"] == Translations{ "Красная Площадь" });
 		}
 
 		SECTION("parsing doesn't rely on special separators")
@@ -232,7 +301,7 @@ TEST_CASE("dictionary file operations work correctly")
 			Dictionary dictionary;
 			ReadDictionaryFile(input, dictionary);
 			REQUIRE(dictionary.size() == 1);
-			REQUIRE(dictionary["cat:"] == std::set<std::string>{ ":кисулькен" });
+			REQUIRE(dictionary["cat:"] == Translations{ ":кисулькен" });
 		}
 
 		SECTION("invalid translation file results in an exception")
