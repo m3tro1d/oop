@@ -129,7 +129,49 @@ TEST_CASE("general string operations work correctly")
 
 TEST_CASE("dictionary manipulations work correctly")
 {
-	// TODO
+	SECTION("looking up translations works correctly")
+	{
+		SECTION("looking up existing phrase returns its translations")
+		{
+			Dictionary dictionary;
+			const std::string phrase = "cat";
+			Translations translations{ "кот" };
+			dictionary[phrase] = translations;
+			auto const result = LookupTranslation(dictionary, phrase);
+			REQUIRE(result.has_value());
+			REQUIRE(result.value() == translations);
+		}
+
+		SECTION("translation lookup is performed case-insensitively")
+		{
+			Dictionary dictionary;
+			Translations translations{ "кот" };
+			dictionary["cat"] = translations;
+			auto const result = LookupTranslation(dictionary, "CaT");
+			REQUIRE(result.has_value());
+			REQUIRE(result.value() == translations);
+		}
+
+		SECTION("looking up non-existing phrase returns empty value")
+		{
+			Dictionary dictionary;
+			dictionary["cat"] = { "кот" };
+			auto const result = LookupTranslation(dictionary, "dog");
+			REQUIRE(!result.has_value());
+		}
+	}
+
+	SECTION("adding direct translations works correctly")
+	{
+	}
+
+	SECTION("adding reverse translations works correctly")
+	{
+	}
+
+	SECTION("general translations adding works correctly")
+	{
+	}
 }
 
 TEST_CASE("dictionary file operations work correctly")
