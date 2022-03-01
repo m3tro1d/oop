@@ -1,60 +1,5 @@
 #include "DictionaryLib.h"
 
-std::string ToLower(const std::string& string)
-{
-	std::string result;
-	std::transform(
-		string.begin(),
-		string.end(),
-		std::back_inserter(result),
-		[](char ch) {
-			return std::tolower(ch);
-		});
-
-	return result;
-}
-
-void Trim(std::string& string)
-{
-	string.erase(string.find_last_not_of(' ') + 1);
-	string.erase(0, string.find_first_not_of(' '));
-}
-
-Translations ParseStringForTranslations(const std::string& translationsString)
-{
-	std::stringstream ss(translationsString);
-	std::string translation;
-	Translations result;
-
-	while (std::getline(ss, translation, ','))
-	{
-		Trim(translation);
-		if (!translation.empty())
-		{
-			result.insert(translation);
-		}
-	}
-
-	return result;
-}
-
-std::string SerializeTranslationsAsString(const Translations& translations)
-{
-	std::string result;
-	auto last = translations.end();
-	--last;
-	for (auto it = translations.begin(); it != translations.end(); ++it)
-	{
-		result.append(*it);
-		if (it != last)
-		{
-			result.append(", ");
-		}
-	}
-
-	return result;
-}
-
 std::optional<Translations> LookupTranslation(const Dictionary& dictionary, const std::string& phrase)
 {
 	try
@@ -106,7 +51,7 @@ void AddTranslations(Dictionary& dictionary, const std::string& phrase, const Tr
 
 void AddTranslations(Dictionary& dictionary, const std::string& phrase, const std::string& translationsString)
 {
-	auto const translations = ParseStringForTranslations(translationsString);
+	auto const translations = StringToSet(translationsString, DELIMITER);
 	if (translations.empty())
 	{
 		throw std::invalid_argument("empty translation");

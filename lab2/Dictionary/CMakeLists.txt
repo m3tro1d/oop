@@ -1,4 +1,6 @@
 add_executable(Dictionary
+               StringLib.h
+               StringLib.cpp
                DictionaryLib.h
                DictionaryLib.cpp
                DictionaryFileLib.h

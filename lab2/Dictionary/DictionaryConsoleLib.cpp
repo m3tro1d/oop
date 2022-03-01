@@ -67,7 +67,7 @@ void StartTranslationConsole(std::istream& input, std::ostream& output, const st
 		auto const translation = LookupTranslation(dictionary, userInput);
 		if (translation.has_value())
 		{
-			output << SerializeTranslationsAsString(translation.value()) << '\n';
+			output << SetToString(translation.value(), ", ") << '\n';
 		}
 		else
 		{

@@ -26,7 +26,7 @@ void ReadDictionaryFile(std::istream& dictionaryFile, Dictionary& dictionary)
 			throw std::invalid_argument("Invalid dictionary file format");
 		}
 
-		AddDirectTranslations(dictionary, source, ParseStringForTranslations(translations));
+		AddDirectTranslations(dictionary, source, StringToSet(translations, DELIMITER));
 	}
 
 	if (dictionaryFile.eof() && !source.empty())
@@ -58,7 +58,7 @@ void WriteDictionaryFile(std::ostream& dictionaryFile, const Dictionary& diction
 	for (auto const& [source, translation] : dictionary)
 	{
 		dictionaryFile << source << '\n'
-					   << SerializeTranslationsAsString(translation) << '\n';
+					   << SetToString(translation, ", ") << '\n';
 	}
 }
 
