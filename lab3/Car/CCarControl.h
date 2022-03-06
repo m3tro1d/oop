@@ -3,6 +3,7 @@
 #include "CCar.h"
 #include <iostream>
 #include <string>
+#include <sstream>
 
 class CCarControl
 {
@@ -38,4 +39,5 @@ private:
 	std::istream& m_input;
 	std::ostream& m_output;
 	CCar m_car;
+	int m_argument = 0; // FIXME: this is a bad approach
 };

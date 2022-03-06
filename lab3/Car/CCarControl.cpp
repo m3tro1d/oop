@@ -50,11 +50,18 @@ CCarControl::Command CCarControl::ReadCommand()
 {
 	std::string userInput;
 	std::getline(m_input, userInput);
+	std::stringstream input(userInput);
 
 	Command command = Command::IDLE;
+	std::string commandStr;
 	try
 	{
-		command = ParseCommand(userInput);
+		std::getline(input, commandStr, ' ');
+		if (!(input >> m_argument))
+		{
+			m_argument = 0;
+		}
+		command = ParseCommand(commandStr);
 	}
 	catch (const std::exception& e)
 	{
@@ -142,10 +149,24 @@ void CCarControl::EngineOff()
 
 void CCarControl::SetGear()
 {
+	if (m_car.SetGear(m_argument))
+	{
+		m_output << "Gear set to " << m_argument << '\n';
+		return;
+	}
+
+	m_output << "Error: can't set gear to " << m_argument << '\n';
 }
 
 void CCarControl::SetSpeed()
 {
+	if (m_car.SetSpeed(m_argument))
+	{
+		m_output << "Speed set to " << m_argument << '\n';
+		return;
+	}
+
+	m_output << "Error: can't set speed to " << m_argument << '\n';
 }
 
 std::string CCarControl::DirectionToString(Direction direction)
