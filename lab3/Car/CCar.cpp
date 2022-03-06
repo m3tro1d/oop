@@ -34,6 +34,12 @@ bool CCar::SetGear(int gear)
 		return false;
 	}
 
+	auto const limits = GEAR_SPEED_LIMITS.at(gear);
+	if (m_speed < limits.lower || m_speed > limits.upper)
+	{
+		return false;
+	}
+
 	m_gear = gear;
 	return true;
 }

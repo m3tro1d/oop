@@ -129,6 +129,27 @@ SCENARIO("car is operated correctly")
 				REQUIRE(car.SetSpeed(20));
 				REQUIRE(car.GetDirection() == Direction::FORWARD);
 			}
+
+			THEN("second gear can't be set if the speed is not enough")
+			{
+				REQUIRE(car.SetSpeed(10));
+				REQUIRE(!car.SetGear(2));
+				REQUIRE(car.GetGear() == 1);
+			}
+
+			THEN("second gear can be set if the speed is enough")
+			{
+				REQUIRE(car.SetSpeed(20));
+				REQUIRE(car.SetGear(2));
+				REQUIRE(car.GetGear() == 2);
+			}
+
+			THEN("third gear can be set if the speed is enough")
+			{
+				REQUIRE(car.SetSpeed(30));
+				REQUIRE(car.SetGear(3));
+				REQUIRE(car.GetGear() == 3);
+			}
 		}
 
 		WHEN("it is turned on and reverse gear is set")
