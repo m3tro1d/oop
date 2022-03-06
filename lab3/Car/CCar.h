@@ -5,9 +5,9 @@
 
 enum class Direction
 {
-	Forward,
-	Still,
-	Backward,
+	FORWARD,
+	STILL,
+	BACKWARD,
 };
 
 constexpr int MIN_GEAR = -1;

@@ -27,7 +27,7 @@ SCENARIO("car is operated correctly")
 
 			THEN("it is not moving")
 			{
-				REQUIRE(car.GetDirection() == Direction::Still);
+				REQUIRE(car.GetDirection() == Direction::STILL);
 			}
 
 			THEN("it can't change gear")
@@ -71,7 +71,7 @@ SCENARIO("car is operated correctly")
 
 			THEN("it is not moving")
 			{
-				REQUIRE(car.GetDirection() == Direction::Still);
+				REQUIRE(car.GetDirection() == Direction::STILL);
 			}
 
 			THEN("the engine can be turned off")
@@ -127,7 +127,7 @@ SCENARIO("car is operated correctly")
 			THEN("setting speed more than 0 makes car move forward")
 			{
 				REQUIRE(car.SetSpeed(20));
-				REQUIRE(car.GetDirection() == Direction::Forward);
+				REQUIRE(car.GetDirection() == Direction::FORWARD);
 			}
 		}
 
@@ -159,7 +159,7 @@ SCENARIO("car is operated correctly")
 			THEN("setting speed more than 0 makes car move backward")
 			{
 				REQUIRE(car.SetSpeed(10));
-				REQUIRE(car.GetDirection() == Direction::Backward);
+				REQUIRE(car.GetDirection() == Direction::BACKWARD);
 			}
 		}
 	}

@@ -58,15 +58,15 @@ Direction CCar::GetDirection() const
 {
 	if (m_speed == 0)
 	{
-		return Direction::Still;
+		return Direction::STILL;
 	}
 
 	if (m_gear < 0)
 	{
-		return Direction::Backward;
+		return Direction::BACKWARD;
 	}
 
-	return Direction::Forward;
+	return Direction::FORWARD;
 }
 
 int CCar::GetGear() const
