@@ -29,6 +29,11 @@ bool CCar::SetGear(int gear)
 		return false;
 	}
 
+	if (gear < MIN_GEAR || gear > MAX_GEAR)
+	{
+		return false;
+	}
+
 	m_gear = gear;
 	return true;
 }
@@ -36,6 +41,12 @@ bool CCar::SetGear(int gear)
 bool CCar::SetSpeed(int speed)
 {
 	if (!m_isEngineOn)
+	{
+		return false;
+	}
+
+	auto const limits = GEAR_SPEED_LIMITS.at(m_gear);
+	if (speed < limits.lower || speed > limits.upper)
 	{
 		return false;
 	}
