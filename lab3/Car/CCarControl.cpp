@@ -1,37 +1,43 @@
 #include "CCarControl.h"
 
-void CCarControl::StartControl(std::istream& input, std::ostream& output)
+CCarControl::CCarControl(std::istream& input, std::ostream& output)
+	: m_input(input)
+	, m_output(output)
+{
+}
+
+void CCarControl::StartControl()
 {
 	Command command;
 	bool finished = false;
 
 	while (!finished)
 	{
-		output << "> ";
-		command = ReadCommand(input, output);
+		m_output << "> ";
+		command = ReadCommand();
 		switch (command)
 		{
 		case Command::HELP:
-			PrintHelp(output);
+			PrintHelp();
 			break;
 		case Command::INFO:
-			PrintInfo(output);
+			PrintInfo();
 			break;
 		case Command::EXIT:
 			finished = true;
-			output << "Farewell!\n";
+			m_output << "Farewell!\n";
 			break;
 		case Command::ENGINE_ON:
-			EngineOn(output);
+			EngineOn();
 			break;
 		case Command::ENGINE_OFF:
-			EngineOff(output);
+			EngineOff();
 			break;
 		case Command::SET_GEAR:
-			SetGear(output);
+			SetGear();
 			break;
 		case Command::SET_SPEED:
-			SetSpeed(output);
+			SetSpeed();
 			break;
 		default:
 			break;
@@ -39,10 +45,10 @@ void CCarControl::StartControl(std::istream& input, std::ostream& output)
 	}
 }
 
-CCarControl::Command CCarControl::ReadCommand(std::istream& input, std::ostream& output)
+CCarControl::Command CCarControl::ReadCommand()
 {
 	std::string userInput;
-	std::getline(input, userInput);
+	std::getline(m_input, userInput);
 
 	Command command = Command::IDLE;
 	try
@@ -51,7 +57,7 @@ CCarControl::Command CCarControl::ReadCommand(std::istream& input, std::ostream&
 	}
 	catch (const std::exception& e)
 	{
-		output << "Error: " << e.what() << '\n';
+		m_output << "Error: " << e.what() << '\n';
 	}
 
 	return command;
@@ -91,53 +97,53 @@ CCarControl::Command CCarControl::ParseCommand(const std::string& command)
 	throw std::invalid_argument("invalid command");
 }
 
-void CCarControl::PrintHelp(std::ostream& output)
+void CCarControl::PrintHelp()
 {
-	output << "Help             show this message\n"
-			  "Info             print car info\n"
-			  "Exit             stop the program\n"
-			  "EngineOn         start the car engine\n"
-			  "EngineOff        stop the car engine\n"
-			  "SetGear <gear>   change car gear\n"
-			  "SetSpeed <speed> change car speed\n";
+	m_output << "Help             show this message\n"
+				"Info             print car info\n"
+				"Exit             stop the program\n"
+				"EngineOn         start the car engine\n"
+				"EngineOff        stop the car engine\n"
+				"SetGear <gear>   change car gear\n"
+				"SetSpeed <speed> change car speed\n";
 }
 
-void CCarControl::PrintInfo(std::ostream& output)
+void CCarControl::PrintInfo()
 {
-	output << "Car state:\n"
-		   << "Engine: " << (m_car.IsTurnedOn() ? "on" : "off") << '\n'
-		   << "Direction: " << DirectionToString(m_car.GetDirection()) << '\n'
-		   << "Speed: " << m_car.GetSpeed() << '\n'
-		   << "Gear: " << m_car.GetGear() << '\n';
+	m_output << "Car state:\n"
+			 << "Engine: " << (m_car.IsTurnedOn() ? "on" : "off") << '\n'
+			 << "Direction: " << DirectionToString(m_car.GetDirection()) << '\n'
+			 << "Speed: " << m_car.GetSpeed() << '\n'
+			 << "Gear: " << m_car.GetGear() << '\n';
 }
 
-void CCarControl::EngineOn(std::ostream& output)
+void CCarControl::EngineOn()
 {
 	if (m_car.TurnOnEngine())
 	{
-		output << "Engine turned on\n";
+		m_output << "Engine turned on\n";
 		return;
 	}
 
-	output << "Error: can't turn on the engine\n";
+	m_output << "Error: can't turn on the engine\n";
 }
 
-void CCarControl::EngineOff(std::ostream& output)
+void CCarControl::EngineOff()
 {
 	if (m_car.TurnOffEngine())
 	{
-		output << "Engine turned off\n";
+		m_output << "Engine turned off\n";
 		return;
 	}
 
-	output << "Error: can't turn off the engine\n";
+	m_output << "Error: can't turn off the engine\n";
 }
 
-void CCarControl::SetGear(std::ostream& output)
+void CCarControl::SetGear()
 {
 }
 
-void CCarControl::SetSpeed(std::ostream& output)
+void CCarControl::SetSpeed()
 {
 }
 

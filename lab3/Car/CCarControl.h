@@ -1,11 +1,14 @@
 #pragma once
 
 #include "CCar.h"
+#include <iostream>
+#include <string>
 
 class CCarControl
 {
 public:
-	void StartControl(std::istream& input, std::ostream& output);
+	CCarControl(std::istream& input, std::ostream& output);
+	void StartControl();
 
 private:
 	enum class Command
@@ -20,17 +23,19 @@ private:
 		SET_SPEED,
 	};
 
-	static CCarControl::Command ReadCommand(std::istream& input, std::ostream& output);
+	CCarControl::Command ReadCommand();
 	static CCarControl::Command ParseCommand(const std::string& command);
 
-	static void PrintHelp(std::ostream& output);
-	void PrintInfo(std::ostream& output);
-	void EngineOn(std::ostream& output);
-	void EngineOff(std::ostream& output);
-	void SetGear(std::ostream& output);
-	void SetSpeed(std::ostream& output);
+	void PrintHelp();
+	void PrintInfo();
+	void EngineOn();
+	void EngineOff();
+	void SetGear();
+	void SetSpeed();
 
 	static std::string DirectionToString(Direction direction);
 
+	std::istream& m_input;
+	std::ostream& m_output;
 	CCar m_car;
 };
