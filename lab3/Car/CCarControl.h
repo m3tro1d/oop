@@ -23,12 +23,14 @@ private:
 	static CCarControl::Command ReadCommand(std::istream& input, std::ostream& output);
 	static CCarControl::Command ParseCommand(const std::string& command);
 
-	void PrintHelp(std::ostream& output);
+	static void PrintHelp(std::ostream& output);
 	void PrintInfo(std::ostream& output);
 	void EngineOn(std::ostream& output);
 	void EngineOff(std::ostream& output);
 	void SetGear(std::ostream& output);
 	void SetSpeed(std::ostream& output);
+
+	static std::string DirectionToString(Direction direction);
 
 	CCar m_car;
 };

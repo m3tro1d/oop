@@ -7,6 +7,7 @@ void CCarControl::StartControl(std::istream& input, std::ostream& output)
 
 	while (!finished)
 	{
+		output << "> ";
 		command = ReadCommand(input, output);
 		switch (command)
 		{
@@ -18,6 +19,7 @@ void CCarControl::StartControl(std::istream& input, std::ostream& output)
 			break;
 		case Command::EXIT:
 			finished = true;
+			output << "Farewell!\n";
 			break;
 		case Command::ENGINE_ON:
 			EngineOn(output);
@@ -49,7 +51,7 @@ CCarControl::Command CCarControl::ReadCommand(std::istream& input, std::ostream&
 	}
 	catch (const std::exception& e)
 	{
-		output << e.what() << '\n';
+		output << "Error: " << e.what() << '\n';
 	}
 
 	return command;
@@ -89,26 +91,67 @@ CCarControl::Command CCarControl::ParseCommand(const std::string& command)
 	throw std::invalid_argument("invalid command");
 }
 
-void PrintHelp(std::ostream& output)
+void CCarControl::PrintHelp(std::ostream& output)
+{
+	output << "Help             show this message\n"
+			  "Info             print car info\n"
+			  "Exit             stop the program\n"
+			  "EngineOn         start the car engine\n"
+			  "EngineOff        stop the car engine\n"
+			  "SetGear <gear>   change car gear\n"
+			  "SetSpeed <speed> change car speed\n";
+}
+
+void CCarControl::PrintInfo(std::ostream& output)
+{
+	output << "Car state:\n"
+		   << "Engine: " << (m_car.IsTurnedOn() ? "on" : "off") << '\n'
+		   << "Direction: " << DirectionToString(m_car.GetDirection()) << '\n'
+		   << "Speed: " << m_car.GetSpeed() << '\n'
+		   << "Gear: " << m_car.GetGear() << '\n';
+}
+
+void CCarControl::EngineOn(std::ostream& output)
+{
+	if (m_car.TurnOnEngine())
+	{
+		output << "Engine turned on\n";
+		return;
+	}
+
+	output << "Error: can't turn on the engine\n";
+}
+
+void CCarControl::EngineOff(std::ostream& output)
+{
+	if (m_car.TurnOffEngine())
+	{
+		output << "Engine turned off\n";
+		return;
+	}
+
+	output << "Error: can't turn off the engine\n";
+}
+
+void CCarControl::SetGear(std::ostream& output)
 {
 }
 
-void PrintInfo(std::ostream& output)
+void CCarControl::SetSpeed(std::ostream& output)
 {
 }
 
-void EngineOn(std::ostream& output)
+std::string CCarControl::DirectionToString(Direction direction)
 {
-}
-
-void EngineOff(std::ostream& output)
-{
-}
-
-void SetGear(std::ostream& output)
-{
-}
-
-void SetSpeed(std::ostream& output)
-{
+	switch (direction)
+	{
+	case Direction::FORWARD:
+		return "forward";
+	case Direction::STILL:
+		return "standing still";
+	case Direction::BACKWARD:
+		return "backward";
+	default:
+		return {};
+	}
 }
