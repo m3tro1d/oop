@@ -51,13 +51,19 @@ bool CCar::SetSpeed(int speed)
 		return false;
 	}
 
+	if (m_gear == 0 && speed > std::abs(m_speed))
+	{
+		return false;
+	}
+
 	auto const limits = GEAR_SPEED_LIMITS.at(m_gear);
 	if (speed < limits.lower || speed > limits.upper)
 	{
 		return false;
 	}
 
-	m_speed = speed;
+	m_speed = m_gear == -1 ? -speed : speed;
+	UpdateDirection();
 	return true;
 }
 
@@ -68,17 +74,7 @@ bool CCar::IsTurnedOn() const
 
 Direction CCar::GetDirection() const
 {
-	if (m_speed == 0)
-	{
-		return Direction::STILL;
-	}
-
-	if (m_gear < 0)
-	{
-		return Direction::BACKWARD;
-	}
-
-	return Direction::FORWARD;
+	return m_direction;
 }
 
 int CCar::GetGear() const
@@ -88,5 +84,22 @@ int CCar::GetGear() const
 
 int CCar::GetSpeed() const
 {
-	return m_speed;
+	return std::abs(m_speed);
+}
+
+void CCar::UpdateDirection()
+{
+	if (m_speed > 0)
+	{
+		m_direction = Direction::FORWARD;
+		return;
+	}
+
+	if (m_speed < 0)
+	{
+		m_direction = Direction::BACKWARD;
+		return;
+	}
+
+	m_direction = Direction::STILL;
 }
