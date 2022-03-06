@@ -7,7 +7,7 @@
 class CCarControl
 {
 public:
-	CCarControl(std::istream& input, std::ostream& output);
+	CCarControl(std::istream& input, std::ostream& output, CCar& car);
 	void StartControl();
 
 private:

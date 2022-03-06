@@ -2,7 +2,8 @@
 
 int main()
 {
-	CCarControl control(std::cin, std::cout);
+	CCar car;
+	CCarControl control(std::cin, std::cout, car);
 	control.StartControl();
 
 	return EXIT_SUCCESS;

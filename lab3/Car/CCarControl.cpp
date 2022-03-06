@@ -1,8 +1,9 @@
 #include "CCarControl.h"
 
-CCarControl::CCarControl(std::istream& input, std::ostream& output)
+CCarControl::CCarControl(std::istream& input, std::ostream& output, CCar& car)
 	: m_input(input)
 	, m_output(output)
+	, m_car(car)
 {
 }
 
