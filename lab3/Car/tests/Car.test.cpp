@@ -278,6 +278,110 @@ SCENARIO("car is operated correctly")
 						}
 					}
 				}
+
+				WHEN("second gear is set")
+				{
+					car.SetGear(1);
+					car.SetSpeed(20);
+					car.SetGear(2);
+
+					THEN("speed from 20 to 50 can be set")
+					{
+						REQUIRE(car.SetSpeed(20));
+						REQUIRE(car.GetSpeed() == 20);
+						REQUIRE(car.SetSpeed(50));
+						REQUIRE(car.GetSpeed() == 50);
+					}
+
+					THEN("speed exceeding limit can't be set")
+					{
+						REQUIRE(!car.SetSpeed(19));
+						REQUIRE(car.GetSpeed() == 20);
+						REQUIRE(!car.SetSpeed(51));
+						REQUIRE(car.GetSpeed() == 20);
+					}
+				}
+
+				WHEN("third gear is set")
+				{
+					car.SetGear(1);
+					car.SetSpeed(20);
+					car.SetGear(2);
+					car.SetSpeed(30);
+					car.SetGear(3);
+
+					THEN("speed from 30 to 60 can be set")
+					{
+						REQUIRE(car.SetSpeed(30));
+						REQUIRE(car.GetSpeed() == 30);
+						REQUIRE(car.SetSpeed(60));
+						REQUIRE(car.GetSpeed() == 60);
+					}
+
+					THEN("speed exceeding limit can't be set")
+					{
+						REQUIRE(!car.SetSpeed(29));
+						REQUIRE(car.GetSpeed() == 30);
+						REQUIRE(!car.SetSpeed(61));
+						REQUIRE(car.GetSpeed() == 30);
+					}
+				}
+
+				WHEN("fourth gear is set")
+				{
+					car.SetGear(1);
+					car.SetSpeed(20);
+					car.SetGear(2);
+					car.SetSpeed(30);
+					car.SetGear(3);
+					car.SetSpeed(40);
+					car.SetGear(4);
+
+					THEN("speed from 40 to 90 can be set")
+					{
+						REQUIRE(car.SetSpeed(40));
+						REQUIRE(car.GetSpeed() == 40);
+						REQUIRE(car.SetSpeed(90));
+						REQUIRE(car.GetSpeed() == 90);
+					}
+
+					THEN("speed exceeding limit can't be set")
+					{
+						REQUIRE(!car.SetSpeed(39));
+						REQUIRE(car.GetSpeed() == 40);
+						REQUIRE(!car.SetSpeed(91));
+						REQUIRE(car.GetSpeed() == 40);
+					}
+				}
+
+				WHEN("fifth gear is set")
+				{
+					car.SetGear(1);
+					car.SetSpeed(20);
+					car.SetGear(2);
+					car.SetSpeed(30);
+					car.SetGear(3);
+					car.SetSpeed(40);
+					car.SetGear(4);
+					car.SetSpeed(50);
+					car.SetGear(5);
+
+					THEN("speed from 50 to 150 can be set")
+					{
+						REQUIRE(car.SetSpeed(50));
+						REQUIRE(car.GetSpeed() == 50);
+						REQUIRE(car.SetSpeed(150));
+						REQUIRE(car.GetSpeed() == 150);
+					}
+
+					THEN("speed exceeding limit can't be set")
+					{
+						REQUIRE(!car.SetSpeed(49));
+						REQUIRE(car.GetSpeed() == 50);
+						REQUIRE(!car.SetSpeed(151));
+						REQUIRE(car.GetSpeed() == 50);
+					}
+				}
 			}
 		}
 	}
