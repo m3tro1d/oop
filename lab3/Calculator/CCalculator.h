@@ -1,0 +1,24 @@
+#pragma once
+
+enum class Token
+{
+	IDENTIFIER,
+	NUMBER,
+	PLUS,
+	MINUS,
+	MULTIPLY,
+	DIVIDE,
+
+	VARIABLE_DECLARATION,
+	ASSIGNMENT,
+	FUNCTION_DEFINITION,
+	PRINT,
+	VARIABLES_DUMP,
+	FUNCTIONS_DUMP,
+
+	END,
+};
+
+class CCalculator
+{
+};
