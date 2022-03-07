@@ -445,36 +445,64 @@ TEST_CASE("car control works correctly")
 
 	SECTION("turning engine on works correctly")
 	{
-		// TODO
+		input.str("EngineOn\nExit\n");
+		const std::string result = "> Engine turned on\n"
+								   "> Farewell!\n";
+		control.StartControl();
+		REQUIRE(output.str() == result);
+		REQUIRE(car.IsTurnedOn());
 	}
 
 	SECTION("turning engine off works correctly")
 	{
-		// TODO
+		input.str("EngineOn\nEngineOff\nExit\n");
+		const std::string result = "> Engine turned on\n"
+								   "> Engine turned off\n"
+								   "> Farewell!\n";
+		control.StartControl();
+		REQUIRE(output.str() == result);
+		REQUIRE(!car.IsTurnedOn());
 	}
 
 	SECTION("setting gear works correctly")
 	{
-		// TODO
+		input.str("EngineOn\nSetGear 1\nExit\n");
+		const std::string result = "> Engine turned on\n"
+								   "> Gear set to 1\n"
+								   "> Farewell!\n";
+		control.StartControl();
+		REQUIRE(output.str() == result);
+		REQUIRE(car.GetGear() == 1);
 	}
 
 	SECTION("setting speed works correctly")
 	{
-		// TODO
+		input.str("EngineOn\nSetGear 1\nSetSpeed 20\nExit\n");
+		const std::string result = "> Engine turned on\n"
+								   "> Gear set to 1\n"
+								   "> Speed set to 20\n"
+								   "> Farewell!\n";
+		control.StartControl();
+		REQUIRE(output.str() == result);
+		REQUIRE(car.GetSpeed() == 20);
 	}
 
-	SECTION("setting invalid gear results in an error")
+	SECTION("invalid command results in an error")
 	{
-		// TODO
-	}
-
-	SECTION("setting invalid speed results in an error")
-	{
-		// TODO
+		input.str("EngineOff\nExit\n");
+		const std::string result = "> Error: can't turn off the engine\n"
+								   "> Farewell!\n";
+		control.StartControl();
+		REQUIRE(output.str() == result);
+		REQUIRE(!car.IsTurnedOn());
 	}
 
 	SECTION("unknown command results in an error")
 	{
-		// TODO
+		input.str("BrewMeACoffee\nExit\n");
+		const std::string result = "> Error: invalid command\n"
+								   "> Farewell!\n";
+		control.StartControl();
+		REQUIRE(output.str() == result);
 	}
 }
