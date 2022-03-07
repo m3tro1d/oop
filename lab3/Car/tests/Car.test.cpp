@@ -1,6 +1,8 @@
 #define CATCH_CONFIG_MAIN
 #include "../CCar.h"
+#include "../CCarControl.h"
 #include "catch.hpp"
+#include <sstream>
 
 SCENARIO("car is operated correctly")
 {
@@ -384,5 +386,95 @@ SCENARIO("car is operated correctly")
 				}
 			}
 		}
+	}
+}
+
+TEST_CASE("car control works correctly")
+{
+	CCar car;
+	std::istringstream input;
+	std::ostringstream output;
+	CCarControl control(input, output, car);
+
+	SECTION("printing help works correctly")
+	{
+		input.str("Help\nExit\n");
+		const std::string result = "> Help             show this message\n"
+								   "Info             print car info\n"
+								   "Exit             stop the program\n"
+								   "EngineOn         start the car engine\n"
+								   "EngineOff        stop the car engine\n"
+								   "SetGear <gear>   change car gear\n"
+								   "SetSpeed <speed> change car speed\n"
+								   "> Farewell!\n";
+		control.StartControl();
+		REQUIRE(output.str() == result);
+	}
+
+	SECTION("printing info works correctly")
+	{
+		SECTION("newly created car info is printed correctly")
+		{
+			input.str("Info\nExit\n");
+			const std::string result = "> Car state:\n"
+									   "Engine: off\n"
+									   "Direction: standing still\n"
+									   "Speed: 0\n"
+									   "Gear: 0\n"
+									   "> Farewell!\n";
+			control.StartControl();
+			REQUIRE(output.str() == result);
+		}
+
+		SECTION("modified car info is printed correctly")
+		{
+			car.TurnOnEngine();
+			car.SetGear(1);
+			car.SetSpeed(15);
+			input.str("Info\nExit\n");
+			const std::string result = "> Car state:\n"
+									   "Engine: on\n"
+									   "Direction: forward\n"
+									   "Speed: 15\n"
+									   "Gear: 1\n"
+									   "> Farewell!\n";
+			control.StartControl();
+			REQUIRE(output.str() == result);
+		}
+	}
+
+	SECTION("turning engine on works correctly")
+	{
+		// TODO
+	}
+
+	SECTION("turning engine off works correctly")
+	{
+		// TODO
+	}
+
+	SECTION("setting gear works correctly")
+	{
+		// TODO
+	}
+
+	SECTION("setting speed works correctly")
+	{
+		// TODO
+	}
+
+	SECTION("setting invalid gear results in an error")
+	{
+		// TODO
+	}
+
+	SECTION("setting invalid speed results in an error")
+	{
+		// TODO
+	}
+
+	SECTION("unknown command results in an error")
+	{
+		// TODO
 	}
 }
