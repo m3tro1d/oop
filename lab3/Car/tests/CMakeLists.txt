@@ -1,6 +1,6 @@
-add_executable(CCarTest
+add_executable(CarTest
                ../CCar.h
                ../CCar.cpp
-               CCar.test.cpp)
-target_link_libraries(CCarTest PUBLIC catch2)
-add_test(NAME CCarTest COMMAND CCarTest)
+               Car.test.cpp)
+target_link_libraries(CarTest PUBLIC catch2)
+add_test(NAME CarTest COMMAND CarTest)

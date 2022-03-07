@@ -231,6 +231,33 @@ SCENARIO("car is operated correctly")
 							REQUIRE(car.SetGear(0));
 							REQUIRE(car.GetGear() == 0);
 						}
+
+						WHEN("neutral gear is set")
+						{
+							car.SetGear(0);
+
+							THEN("it has the same speed")
+							{
+								REQUIRE(car.GetSpeed() == 20);
+							}
+
+							THEN("it is still moving forward")
+							{
+								REQUIRE(car.GetDirection() == Direction::FORWARD);
+							}
+
+							THEN("it can't speed up")
+							{
+								REQUIRE(!car.SetSpeed(25));
+								REQUIRE(car.GetSpeed() == 20);
+							}
+
+							THEN("it can slow down")
+							{
+								REQUIRE(car.SetSpeed(10));
+								REQUIRE(car.GetSpeed() == 10);
+							}
+						}
 					}
 				}
 			}
