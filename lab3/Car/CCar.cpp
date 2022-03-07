@@ -34,6 +34,11 @@ bool CCar::SetGear(int gear)
 		return false;
 	}
 
+	if (m_direction == Direction::FORWARD && gear == -1 || m_direction == Direction::BACKWARD && gear > 0)
+	{
+		return false;
+	}
+
 	auto const limits = GEAR_SPEED_LIMITS.at(gear);
 	if (m_speed < limits.lower || m_speed > limits.upper)
 	{

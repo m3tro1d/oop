@@ -127,6 +127,12 @@ SCENARIO("car is operated correctly")
 						REQUIRE(car.GetGear() == -1);
 					}
 
+					THEN("first gear can be set")
+					{
+						REQUIRE(car.SetGear(1));
+						REQUIRE(car.GetGear() == 1);
+					}
+
 					THEN("speed from 0 to 20 can be set")
 					{
 						REQUIRE(car.SetSpeed(20));
@@ -148,6 +154,12 @@ SCENARIO("car is operated correctly")
 						THEN("it is moving backward")
 						{
 							REQUIRE(car.GetDirection() == Direction::BACKWARD);
+						}
+
+						THEN("first gear can't be set")
+						{
+							REQUIRE(!car.SetGear(1));
+							REQUIRE(car.GetGear() == -1);
 						}
 
 						THEN("neutral gear can be set")
@@ -224,6 +236,12 @@ SCENARIO("car is operated correctly")
 						THEN("it is moving forward")
 						{
 							REQUIRE(car.GetDirection() == Direction::FORWARD);
+						}
+
+						THEN("reverse gear can't be set")
+						{
+							REQUIRE(!car.SetGear(-1));
+							REQUIRE(car.GetGear() == 1);
 						}
 
 						THEN("neutral gear can be set")
