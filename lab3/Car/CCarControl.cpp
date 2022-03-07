@@ -14,7 +14,7 @@ void CCarControl::StartControl()
 
 	while (!finished)
 	{
-		m_output << "> ";
+		m_output << PROMPT;
 		command = ReadCommand();
 		switch (command)
 		{

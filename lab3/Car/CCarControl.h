@@ -5,6 +5,8 @@
 #include <sstream>
 #include <string>
 
+const std::string PROMPT = "> ";
+
 class CCarControl
 {
 public:
