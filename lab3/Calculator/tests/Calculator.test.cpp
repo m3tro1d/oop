@@ -2,99 +2,273 @@
 #include "../CCalculator.h"
 #include "catch.hpp"
 
+bool ApproximatelyEquals(double a, double b)
+{
+	return std::abs(a - b) < std::numeric_limits<double>::epsilon();
+}
+
 TEST_CASE("base calculator works correctly")
 {
 	CCalculator calculator;
 
-	SECTION("variable creation works correctly")
+	SECTION("variables work correctly")
 	{
-		SECTION("using non-existing and valid identifier creates a variable with NAN value")
+		SECTION("variable creation works correctly")
 		{
-			const CCalculator::Identifier identifier = "test_123";
-			calculator.CreateVariable(identifier);
-			auto const variables = calculator.DumpVariables();
-			REQUIRE(std::isnan(variables.at(identifier)));
-		}
-
-		SECTION("invalid identifier results in an error")
-		{
-			SECTION("identifier with invalid symbols")
+			SECTION("using non-existing and valid identifier creates a variable with NAN value")
 			{
-				const CCalculator::Identifier identifier = "tes%t";
-				REQUIRE_THROWS_AS(
-					calculator.CreateVariable(identifier),
-					std::invalid_argument);
+				const CCalculator::Identifier identifier = "test_123";
+				calculator.CreateVariable(identifier);
+				auto const variables = calculator.DumpVariables();
+				REQUIRE(std::isnan(variables.at(identifier)));
 			}
 
-			SECTION("identifier starting with number")
+			SECTION("invalid identifier results in an error")
 			{
-				const CCalculator::Identifier identifier = "123test";
+				SECTION("identifier with invalid symbols")
+				{
+					const CCalculator::Identifier identifier = "tes%t";
+					REQUIRE_THROWS_AS(
+						calculator.CreateVariable(identifier),
+						std::invalid_argument);
+				}
+
+				SECTION("identifier starting with number")
+				{
+					const CCalculator::Identifier identifier = "123test";
+					REQUIRE_THROWS_AS(
+						calculator.CreateVariable(identifier),
+						std::invalid_argument);
+				}
+			}
+
+			SECTION("creating variable with existing identifier results in an error")
+			{
+				const CCalculator::Identifier identifier = "test_123";
+				calculator.CreateVariable(identifier);
 				REQUIRE_THROWS_AS(
 					calculator.CreateVariable(identifier),
-					std::invalid_argument);
+					std::runtime_error);
+				REQUIRE(calculator.DumpVariables().size() == 1);
 			}
 		}
 
-		SECTION("creating variable with existing identifier results in an error")
+		SECTION("variable assignment with value works correctly")
 		{
-			const CCalculator::Identifier identifier = "test_123";
-			calculator.CreateVariable(identifier);
-			REQUIRE_THROWS_AS(
-				calculator.CreateVariable(identifier),
-				std::runtime_error);
+			SECTION("assigning to an existing variable works correctly")
+			{
+				const CCalculator::Identifier identifier = "test_123";
+				const CCalculator::Value value = 42.36;
+				calculator.CreateVariable(identifier);
+				calculator.AssignVariable(identifier, value);
+				auto const variables = calculator.DumpVariables();
+				REQUIRE(variables.at(identifier) == value);
+			}
+
+			SECTION("assigning to a non-existing variable works correctly")
+			{
+				const CCalculator::Identifier identifier = "test_123";
+				const CCalculator::Value value = 42.36;
+				calculator.AssignVariable(identifier, value);
+				auto const variables = calculator.DumpVariables();
+				REQUIRE(variables.at(identifier) == value);
+			}
+		}
+
+		SECTION("variable assignment with identifier works correctly")
+		{
+			SECTION("assigning an existing identifier works correctly")
+			{
+				const CCalculator::Identifier identifier1 = "test_123";
+				const CCalculator::Value value = 42.36;
+				calculator.AssignVariable(identifier1, value);
+
+				const CCalculator::Identifier identifier2 = "copy1";
+				calculator.AssignVariable(identifier2, identifier1);
+
+				auto const variables = calculator.DumpVariables();
+				REQUIRE(variables.at(identifier2) == variables.at(identifier1));
+			}
+
+			SECTION("assigning a non-existing identifier results in an error")
+			{
+				const CCalculator::Identifier identifier1 = "test_123";
+				const CCalculator::Identifier identifier2 = "copy1";
+				REQUIRE_THROWS_AS(
+					calculator.AssignVariable(identifier2, identifier1),
+					std::runtime_error);
+			}
 		}
 	}
 
-	SECTION("variable assignment with value works correctly")
+	SECTION("functions work correctly")
 	{
-		SECTION("assigning to an existing variable works correctly")
+		SECTION("function with variables creation works correctly")
 		{
-			const CCalculator::Identifier identifier = "test_123";
-			const CCalculator::Value value = 42.36;
-			calculator.CreateVariable(identifier);
-			calculator.AssignVariable(identifier, value);
-			auto const variables = calculator.DumpVariables();
-			REQUIRE(variables.at(identifier) == value);
+			const CCalculator::Identifier var1 = "var1";
+			const CCalculator::Value value1 = 12.3;
+			const CCalculator::Identifier var2 = "var2";
+			const CCalculator::Value value2 = 45;
+			calculator.AssignVariable(var1, value1);
+			calculator.AssignVariable(var2, value2);
+
+			const CCalculator::Identifier function = "function";
+			const CCalculator::Expression expression = {
+				.operation = CCalculator::Operation::ADDITION,
+				.arguments = { var1, var2 },
+			};
+			calculator.CreateFunction(function, expression);
+
+			auto const functions = calculator.DumpFunctions();
+			REQUIRE(ApproximatelyEquals(functions.at(function), value1 + value2));
 		}
 
-		SECTION("assigning to a non-existing variable works correctly")
+		SECTION("function with other functions creation works correctly")
 		{
-			const CCalculator::Identifier identifier = "test_123";
-			const CCalculator::Value value = 42.36;
-			calculator.AssignVariable(identifier, value);
-			auto const variables = calculator.DumpVariables();
-			REQUIRE(variables.at(identifier) == value);
-		}
-	}
+			SECTION("function with a variable and a function is calculated correctly")
+			{
+				const CCalculator::Identifier var1 = "var1";
+				const CCalculator::Value value1 = 12.3;
+				const CCalculator::Identifier var2 = "var2";
+				const CCalculator::Value value2 = 45;
+				calculator.AssignVariable(var1, value1);
+				calculator.AssignVariable(var2, value2);
 
-	SECTION("variable assignment with identifier works correctly")
-	{
-		SECTION("assigning an existing identifier works correctly")
+				const CCalculator::Identifier argFun = "argFun";
+				const CCalculator::Expression argExpression = {
+					.operation = CCalculator::Operation::ADDITION,
+					.arguments = { var1, var2 },
+				};
+				calculator.CreateFunction(argFun, argExpression);
+
+				const CCalculator::Identifier argVar = "argVar";
+				const CCalculator::Value argValue = 42.78;
+				calculator.AssignVariable(argVar, argValue);
+
+				const CCalculator::Identifier function = "function";
+				const CCalculator::Expression expression = {
+					.operation = CCalculator::Operation::DIVISION,
+					.arguments = { argFun, argVar },
+				};
+				calculator.CreateFunction(function, expression);
+
+				auto const functions = calculator.DumpFunctions();
+				REQUIRE(ApproximatelyEquals(
+					functions.at(function),
+					(value1 + value2) / argValue));
+			}
+
+			SECTION("function with both function arguments is calculated correctly")
+			{
+				const CCalculator::Identifier var11 = "var11";
+				const CCalculator::Value value11 = 12.3;
+				const CCalculator::Identifier var12 = "var12";
+				const CCalculator::Value value12 = 45;
+				calculator.AssignVariable(var11, value11);
+				calculator.AssignVariable(var12, value12);
+
+				const CCalculator::Identifier f1 = "f1";
+				const CCalculator::Expression e1 = {
+					.operation = CCalculator::Operation::DIVISION,
+					.arguments = { var11, var12 },
+				};
+				calculator.CreateFunction(f1, e1);
+
+				const CCalculator::Identifier var21 = "var21";
+				const CCalculator::Value value21 = 1000;
+				const CCalculator::Identifier var22 = "var22";
+				const CCalculator::Value value22 = 500.6;
+				calculator.AssignVariable(var21, value21);
+				calculator.AssignVariable(var22, value22);
+
+				const CCalculator::Identifier f2 = "f2";
+				const CCalculator::Expression e2 = {
+					.operation = CCalculator::Operation::SUBTRACTION,
+					.arguments = { var21, var22 },
+				};
+				calculator.CreateFunction(f2, e2);
+
+				const CCalculator::Identifier function = "function";
+				const CCalculator::Expression expression = {
+					.operation = CCalculator::Operation::MULTIPLICATION,
+					.arguments = { f1, f2 },
+				};
+				calculator.CreateFunction(function, expression);
+
+				auto const functions = calculator.DumpFunctions();
+				REQUIRE(ApproximatelyEquals(
+					functions.at(function),
+					(value11 / value12) * (value21 - value22)));
+			}
+		}
+
+		SECTION("calculating function with zero division returns nan")
 		{
-			const CCalculator::Identifier identifier1 = "test_123";
-			const CCalculator::Value value = 42.36;
-			calculator.AssignVariable(identifier1, value);
+			const CCalculator::Identifier var1 = "var1";
+			const CCalculator::Value value1 = 12.3;
+			const CCalculator::Identifier var2 = "var2";
+			const CCalculator::Value value2 = 0;
+			calculator.AssignVariable(var1, value1);
+			calculator.AssignVariable(var2, value2);
 
-			const CCalculator::Identifier identifier2 = "copy1";
-			calculator.AssignVariable(identifier2, identifier1);
+			const CCalculator::Identifier function = "function";
+			const CCalculator::Expression expression = {
+				.operation = CCalculator::Operation::DIVISION,
+				.arguments = { var1, var2 },
+			};
+			calculator.CreateFunction(function, expression);
 
-			auto const variables = calculator.DumpVariables();
-			REQUIRE(variables.at(identifier2) == variables.at(identifier1));
+			auto const functions = calculator.DumpFunctions();
+			REQUIRE(std::isnan(functions.at(function)));
 		}
 
-		SECTION("assigning a non-existing identifier results in an error")
+		SECTION("creating function with existing identifier results in an error")
 		{
-			const CCalculator::Identifier identifier1 = "test_123";
-			const CCalculator::Identifier identifier2 = "copy1";
-			REQUIRE_THROWS_AS(
-				calculator.AssignVariable(identifier2, identifier1),
-				std::runtime_error);
-		}
-	}
+			SECTION("variable identifier")
+			{
+				const CCalculator::Identifier identifier = "test";
+				const CCalculator::Expression expression = {
+					.operation = CCalculator::Operation::ADDITION,
+					.arguments = { "one", "two" },
+				};
+				calculator.CreateVariable(identifier);
+				REQUIRE_THROWS_AS(
+					calculator.CreateFunction(identifier, expression),
+					std::runtime_error);
+			}
 
-	SECTION("function creation works correctly")
-	{
-		// TODO
+			SECTION("function identifier")
+			{
+				const CCalculator::Identifier identifier = "test";
+				const CCalculator::Expression expression = {
+					.operation = CCalculator::Operation::ADDITION,
+					.arguments = { "one", "two" },
+				};
+				calculator.CreateFunction(identifier, expression);
+				REQUIRE_THROWS_AS(
+					calculator.CreateFunction(identifier, expression),
+					std::runtime_error);
+			}
+		}
+
+		SECTION("operations with nan result in nan")
+		{
+			const CCalculator::Identifier var1 = "var1";
+			const CCalculator::Value value1 = 12.3;
+			const CCalculator::Identifier var2 = "var2";
+			calculator.AssignVariable(var1, value1);
+			calculator.CreateVariable(var2);
+
+			const CCalculator::Identifier function = "function";
+			const CCalculator::Expression expression = {
+				.operation = CCalculator::Operation::ADDITION,
+				.arguments = { var1, var2 },
+			};
+			calculator.CreateFunction(function, expression);
+
+			auto const functions = calculator.DumpFunctions();
+			REQUIRE(std::isnan(functions.at(function)));
+		}
 	}
 
 	SECTION("getting identifier value works correctly")
@@ -126,7 +300,23 @@ TEST_CASE("base calculator works correctly")
 
 		SECTION("functions")
 		{
-			// TODO
+			const CCalculator::Identifier var1 = "var1";
+			const CCalculator::Value value1 = 12.3;
+			const CCalculator::Identifier var2 = "var2";
+			const CCalculator::Value value2 = 45;
+			calculator.AssignVariable(var1, value1);
+			calculator.AssignVariable(var2, value2);
+
+			const CCalculator::Identifier function = "function";
+			const CCalculator::Expression expression = {
+				.operation = CCalculator::Operation::MULTIPLICATION,
+				.arguments = { var1, var2 },
+			};
+			calculator.CreateFunction(function, expression);
+
+			REQUIRE(ApproximatelyEquals(
+				calculator.GetIdentifierValue(function),
+				value1 * value2));
 		}
 	}
 }
