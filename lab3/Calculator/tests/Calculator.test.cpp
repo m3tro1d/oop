@@ -91,4 +91,22 @@ TEST_CASE("base calculator works correctly")
 				std::runtime_error);
 		}
 	}
+
+	SECTION("function creation works correctly")
+	{
+		// TODO
+	}
+
+	SECTION("getting identifier value works correctly")
+	{
+		SECTION("variables")
+		{
+			// TODO
+		}
+
+		SECTION("functions")
+		{
+			// TODO
+		}
+	}
 }
