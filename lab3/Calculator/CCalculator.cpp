@@ -46,7 +46,13 @@ void CCalculator::CreateFunction(const CCalculator::Identifier& identifier, cons
 
 CCalculator::Value CCalculator::GetIdentifierValue(const CCalculator::Identifier& identifier) const
 {
-	// TODO
+	// TODO: process functions
+	if (!DoesIdentifierExist(identifier))
+	{
+		throw std::runtime_error("identifier does not exist");
+	}
+
+	return m_variables.at(identifier);
 }
 
 CCalculator::Variables CCalculator::DumpVariables() const

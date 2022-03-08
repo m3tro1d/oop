@@ -101,7 +101,27 @@ TEST_CASE("base calculator works correctly")
 	{
 		SECTION("variables")
 		{
-			// TODO
+			SECTION("getting existing but not assigned variable returns nan")
+			{
+				const CCalculator::Identifier identifier = "test";
+				calculator.CreateVariable(identifier);
+				REQUIRE(std::isnan(calculator.GetIdentifierValue("test")));
+			}
+
+			SECTION("getting existing variable returns it's value")
+			{
+				const CCalculator::Identifier identifier = "test";
+				const CCalculator::Value value = 12.3;
+				calculator.AssignVariable(identifier, value);
+				REQUIRE(calculator.GetIdentifierValue(identifier) == value);
+			}
+
+			SECTION("getting non-existing variable results in an error")
+			{
+				REQUIRE_THROWS_AS(
+					calculator.GetIdentifierValue("whatever"),
+					std::runtime_error);
+			}
 		}
 
 		SECTION("functions")
