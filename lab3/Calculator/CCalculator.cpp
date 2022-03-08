@@ -55,12 +55,12 @@ CCalculator::Value CCalculator::GetIdentifierValue(const CCalculator::Identifier
 	return m_variables.at(identifier);
 }
 
-CCalculator::Variables CCalculator::DumpVariables() const
+CCalculator::IdentifierValues CCalculator::DumpVariables() const
 {
 	return m_variables;
 }
 
-CCalculator::Variables CCalculator::DumpFunctions() const
+CCalculator::IdentifierValues CCalculator::DumpFunctions() const
 {
 	// TODO
 	return {};
