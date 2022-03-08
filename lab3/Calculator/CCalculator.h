@@ -1,8 +1,8 @@
 #pragma once
 
-#include <regex>
 #include <limits>
 #include <map>
+#include <regex>
 #include <string>
 
 class CCalculator
@@ -45,6 +45,9 @@ public:
 private:
 	static bool IsValidIdentifier(const Identifier& identifier);
 	bool DoesIdentifierExist(const Identifier& identifier) const;
+	static bool IsZero(Value value);
+
+	Value CalculateExpression(const Expression& expression) const;
 
 private:
 	IdentifierValues m_variables;

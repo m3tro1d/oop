@@ -41,18 +41,33 @@ void CCalculator::AssignVariable(const CCalculator::Identifier& identifier, cons
 
 void CCalculator::CreateFunction(const CCalculator::Identifier& identifier, const CCalculator::Expression& expression)
 {
-	// TODO
+	if (!IsValidIdentifier(identifier))
+	{
+		throw std::invalid_argument("invalid identifier");
+	}
+
+	if (DoesIdentifierExist(identifier))
+	{
+		throw std::runtime_error("identifier already exists");
+	}
+
+	m_functions[identifier] = expression;
 }
 
 CCalculator::Value CCalculator::GetIdentifierValue(const CCalculator::Identifier& identifier) const
 {
-	// TODO: process functions
 	if (!DoesIdentifierExist(identifier))
 	{
 		throw std::runtime_error("identifier does not exist");
 	}
 
-	return m_variables.at(identifier);
+	auto const variable = m_variables.find(identifier);
+	if (variable != m_variables.end())
+	{
+		return variable->second;
+	}
+
+	return CalculateExpression(m_functions.at(identifier));
 }
 
 CCalculator::IdentifierValues CCalculator::DumpVariables() const
@@ -62,8 +77,13 @@ CCalculator::IdentifierValues CCalculator::DumpVariables() const
 
 CCalculator::IdentifierValues CCalculator::DumpFunctions() const
 {
-	// TODO
-	return {};
+	IdentifierValues result;
+	for (auto const& [identifier, expression] : m_functions)
+	{
+		result[identifier] = CalculateExpression(expression);
+	}
+
+	return result;
 }
 
 bool CCalculator::IsValidIdentifier(const CCalculator::Identifier& identifier)
@@ -76,5 +96,41 @@ bool CCalculator::IsValidIdentifier(const CCalculator::Identifier& identifier)
 
 bool CCalculator::DoesIdentifierExist(const CCalculator::Identifier& identifier) const
 {
-	return m_variables.find(identifier) != m_variables.end();
+	if (m_variables.find(identifier) != m_variables.end())
+	{
+		return true;
+	}
+
+	return m_functions.find(identifier) != m_functions.end();
+}
+
+bool CCalculator::IsZero(CCalculator::Value value)
+{
+	return std::abs(value) < std::numeric_limits<Value>::epsilon();
+}
+
+CCalculator::Value CCalculator::CalculateExpression(const CCalculator::Expression& expression) const
+{
+	auto const argument1 = expression.arguments.first;
+	auto const argument2 = expression.arguments.second;
+
+	switch (expression.operation)
+	{
+	case Operation::ADDITION:
+		return GetIdentifierValue(argument1) + GetIdentifierValue(argument2);
+	case Operation::SUBTRACTION:
+		return GetIdentifierValue(argument1) - GetIdentifierValue(argument2);
+	case Operation::MULTIPLICATION:
+		return GetIdentifierValue(argument1) * GetIdentifierValue(argument2);
+	case Operation::DIVISION: {
+		auto const divisor = GetIdentifierValue(argument2);
+		if (IsZero(divisor))
+		{
+			return NAN_VALUE;
+		}
+		return GetIdentifierValue(argument1) / divisor;
+	}
+	default:
+		return NAN_VALUE;
+	}
 }
