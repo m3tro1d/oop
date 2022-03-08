@@ -1,5 +1,6 @@
 #pragma once
 
+#include <regex>
 #include <limits>
 #include <map>
 #include <string>
@@ -9,26 +10,40 @@ class CCalculator
 public:
 	using Identifier = std::string;
 	using Value = double;
-	using Expression = std::string;
+
+	enum class Operation
+	{
+		ADDITION,
+		SUBTRACTION,
+		MULTIPLICATION,
+		DIVISION,
+	};
+	using Arguments = std::pair<Identifier, Identifier>;
+	using Expression = struct
+	{
+		Operation operation;
+		Arguments arguments;
+	};
 
 	using Variables = std::map<Identifier, Value>;
 	using Functions = std::map<Identifier, Expression>;
 
-	static constexpr Value NON_EXISTING_VALUE = std::numeric_limits<Value>::signaling_NaN();
+	static constexpr Value NAN_VALUE = std::numeric_limits<Value>::signaling_NaN();
 
 public:
 	void CreateVariable(const Identifier& identifier);
-	void AssignVariable(const Identifier& identifier, const Expression& value);
+	void AssignVariable(const Identifier& identifier, Value value);
+	void AssignVariable(const Identifier& identifier, const Identifier& assignedIdentifier);
 
 	void CreateFunction(const Identifier& identifier, const Expression& expression);
 
-	Value CalculateValueByIdentifier(const Identifier& identifier);
+	Value GetIdentifierValue(const Identifier& identifier) const;
 
 	Variables DumpVariables() const;
-	Functions DumpFunctions() const;
+	Variables DumpFunctions() const;
 
 private:
-	bool IsValidIdentifier(const Identifier& identifier) const;
+	static bool IsValidIdentifier(const Identifier& identifier);
 	bool DoesIdentifierExist(const Identifier& identifier) const;
 
 private:
