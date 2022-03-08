@@ -1,8 +1,10 @@
-#include <iostream>
+#include "CCalculatorControl.h"
 
 int main()
 {
-	// TODO
-	std::cout << "Hello" << std::endl;
+	CCalculator calculator;
+	CCalculatorControl control(std::cin, std::cout, calculator);
+	control.StartControl();
+
 	return EXIT_SUCCESS;
 }

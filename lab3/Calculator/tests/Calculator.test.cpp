@@ -320,3 +320,8 @@ TEST_CASE("base calculator works correctly")
 		}
 	}
 }
+
+TEST_CASE("calculator control works correctly")
+{
+	// TODO
+}
