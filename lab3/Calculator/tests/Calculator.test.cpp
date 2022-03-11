@@ -103,6 +103,19 @@ TEST_CASE("base calculator works correctly")
 
 	SECTION("functions work correctly")
 	{
+		SECTION("function with one variable works correctly")
+		{
+			const CCalculator::Identifier var = "var";
+			const CCalculator::Value value = 12.3;
+			calculator.AssignVariable(var, value);
+
+			const CCalculator::Identifier function = "function";
+			calculator.CreateFunction(function, var);
+
+			auto const functions = calculator.DumpFunctions();
+			REQUIRE(functions.at(function) == value);
+		}
+
 		SECTION("function with variables creation works correctly")
 		{
 			const CCalculator::Identifier var1 = "var1";
@@ -202,6 +215,30 @@ TEST_CASE("base calculator works correctly")
 			}
 		}
 
+		SECTION("creating a function with expression containing non-existing identifiers results in an error")
+		{
+			SECTION("single identifier")
+			{
+				const CCalculator::Identifier var = "var";
+				const CCalculator::Identifier function = "function";
+				REQUIRE_THROWS_AS(calculator.CreateFunction(function, var), std::runtime_error);
+			}
+
+			SECTION("two identifiers")
+			{
+				const CCalculator::Identifier var1 = "var1";
+				const CCalculator::Identifier var2 = "var2";
+
+				const CCalculator::Identifier function = "function";
+				const CCalculator::Expression expression = {
+					.operation = CCalculator::Operation::ADDITION,
+					.arguments = { var1, var2 },
+				};
+
+				REQUIRE_THROWS_AS(calculator.CreateFunction(function, expression), std::runtime_error);
+			}
+		}
+
 		SECTION("calculating function with zero division returns nan")
 		{
 			const CCalculator::Identifier var1 = "var1";
@@ -232,6 +269,7 @@ TEST_CASE("base calculator works correctly")
 					.arguments = { "one", "two" },
 				};
 				calculator.CreateVariable(identifier);
+
 				REQUIRE_THROWS_AS(
 					calculator.CreateFunction(identifier, expression),
 					std::runtime_error);
@@ -239,12 +277,18 @@ TEST_CASE("base calculator works correctly")
 
 			SECTION("function identifier")
 			{
+				const CCalculator::Identifier one = "one";
+				const CCalculator::Identifier two = "two";
+				calculator.CreateVariable(one);
+				calculator.CreateVariable(two);
+
 				const CCalculator::Identifier identifier = "test";
 				const CCalculator::Expression expression = {
 					.operation = CCalculator::Operation::ADDITION,
 					.arguments = { "one", "two" },
 				};
 				calculator.CreateFunction(identifier, expression);
+
 				REQUIRE_THROWS_AS(
 					calculator.CreateFunction(identifier, expression),
 					std::runtime_error);
