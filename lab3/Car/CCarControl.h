@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CCar.h"
+#include <functional>
 #include <iostream>
 #include <sstream>
 #include <string>
@@ -14,7 +15,7 @@ public:
 	void StartControl();
 
 private:
-	enum class Command
+	enum class CommandType
 	{
 		IDLE,
 		HELP,
@@ -26,20 +27,28 @@ private:
 		SET_SPEED,
 	};
 
+	struct Command
+	{
+		CommandType type;
+		int argument;
+	};
+
+	using CommandHandler = std::function<void(int argument)>;
+
 	CCarControl::Command ReadCommand();
-	static CCarControl::Command ParseCommand(const std::string& command);
+	static CCarControl::CommandType ParseCommandType(const std::string& command);
+	CommandHandler GetHandlerForCommand(CommandType command);
 
 	void PrintHelp();
 	void PrintInfo();
 	void EngineOn();
 	void EngineOff();
-	void SetGear();
-	void SetSpeed();
+	void SetGear(int gear);
+	void SetSpeed(int speed);
 
 	static std::string DirectionToString(CCar::Direction direction);
 
 	std::istream& m_input;
 	std::ostream& m_output;
 	CCar& m_car;
-	int m_argument = 0; // FIXME: this is a bad approach
 };

@@ -9,36 +9,25 @@ CCarControl::CCarControl(std::istream& input, std::ostream& output, CCar& car)
 
 void CCarControl::StartControl()
 {
-	Command command;
 	bool finished = false;
 
 	while (!finished)
 	{
 		m_output << PROMPT;
-		command = ReadCommand();
-		switch (command)
+		auto const command = ReadCommand();
+		switch (command.type)
 		{
-		case Command::HELP:
-			PrintHelp();
+		case CommandType::HELP:
+		case CommandType::INFO:
+		case CommandType::ENGINE_ON:
+		case CommandType::ENGINE_OFF:
+		case CommandType::SET_GEAR:
+		case CommandType::SET_SPEED:
+			GetHandlerForCommand(command.type)(command.argument);
 			break;
-		case Command::INFO:
-			PrintInfo();
-			break;
-		case Command::EXIT:
+		case CommandType::EXIT:
 			finished = true;
 			m_output << "Farewell!\n";
-			break;
-		case Command::ENGINE_ON:
-			EngineOn();
-			break;
-		case Command::ENGINE_OFF:
-			EngineOff();
-			break;
-		case Command::SET_GEAR:
-			SetGear();
-			break;
-		case Command::SET_SPEED:
-			SetSpeed();
 			break;
 		default:
 			break;
@@ -49,60 +38,97 @@ void CCarControl::StartControl()
 CCarControl::Command CCarControl::ReadCommand()
 {
 	std::string userInput;
+	int argument;
 	std::getline(m_input, userInput);
 	std::stringstream input(userInput);
 
-	Command command = Command::IDLE;
-	std::string commandStr;
+	CommandType type = CommandType::IDLE;
+	std::string commandTypeStr;
 	try
 	{
-		std::getline(input, commandStr, ' ');
-		if (!(input >> m_argument))
+		std::getline(input, commandTypeStr, ' ');
+		if (!(input >> argument))
 		{
-			m_argument = 0;
+			argument = 0;
 		}
-		command = ParseCommand(commandStr);
+		type = ParseCommandType(commandTypeStr);
 	}
 	catch (const std::exception& e)
 	{
 		m_output << "Error: " << e.what() << '\n';
 	}
 
-	return command;
+	return {
+		.type = type,
+		.argument = argument,
+	};
 }
 
-CCarControl::Command CCarControl::ParseCommand(const std::string& command)
+CCarControl::CommandType CCarControl::ParseCommandType(const std::string& command)
 {
 	if (command == "Help")
 	{
-		return Command::HELP;
+		return CommandType::HELP;
 	}
 	else if (command == "Info")
 	{
-		return Command::INFO;
+		return CommandType::INFO;
 	}
 	else if (command == "Exit")
 	{
-		return Command::EXIT;
+		return CommandType::EXIT;
 	}
 	else if (command == "EngineOn")
 	{
-		return Command::ENGINE_ON;
+		return CommandType::ENGINE_ON;
 	}
 	else if (command == "EngineOff")
 	{
-		return Command::ENGINE_OFF;
+		return CommandType::ENGINE_OFF;
 	}
 	else if (command == "SetGear")
 	{
-		return Command::SET_GEAR;
+		return CommandType::SET_GEAR;
 	}
 	else if (command == "SetSpeed")
 	{
-		return Command::SET_SPEED;
+		return CommandType::SET_SPEED;
 	}
 
 	throw std::invalid_argument("invalid command");
+}
+
+CCarControl::CommandHandler CCarControl::GetHandlerForCommand(CCarControl::CommandType command)
+{
+	switch (command)
+	{
+	case CommandType::HELP:
+		return [this](int) {
+			PrintHelp();
+		};
+	case CommandType::INFO:
+		return [this](int) {
+			PrintInfo();
+		};
+	case CommandType::ENGINE_ON:
+		return [this](int) {
+			EngineOn();
+		};
+	case CommandType::ENGINE_OFF:
+		return [this](int) {
+			EngineOff();
+		};
+	case CommandType::SET_GEAR:
+		return [this](int gear) {
+			SetGear(gear);
+		};
+	case CommandType::SET_SPEED:
+		return [this](int speed) {
+			SetSpeed(speed);
+		};
+	default:
+		throw std::invalid_argument("no handler for command");
+	}
 }
 
 void CCarControl::PrintHelp()
@@ -147,26 +173,26 @@ void CCarControl::EngineOff()
 	m_output << "Error: can't turn off the engine\n";
 }
 
-void CCarControl::SetGear()
+void CCarControl::SetGear(int gear)
 {
-	if (m_car.SetGear(m_argument))
+	if (m_car.SetGear(gear))
 	{
-		m_output << "Gear set to " << m_argument << '\n';
+		m_output << "Gear set to " << gear << '\n';
 		return;
 	}
 
-	m_output << "Error: can't set gear to " << m_argument << '\n';
+	m_output << "Error: can't set gear to " << gear << '\n';
 }
 
-void CCarControl::SetSpeed()
+void CCarControl::SetSpeed(int speed)
 {
-	if (m_car.SetSpeed(m_argument))
+	if (m_car.SetSpeed(speed))
 	{
-		m_output << "Speed set to " << m_argument << '\n';
+		m_output << "Speed set to " << speed << '\n';
 		return;
 	}
 
-	m_output << "Error: can't set speed to " << m_argument << '\n';
+	m_output << "Error: can't set speed to " << speed << '\n';
 }
 
 std::string CCarControl::DirectionToString(CCar::Direction direction)
