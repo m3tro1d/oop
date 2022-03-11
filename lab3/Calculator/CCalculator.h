@@ -49,7 +49,6 @@ private:
 
 	Value CalculateExpression(const Expression& expression) const;
 
-private:
 	IdentifierValues m_variables;
 	Functions m_functions;
 };
