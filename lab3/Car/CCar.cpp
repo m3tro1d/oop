@@ -77,7 +77,7 @@ bool CCar::IsTurnedOn() const
 	return m_isEngineOn;
 }
 
-Direction CCar::GetDirection() const
+CCar::Direction CCar::GetDirection() const
 {
 	return m_direction;
 }

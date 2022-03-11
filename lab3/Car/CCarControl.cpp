@@ -169,15 +169,15 @@ void CCarControl::SetSpeed()
 	m_output << "Error: can't set speed to " << m_argument << '\n';
 }
 
-std::string CCarControl::DirectionToString(Direction direction)
+std::string CCarControl::DirectionToString(CCar::Direction direction)
 {
 	switch (direction)
 	{
-	case Direction::FORWARD:
+	case CCar::Direction::FORWARD:
 		return "forward";
-	case Direction::STILL:
+	case CCar::Direction::STILL:
 		return "standing still";
-	case Direction::BACKWARD:
+	case CCar::Direction::BACKWARD:
 		return "backward";
 	default:
 		return {};

@@ -36,7 +36,7 @@ private:
 	void SetGear();
 	void SetSpeed();
 
-	static std::string DirectionToString(Direction direction);
+	static std::string DirectionToString(CCar::Direction direction);
 
 	std::istream& m_input;
 	std::ostream& m_output;

@@ -29,7 +29,7 @@ SCENARIO("car is operated correctly")
 
 			THEN("it is not moving")
 			{
-				REQUIRE(car.GetDirection() == Direction::STILL);
+				REQUIRE(car.GetDirection() == CCar::Direction::STILL);
 			}
 
 			THEN("it can't change gear")
@@ -74,7 +74,7 @@ SCENARIO("car is operated correctly")
 
 				THEN("it is not moving")
 				{
-					REQUIRE(car.GetDirection() == Direction::STILL);
+					REQUIRE(car.GetDirection() == CCar::Direction::STILL);
 				}
 
 				THEN("the engine can be turned off")
@@ -155,7 +155,7 @@ SCENARIO("car is operated correctly")
 
 						THEN("it is moving backward")
 						{
-							REQUIRE(car.GetDirection() == Direction::BACKWARD);
+							REQUIRE(car.GetDirection() == CCar::Direction::BACKWARD);
 						}
 
 						THEN("first gear can't be set")
@@ -181,7 +181,7 @@ SCENARIO("car is operated correctly")
 
 							THEN("it is still moving backwards")
 							{
-								REQUIRE(car.GetDirection() == Direction::BACKWARD);
+								REQUIRE(car.GetDirection() == CCar::Direction::BACKWARD);
 							}
 
 							THEN("it can't speed up")
@@ -237,7 +237,7 @@ SCENARIO("car is operated correctly")
 
 						THEN("it is moving forward")
 						{
-							REQUIRE(car.GetDirection() == Direction::FORWARD);
+							REQUIRE(car.GetDirection() == CCar::Direction::FORWARD);
 						}
 
 						THEN("reverse gear can't be set")
@@ -263,7 +263,7 @@ SCENARIO("car is operated correctly")
 
 							THEN("it is still moving forward")
 							{
-								REQUIRE(car.GetDirection() == Direction::FORWARD);
+								REQUIRE(car.GetDirection() == CCar::Direction::FORWARD);
 							}
 
 							THEN("it can't speed up")
