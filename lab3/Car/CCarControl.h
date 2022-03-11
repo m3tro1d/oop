@@ -35,8 +35,8 @@ private:
 
 	using CommandHandler = std::function<void(int argument)>;
 
-	CCarControl::Command ReadCommand();
-	static CCarControl::CommandType ParseCommandType(const std::string& command);
+	Command ReadCommand();
+	static CommandType ParseCommandType(const std::string& command);
 	CommandHandler GetHandlerForCommand(CommandType command);
 
 	void PrintHelp();
