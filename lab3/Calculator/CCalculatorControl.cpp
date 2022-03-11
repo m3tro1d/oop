@@ -24,7 +24,7 @@ void CCalculatorControl::StartControl()
 		case ExpressionType::PRINT_IDENTIFIER:
 		case ExpressionType::PRINT_VARIABLES:
 		case ExpressionType::PRINT_FUNCTIONS:
-			GetHandlerForExpression(expression.type)(expression.arguments);
+			WrapWithExceptionHandling(GetHandlerForExpression(expression.type), expression.arguments);
 			break;
 		case ExpressionType::EXIT:
 			finished = true;
@@ -156,35 +156,25 @@ void CCalculatorControl::PrintHelp()
 
 void CCalculatorControl::CreateVariable(const std::string& arguments)
 {
-	try
-	{
-		m_calculator.CreateVariable(arguments);
-	}
-	catch (const std::exception& e)
-	{
-		m_output << "Error: " << e.what() << '\n';
-	}
+	m_calculator.CreateVariable(arguments);
 }
 
 void CCalculatorControl::AssignVariable(const std::string& arguments)
 {
+	auto const identifier = GetIdentifierFromExpression(arguments);
+	m_output << identifier << '\n';
 }
 
 void CCalculatorControl::CreateFunction(const std::string& arguments)
 {
+	auto const identifier = GetIdentifierFromExpression(arguments);
+	m_output << identifier << '\n';
 }
 
 void CCalculatorControl::PrintIdentifier(const std::string& arguments)
 {
-	try
-	{
-		m_output << std::fixed << std::setprecision(PRINT_PRECISION)
-				 << m_calculator.GetIdentifierValue(arguments) << '\n';
-	}
-	catch (const std::exception& e)
-	{
-		m_output << "Error: " << e.what() << '\n';
-	}
+	m_output << std::fixed << std::setprecision(PRINT_PRECISION)
+			 << m_calculator.GetIdentifierValue(arguments) << '\n';
 }
 
 void CCalculatorControl::PrintVariables()
@@ -203,4 +193,40 @@ void CCalculatorControl::PrintFunctions()
 	{
 		m_output << function << ':' << value << '\n';
 	}
+}
+
+void CCalculatorControl::WrapWithExceptionHandling(const ExpressionHandler& handler, const std::string& arguments)
+{
+	try
+	{
+		handler(arguments);
+	}
+	catch (const std::exception& e)
+	{
+		m_output << "Error: " << e.what() << '\n';
+	}
+}
+
+CCalculator::Identifier CCalculatorControl::GetIdentifierFromExpression(const std::string& expression)
+{
+	std::stringstream expressionStream(expression);
+	std::string identifier;
+	if (!std::getline(expressionStream, identifier, '='))
+	{
+		throw std::invalid_argument("no identifier provided");
+	}
+
+	Trim(identifier);
+	if (identifier.empty())
+	{
+		throw std::invalid_argument("empty identifier");
+	}
+
+	return identifier;
+}
+
+CCalculator::Expression CCalculatorControl::ParseExpression(const std::string& expression)
+{
+	// TODO
+	return CCalculator::Expression();
 }

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CCalculator.h"
+#include "StringLib.h"
 #include <functional>
 #include <iomanip>
 #include <iostream>
@@ -48,6 +49,11 @@ private:
 	void PrintIdentifier(const std::string& arguments);
 	void PrintVariables();
 	void PrintFunctions();
+
+	void WrapWithExceptionHandling(const ExpressionHandler& handler, const std::string& arguments);
+
+	static CCalculator::Identifier GetIdentifierFromExpression(const std::string& expression);
+	CCalculator::Expression ParseExpression(const std::string& expression);
 
 	std::istream& m_input;
 	std::ostream& m_output;
