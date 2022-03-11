@@ -6,8 +6,6 @@
 #include <sstream>
 #include <string>
 
-const std::string PROMPT = "> ";
-
 class CCarControl
 {
 public:
@@ -15,6 +13,8 @@ public:
 	void StartControl();
 
 private:
+	const std::string PROMPT = "> ";
+
 	enum class CommandType
 	{
 		IDLE,
