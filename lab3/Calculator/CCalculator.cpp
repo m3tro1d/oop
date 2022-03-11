@@ -31,12 +31,37 @@ void CCalculator::AssignVariable(const CCalculator::Identifier& identifier, cons
 	{
 		throw std::runtime_error("identifier does not exist");
 	}
+
 	if (!DoesIdentifierExist(identifier))
 	{
 		CreateVariable(identifier);
 	}
 
 	m_variables[identifier] = m_variables[assignedIdentifier];
+}
+
+void CCalculator::CreateFunction(const CCalculator::Identifier& identifier, const CCalculator::Identifier& assignedIdentifier)
+{
+	if (!IsValidIdentifier(identifier))
+	{
+		throw std::invalid_argument("invalid identifier");
+	}
+
+	if (DoesIdentifierExist(identifier))
+	{
+		throw std::runtime_error("identifier already exists");
+	}
+
+	if (!DoesIdentifierExist(assignedIdentifier))
+	{
+		throw std::runtime_error("identifier does not exist");
+	}
+
+	Expression expression{
+		.operation = Operation::NOTHING,
+		.arguments = { assignedIdentifier, "" },
+	};
+	m_functions[identifier] = expression;
 }
 
 void CCalculator::CreateFunction(const CCalculator::Identifier& identifier, const CCalculator::Expression& expression)
@@ -49,6 +74,12 @@ void CCalculator::CreateFunction(const CCalculator::Identifier& identifier, cons
 	if (DoesIdentifierExist(identifier))
 	{
 		throw std::runtime_error("identifier already exists");
+	}
+
+	auto const& args = expression.arguments;
+	if (!DoesIdentifierExist(args.first) || !DoesIdentifierExist(args.second))
+	{
+		throw std::runtime_error("expression contains non-existing identifiers");
 	}
 
 	m_functions[identifier] = expression;
@@ -116,6 +147,8 @@ CCalculator::Value CCalculator::CalculateExpression(const CCalculator::Expressio
 
 	switch (expression.operation)
 	{
+	case Operation::NOTHING:
+		return GetIdentifierValue(argument1);
 	case Operation::ADDITION:
 		return GetIdentifierValue(argument1) + GetIdentifierValue(argument2);
 	case Operation::SUBTRACTION:

@@ -13,6 +13,7 @@ public:
 
 	enum class Operation
 	{
+		NOTHING,
 		ADDITION,
 		SUBTRACTION,
 		MULTIPLICATION,
@@ -35,6 +36,7 @@ public:
 	void AssignVariable(const Identifier& identifier, Value value);
 	void AssignVariable(const Identifier& identifier, const Identifier& assignedIdentifier);
 
+	void CreateFunction(const Identifier& identifier, const Identifier& assignedIdentifier);
 	void CreateFunction(const Identifier& identifier, const Expression& expression);
 
 	Value GetIdentifierValue(const Identifier& identifier) const;
