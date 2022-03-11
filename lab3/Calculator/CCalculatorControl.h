@@ -6,6 +6,7 @@
 #include <iomanip>
 #include <iostream>
 #include <sstream>
+#include <variant>
 
 class CCalculatorControl
 {
@@ -53,7 +54,8 @@ private:
 	void WrapWithExceptionHandling(const ExpressionHandler& handler, const std::string& arguments);
 
 	static CCalculator::Identifier GetIdentifierFromExpression(const std::string& expression);
-	CCalculator::Expression ParseExpression(const std::string& expression);
+	static std::variant<CCalculator::Identifier, CCalculator::Value> ParseAssignment(const std::string& assignment);
+	static std::variant<CCalculator::Identifier, CCalculator::Expression> ParseExpression(const std::string& expression);
 
 	std::istream& m_input;
 	std::ostream& m_output;

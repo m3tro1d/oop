@@ -168,7 +168,20 @@ void CCalculatorControl::AssignVariable(const std::string& arguments)
 void CCalculatorControl::CreateFunction(const std::string& arguments)
 {
 	auto const identifier = GetIdentifierFromExpression(arguments);
-	m_output << identifier << '\n';
+	auto const expression = ParseExpression(arguments);
+
+	if (std::holds_alternative<CCalculator::Identifier>(expression))
+	{
+		m_calculator.CreateFunction(identifier, std::get<CCalculator::Identifier>(expression));
+	}
+	else if (std::holds_alternative<CCalculator::Expression>(expression))
+	{
+		m_calculator.CreateFunction(identifier, std::get<CCalculator::Expression>(expression));
+	}
+	else
+	{
+		throw std::runtime_error("failed to parse expression");
+	}
 }
 
 void CCalculatorControl::PrintIdentifier(const std::string& arguments)
@@ -225,8 +238,28 @@ CCalculator::Identifier CCalculatorControl::GetIdentifierFromExpression(const st
 	return identifier;
 }
 
-CCalculator::Expression CCalculatorControl::ParseExpression(const std::string& expression)
+std::variant<CCalculator::Identifier, CCalculator::Value> CCalculatorControl::ParseAssignment(const std::string& assignment)
 {
-	// TODO
-	return CCalculator::Expression();
+	// TODO: parse assignment
+	return std::variant<CCalculator::Identifier, CCalculator::Value>();
+}
+
+std::variant<CCalculator::Identifier, CCalculator::Expression> CCalculatorControl::ParseExpression(const std::string& expression)
+{
+	std::stringstream expressionStream(expression);
+	expressionStream.ignore(std::numeric_limits<std::streamsize>::max(), '=');
+	std::string identifier;
+	if (!std::getline(expressionStream, identifier))
+	{
+		throw std::invalid_argument("no identifier provided");
+	}
+
+	Trim(identifier);
+	if (identifier.empty())
+	{
+		throw std::invalid_argument("empty identifier");
+	}
+
+	// TODO: parse complex expression
+	return { identifier };
 }
