@@ -188,8 +188,18 @@ void CCalculatorControl::PrintIdentifier(const std::string& arguments)
 
 void CCalculatorControl::PrintVariables()
 {
+	auto const variables = m_calculator.DumpVariables();
+	for (auto const& [variable, value] : variables)
+	{
+		m_output << variable << ':' << value << '\n';
+	}
 }
 
 void CCalculatorControl::PrintFunctions()
 {
+	auto const functions = m_calculator.DumpFunctions();
+	for (auto const& [function, value] : functions)
+	{
+		m_output << function << ':' << value << '\n';
+	}
 }
