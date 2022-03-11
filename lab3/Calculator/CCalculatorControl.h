@@ -2,6 +2,7 @@
 
 #include "CCalculator.h"
 #include <functional>
+#include <iomanip>
 #include <iostream>
 #include <sstream>
 
@@ -13,6 +14,7 @@ public:
 
 private:
 	const std::string PROMPT = "$ ";
+	static constexpr int PRINT_PRECISION = 2;
 
 	enum class ExpressionType
 	{

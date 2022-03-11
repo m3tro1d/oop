@@ -178,7 +178,8 @@ void CCalculatorControl::PrintIdentifier(const std::string& arguments)
 {
 	try
 	{
-		m_output << m_calculator.GetIdentifierValue(arguments) << '\n';
+		m_output << std::fixed << std::setprecision(PRINT_PRECISION)
+				 << m_calculator.GetIdentifierValue(arguments) << '\n';
 	}
 	catch (const std::exception& e)
 	{
