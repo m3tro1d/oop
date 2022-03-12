@@ -205,6 +205,7 @@ void CCalculatorControl::PrintIdentifier(const std::string& arguments)
 
 void CCalculatorControl::PrintVariables()
 {
+	m_output << std::fixed << std::setprecision(PRINT_PRECISION);
 	auto const variables = m_calculator.DumpVariables();
 	for (auto const& [variable, value] : variables)
 	{
@@ -214,6 +215,7 @@ void CCalculatorControl::PrintVariables()
 
 void CCalculatorControl::PrintFunctions()
 {
+	m_output << std::fixed << std::setprecision(PRINT_PRECISION);
 	auto const functions = m_calculator.DumpFunctions();
 	for (auto const& [function, value] : functions)
 	{
