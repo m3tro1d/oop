@@ -255,7 +255,6 @@ CCalculator::Identifier CCalculatorControl::GetIdentifierFromExpression(const st
 
 std::variant<CCalculator::Identifier, CCalculator::Value> CCalculatorControl::ParseAssignment(const std::string& assignment)
 {
-	// TODO: improve parsing making it independent of the whitespaces
 	std::stringstream expressionStream(assignment);
 	expressionStream.ignore(std::numeric_limits<std::streamsize>::max(), '=');
 	std::string result;
@@ -278,7 +277,6 @@ std::variant<CCalculator::Identifier, CCalculator::Value> CCalculatorControl::Pa
 
 std::variant<CCalculator::Identifier, CCalculator::Expression> CCalculatorControl::ParseExpression(const std::string& expression)
 {
-	// TODO: improve parsing making it independent of the whitespaces
 	std::stringstream expressionStream(expression);
 	expressionStream.ignore(std::numeric_limits<std::streamsize>::max(), '=');
 
