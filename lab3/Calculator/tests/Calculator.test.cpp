@@ -90,6 +90,22 @@ TEST_CASE("base calculator works correctly")
 				REQUIRE(variables.at(identifier2) == variables.at(identifier1));
 			}
 
+			SECTION("identifier value is copied in the variable")
+			{
+				const CCalculator::Identifier identifier1 = "test_123";
+				const CCalculator::Value value = 42;
+				calculator.AssignVariable(identifier1, value);
+
+				const CCalculator::Identifier identifier2 = "copy1";
+				calculator.AssignVariable(identifier2, identifier1);
+				const CCalculator::Value newValue = 42;
+				calculator.AssignVariable(identifier1, newValue);
+
+				auto const variables = calculator.DumpVariables();
+				REQUIRE(variables.at(identifier1) == newValue);
+				REQUIRE(variables.at(identifier2) == value);
+			}
+
 			SECTION("assigning a non-existing identifier results in an error")
 			{
 				const CCalculator::Identifier identifier1 = "test_123";
@@ -134,6 +150,21 @@ TEST_CASE("base calculator works correctly")
 
 			auto const functions = calculator.DumpFunctions();
 			REQUIRE(ApproximatelyEquals(functions.at(function), value1 + value2));
+		}
+
+		SECTION("function holds a reference to a variable, not a copy")
+		{
+			const CCalculator::Identifier var = "var";
+			calculator.AssignVariable(var, 42);
+
+			const CCalculator::Identifier function = "function";
+			calculator.CreateFunction(function, var);
+
+			const CCalculator::Value newValue = 43;
+			calculator.AssignVariable(var, newValue);
+
+			auto const functions = calculator.DumpFunctions();
+			REQUIRE(functions.at(function) == newValue);
 		}
 
 		SECTION("function with other functions creation works correctly")
