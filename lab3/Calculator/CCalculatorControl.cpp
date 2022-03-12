@@ -142,16 +142,16 @@ CCalculatorControl::ExpressionHandler CCalculatorControl::GetHandlerForExpressio
 
 void CCalculatorControl::PrintHelp()
 {
-	m_output << "help                                                    show this message\n"
-				"exit                                                    stop the program\n"
-				"var [identifier]                                        create new variable\n"
-				"let [identifier] = [number]                             assign number value to a variable\n"
-				"let [identifier] = [identifier2]                        assign another variable to a variable\n"
-				"fn [identifier] = [identifier2]                         create simple function\n"
-				"fn [identifier] = [identifier2] [operand] [identifier3] create complex function\n"
-				"print [identifier]                                      print the value of the identifier\n"
-				"printvars                                               print all variables values\n"
-				"printfns                                                print all functions values\n";
+	m_output << "help                                                     show this message\n"
+				"exit                                                     stop the program\n"
+				"var [identifier]                                         create new variable\n"
+				"let [identifier] = [number]                              assign number value to a variable\n"
+				"let [identifier] = [identifier2]                         assign another variable to a variable\n"
+				"fn [identifier] = [identifier2]                          create simple function\n"
+				"fn [identifier] = [identifier2] [operator] [identifier3] create complex function\n"
+				"print [identifier]                                       print the value of the identifier\n"
+				"printvars                                                print all variables values\n"
+				"printfns                                                 print all functions values\n";
 }
 
 void CCalculatorControl::CreateVariable(const std::string& arguments)
@@ -277,18 +277,6 @@ std::variant<CCalculator::Identifier, CCalculator::Expression> CCalculatorContro
 {
 	std::stringstream expressionStream(expression);
 	expressionStream.ignore(std::numeric_limits<std::streamsize>::max(), '=');
-	std::string identifier;
-	if (!std::getline(expressionStream, identifier))
-	{
-		throw std::invalid_argument("no identifier provided");
-	}
 
-	Trim(identifier);
-	if (identifier.empty())
-	{
-		throw std::invalid_argument("empty identifier");
-	}
-
-	// TODO: parse complex expression
-	return { identifier };
+	// TODO
 }
