@@ -278,5 +278,51 @@ std::variant<CCalculator::Identifier, CCalculator::Expression> CCalculatorContro
 	std::stringstream expressionStream(expression);
 	expressionStream.ignore(std::numeric_limits<std::streamsize>::max(), '=');
 
-	// TODO
+	std::string operand1;
+	char operatorCharacter = ' ';
+	std::string operand2;
+
+	expressionStream >> operand1;
+	if (operand1.empty())
+	{
+		throw std::invalid_argument("invalid expression");
+	}
+	if (expressionStream.eof())
+	{
+		return operand1;
+	}
+
+	expressionStream >> operatorCharacter;
+	if (operatorCharacter == ' ')
+	{
+		throw std::invalid_argument("invalid expression");
+	}
+
+	expressionStream >> operand2;
+	if (operand2.empty())
+	{
+		throw std::invalid_argument("invalid expression");
+	}
+
+	return CCalculator::Expression{
+		.operation = CharToOperator(operatorCharacter),
+		.arguments = { operand1, operand2 },
+	};
+}
+
+CCalculator::Operation CCalculatorControl::CharToOperator(char op)
+{
+	switch (op)
+	{
+	case '+':
+		return CCalculator::Operation::ADDITION;
+	case '-':
+		return CCalculator::Operation::SUBTRACTION;
+	case '*':
+		return CCalculator::Operation::MULTIPLICATION;
+	case '/':
+		return CCalculator::Operation::DIVISION;
+	default:
+		throw std::invalid_argument("unknown operator");
+	}
 }

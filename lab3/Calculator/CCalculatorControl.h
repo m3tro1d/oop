@@ -57,6 +57,8 @@ private:
 	static std::variant<CCalculator::Identifier, CCalculator::Value> ParseAssignment(const std::string& assignment);
 	static std::variant<CCalculator::Identifier, CCalculator::Expression> ParseExpression(const std::string& expression);
 
+	static CCalculator::Operation CharToOperator(char op);
+
 	std::istream& m_input;
 	std::ostream& m_output;
 	CCalculator& m_calculator;
