@@ -162,7 +162,20 @@ void CCalculatorControl::CreateVariable(const std::string& arguments)
 void CCalculatorControl::AssignVariable(const std::string& arguments)
 {
 	auto const identifier = GetIdentifierFromExpression(arguments);
-	m_output << identifier << '\n';
+	auto const assignment = ParseAssignment(arguments);
+
+	if (std::holds_alternative<CCalculator::Identifier>(assignment))
+	{
+		m_calculator.AssignVariable(identifier, std::get<CCalculator::Identifier>(assignment));
+	}
+	else if (std::holds_alternative<CCalculator::Value>(assignment))
+	{
+		m_calculator.AssignVariable(identifier, std::get<CCalculator::Value>(assignment));
+	}
+	else
+	{
+		throw std::runtime_error("failed to parse assignment");
+	}
 }
 
 void CCalculatorControl::CreateFunction(const std::string& arguments)
@@ -240,8 +253,24 @@ CCalculator::Identifier CCalculatorControl::GetIdentifierFromExpression(const st
 
 std::variant<CCalculator::Identifier, CCalculator::Value> CCalculatorControl::ParseAssignment(const std::string& assignment)
 {
-	// TODO: parse assignment
-	return std::variant<CCalculator::Identifier, CCalculator::Value>();
+	std::stringstream expressionStream(assignment);
+	expressionStream.ignore(std::numeric_limits<std::streamsize>::max(), '=');
+	std::string result;
+
+	expressionStream >> result;
+	if (result.empty())
+	{
+		throw std::invalid_argument("empty assignment");
+	}
+
+	try
+	{
+		return std::stod(result);
+	}
+	catch (const std::invalid_argument&)
+	{
+		return result;
+	}
 }
 
 std::variant<CCalculator::Identifier, CCalculator::Expression> CCalculatorControl::ParseExpression(const std::string& expression)
