@@ -1,5 +1,6 @@
 #define CATCH_CONFIG_MAIN
 #include "../CCalculator.h"
+#include "../CCalculatorControl.h"
 #include "catch.hpp"
 
 bool ApproximatelyEquals(double a, double b)
@@ -398,5 +399,101 @@ TEST_CASE("base calculator works correctly")
 
 TEST_CASE("calculator control works correctly")
 {
-	// TODO
+	CCalculator calculator;
+	std::istringstream input;
+	std::ostringstream output;
+	CCalculatorControl control(input, output, calculator);
+
+	SECTION("printing help works correctly")
+	{
+		input.str("help\nexit\n");
+		const std::string result = "$ help                                                     show this message\n"
+								   "exit                                                     stop the program\n"
+								   "var [identifier]                                         create new variable\n"
+								   "let [identifier] = [number]                              assign number value to a variable\n"
+								   "let [identifier] = [identifier2]                         assign another variable to a variable\n"
+								   "fn [identifier] = [identifier2]                          create simple function\n"
+								   "fn [identifier] = [identifier2] [operator] [identifier3] create complex function\n"
+								   "print [identifier]                                       print the value of the identifier\n"
+								   "printvars                                                print all variables values\n"
+								   "printfns                                                 print all functions values\n"
+								   "$ Farewell!\n";
+		control.StartControl();
+		REQUIRE(output.str() == result);
+	}
+
+	SECTION("variable creation works correctly")
+	{
+		input.str("var a\nexit\n");
+		control.StartControl();
+		auto const variables = calculator.DumpVariables();
+		REQUIRE(variables.size() == 1);
+		REQUIRE(std::isnan(variables.at("a")));
+	}
+
+	SECTION("variable assignment works correctly")
+	{
+		input.str("let a=3\nexit\n");
+		control.StartControl();
+		auto const variables = calculator.DumpVariables();
+		REQUIRE(variables.size() == 1);
+		REQUIRE(variables.at("a") == 3);
+	}
+
+	SECTION("function creation works correctly")
+	{
+		input.str("let a=3\nfn f=a\nexit\n");
+		control.StartControl();
+		auto const functions = calculator.DumpFunctions();
+		REQUIRE(functions.size() == 1);
+		REQUIRE(functions.at("f") == 3);
+	}
+
+	SECTION("identifier printing works correctly")
+	{
+		input.str(
+			"var a\nlet b = 3\nfn f = b\n"
+			"print a\nprint b\nprint f\n"
+			"exit\n");
+		const std::string result = "$ $ $ $ nan\n"
+								   "$ 3.00\n"
+								   "$ 3.00\n"
+								   "$ Farewell!\n";
+		control.StartControl();
+		REQUIRE(output.str() == result);
+	}
+
+	SECTION("printing all variables works correctly")
+	{
+		input.str(
+			"var a\nlet b = a\nlet c=42\n"
+			"printvars\n"
+			"exit\n");
+		const std::string result = "$ $ $ "
+								   "$ a:nan\nb:nan\nc:42.00\n"
+								   "$ Farewell!\n";
+		control.StartControl();
+		REQUIRE(output.str() == result);
+	}
+
+	SECTION("printing all function works correctly")
+	{
+		input.str(
+			"var a\nlet b=3\nfn c = a\nfn d = b\nfn e = d + b\n"
+			"printfns\n"
+			"exit\n");
+		const std::string result = "$ $ $ $ $ "
+								   "$ c:nan\nd:3.00\ne:6.00\n"
+								   "$ Farewell!\n";
+		control.StartControl();
+		REQUIRE(output.str() == result);
+	}
+
+	SECTION("unknown expression results in an error")
+	{
+		input.str("what's up dog\nexit\n");
+		const std::string result = "$ Error: invalid expression\n$ Farewell!\n";
+		control.StartControl();
+		REQUIRE(output.str() == result);
+	}
 }
