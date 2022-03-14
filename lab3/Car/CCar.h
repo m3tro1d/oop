@@ -13,7 +13,6 @@ public:
 		BACKWARD,
 	};
 
-public:
 	bool TurnOnEngine();
 	bool TurnOffEngine();
 	bool SetGear(int gear);
