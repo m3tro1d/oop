@@ -31,7 +31,6 @@ public:
 
 	static constexpr Value NAN_VALUE = std::numeric_limits<Value>::signaling_NaN();
 
-public:
 	void CreateVariable(const Identifier& identifier);
 	void AssignVariable(const Identifier& identifier, Value value);
 	void AssignVariable(const Identifier& identifier, const Identifier& assignedIdentifier);
