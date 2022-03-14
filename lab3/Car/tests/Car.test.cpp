@@ -194,6 +194,7 @@ SCENARIO("car is operated correctly")
 							{
 								REQUIRE(car.SetSpeed(5));
 								REQUIRE(car.GetSpeed() == 5);
+								REQUIRE(car.GetDirection() == CCar::Direction::BACKWARD);
 							}
 						}
 					}
