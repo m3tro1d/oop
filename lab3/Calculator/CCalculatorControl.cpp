@@ -67,6 +67,7 @@ CCalculatorControl::Expression CCalculatorControl::ReadExpression()
 
 CCalculatorControl::ExpressionType CCalculatorControl::ParseExpressionType(const std::string& expression)
 {
+	// TODO: map
 	if (expression == "help")
 	{
 		return ExpressionType::HELP;

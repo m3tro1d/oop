@@ -433,11 +433,24 @@ TEST_CASE("calculator control works correctly")
 
 	SECTION("variable assignment works correctly")
 	{
-		input.str("let a=3\nexit\n");
-		control.StartControl();
-		auto const variables = calculator.DumpVariables();
-		REQUIRE(variables.size() == 1);
-		REQUIRE(variables.at("a") == 3);
+		SECTION("usual assignment works correctly")
+		{
+			input.str("let a=3\nexit\n");
+			control.StartControl();
+			auto const variables = calculator.DumpVariables();
+			REQUIRE(variables.size() == 1);
+			REQUIRE(variables.at("a") == 3);
+		}
+
+		SECTION("overflowing value results in an error")
+		{
+			// TODO: let a = 100000000000000000000000000000000000000000000000000000000
+		}
+
+		SECTION("recursive assignment results in an error")
+		{
+			// TODO: let a = a
+		}
 	}
 
 	SECTION("function creation works correctly")

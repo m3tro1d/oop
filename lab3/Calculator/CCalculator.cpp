@@ -148,6 +148,7 @@ CCalculator::Value CCalculator::CalculateExpression(const CCalculator::Expressio
 	switch (expression.operation)
 	{
 		// TODO: overflow handling
+		// TODO: down-top memoization (x1000 + x, calculate x as the most immediate and remember the value, then others)
 	case Operation::NOTHING:
 		return GetIdentifierValue(argument1);
 	case Operation::ADDITION:
