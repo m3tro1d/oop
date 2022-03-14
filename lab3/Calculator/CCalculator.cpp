@@ -27,17 +27,17 @@ void CCalculator::AssignVariable(const CCalculator::Identifier& identifier, CCal
 
 void CCalculator::AssignVariable(const CCalculator::Identifier& identifier, const CCalculator::Identifier& assignedIdentifier)
 {
-	if (!DoesIdentifierExist(assignedIdentifier))
-	{
-		throw std::runtime_error("identifier does not exist");
-	}
-
 	if (!DoesIdentifierExist(identifier))
 	{
 		CreateVariable(identifier);
 	}
 
-	m_variables[identifier] = m_variables[assignedIdentifier];
+	if (identifier == assignedIdentifier)
+	{
+		throw std::invalid_argument("can not assign variable to itself");
+	}
+
+	m_variables[identifier] = GetIdentifierValue(assignedIdentifier);
 }
 
 void CCalculator::CreateFunction(const CCalculator::Identifier& identifier, const CCalculator::Identifier& assignedIdentifier)
@@ -147,6 +147,7 @@ CCalculator::Value CCalculator::CalculateExpression(const CCalculator::Expressio
 
 	switch (expression.operation)
 	{
+		// TODO: overflow handling
 	case Operation::NOTHING:
 		return GetIdentifierValue(argument1);
 	case Operation::ADDITION:
