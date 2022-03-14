@@ -1,5 +1,24 @@
 #include "CCar.h"
 
+static constexpr int MIN_GEAR = -1;
+static constexpr int MAX_GEAR = 5;
+
+struct SpeedLimits
+{
+	int lower;
+	int upper;
+};
+
+const std::map<int, SpeedLimits> GEAR_SPEED_LIMITS = {
+	{ -1, { 0, 20 } },
+	{ 0, { -20, 150 } },
+	{ 1, { 0, 30 } },
+	{ 2, { 20, 50 } },
+	{ 3, { 30, 60 } },
+	{ 4, { 40, 90 } },
+	{ 5, { 50, 150 } },
+};
+
 bool CCar::TurnOnEngine()
 {
 	if (m_isEngineOn)
@@ -34,7 +53,7 @@ bool CCar::SetGear(int gear)
 		return false;
 	}
 
-	if (m_direction == Direction::FORWARD && gear == -1 || m_direction == Direction::BACKWARD && gear > 0)
+	if (m_speed > 0 && gear == -1 || m_speed < 0 && gear > 0)
 	{
 		return false;
 	}
@@ -67,8 +86,13 @@ bool CCar::SetSpeed(int speed)
 		return false;
 	}
 
+	if (m_speed < 0 && m_gear == 0)
+	{
+		m_speed = -speed;
+		return true;
+	}
+
 	m_speed = m_gear == -1 ? -speed : speed;
-	UpdateDirection();
 	return true;
 }
 
@@ -79,7 +103,18 @@ bool CCar::IsTurnedOn() const
 
 CCar::Direction CCar::GetDirection() const
 {
-	return m_direction;
+	if (m_speed > 0)
+	{
+		return Direction::FORWARD;
+	}
+	else if (m_speed == 0)
+	{
+		return Direction::STILL;
+	}
+	else // m_speed < 0
+	{
+		return Direction::BACKWARD;
+	}
 }
 
 int CCar::GetGear() const
@@ -90,21 +125,4 @@ int CCar::GetGear() const
 int CCar::GetSpeed() const
 {
 	return std::abs(m_speed);
-}
-
-void CCar::UpdateDirection()
-{
-	if (m_speed > 0)
-	{
-		m_direction = Direction::FORWARD;
-		return;
-	}
-
-	if (m_speed < 0)
-	{
-		m_direction = Direction::BACKWARD;
-		return;
-	}
-
-	m_direction = Direction::STILL;
 }
