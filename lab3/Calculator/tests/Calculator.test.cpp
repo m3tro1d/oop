@@ -349,7 +349,7 @@ TEST_CASE("base calculator works correctly")
 
 	SECTION("getting identifier value works correctly")
 	{
-		SECTION("variables")
+		SECTION("variable value returns correctly")
 		{
 			SECTION("getting existing but not assigned variable returns nan")
 			{
@@ -374,7 +374,7 @@ TEST_CASE("base calculator works correctly")
 			}
 		}
 
-		SECTION("functions")
+		SECTION("function value returns correctly")
 		{
 			const CCalculator::Identifier var1 = "var1";
 			const CCalculator::Value value1 = 12.3;
@@ -393,6 +393,11 @@ TEST_CASE("base calculator works correctly")
 			REQUIRE(ApproximatelyEquals(
 				calculator.GetIdentifierValue(function),
 				value1 * value2));
+		}
+
+		SECTION("overflowing function results in an error")
+		{
+			// TODO
 		}
 	}
 }
