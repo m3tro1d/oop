@@ -146,6 +146,8 @@ CCalculator::Value CCalculator::CalculateExpression(const CCalculator::Expressio
 	auto const argument2 = expression.arguments.second;
 
 	// TODO: overflow handling
+	//  https://stackoverflow.com/questions/199333/how-do-i-detect-unsigned-integer-multiply-overflow
+	//  check positive and negative number cases
 	switch (expression.operation)
 	{
 	case Operation::NOTHING:
