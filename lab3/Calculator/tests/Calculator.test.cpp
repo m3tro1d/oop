@@ -444,12 +444,19 @@ TEST_CASE("calculator control works correctly")
 
 		SECTION("overflowing value results in an error")
 		{
-			// TODO: let a = 100000000000000000000000000000000000000000000000000000000
+			input.str(
+				"let a = 1" + std::to_string(std::numeric_limits<CCalculator::Value>::max()) + "\nexit\n");
+			control.StartControl();
+			auto const variables = calculator.DumpVariables();
+			REQUIRE(variables.empty());
 		}
 
 		SECTION("recursive assignment results in an error")
 		{
-			// TODO: let a = a
+			input.str("let a = a\nexit\n");
+			control.StartControl();
+			auto const variables = calculator.DumpVariables();
+			REQUIRE(variables.empty());
 		}
 	}
 
