@@ -101,7 +101,7 @@ CCalculator::Value CCalculator::GetIdentifierValue(const CCalculator::Identifier
 	return CalculateExpression(m_functions.at(identifier));
 }
 
-CCalculator::IdentifierValues CCalculator::DumpVariables() const
+const CCalculator::IdentifierValues& CCalculator::DumpVariables() const
 {
 	return m_variables;
 }

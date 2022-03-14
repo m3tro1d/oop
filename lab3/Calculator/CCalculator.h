@@ -40,7 +40,7 @@ public:
 
 	Value GetIdentifierValue(const Identifier& identifier) const;
 
-	IdentifierValues DumpVariables() const;
+	const IdentifierValues& DumpVariables() const;
 	IdentifierValues DumpFunctions() const;
 
 private:
