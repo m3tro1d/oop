@@ -51,6 +51,8 @@ private:
 	void PrintVariables();
 	void PrintFunctions();
 
+	void PrepareForValuePrinting();
+
 	void WrapWithExceptionHandling(const ExpressionHandler& handler, const std::string& arguments);
 
 	static CCalculator::Identifier GetIdentifierFromExpression(const std::string& expression);

@@ -199,13 +199,13 @@ void CCalculatorControl::CreateFunction(const std::string& arguments)
 
 void CCalculatorControl::PrintIdentifier(const std::string& arguments)
 {
-	m_output << std::fixed << std::setprecision(PRINT_PRECISION)
-			 << m_calculator.GetIdentifierValue(arguments) << '\n';
+	PrepareForValuePrinting();
+	m_output << m_calculator.GetIdentifierValue(arguments) << '\n';
 }
 
 void CCalculatorControl::PrintVariables()
 {
-	m_output << std::fixed << std::setprecision(PRINT_PRECISION);
+	PrepareForValuePrinting();
 	auto const variables = m_calculator.DumpVariables();
 	for (auto const& [variable, value] : variables)
 	{
@@ -215,12 +215,17 @@ void CCalculatorControl::PrintVariables()
 
 void CCalculatorControl::PrintFunctions()
 {
-	m_output << std::fixed << std::setprecision(PRINT_PRECISION);
+	PrepareForValuePrinting();
 	auto const functions = m_calculator.DumpFunctions();
 	for (auto const& [function, value] : functions)
 	{
 		m_output << function << ':' << value << '\n';
 	}
+}
+
+void CCalculatorControl::PrepareForValuePrinting()
+{
+	m_output << std::fixed << std::setprecision(PRINT_PRECISION);
 }
 
 void CCalculatorControl::WrapWithExceptionHandling(const ExpressionHandler& handler, const std::string& arguments)
