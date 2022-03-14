@@ -1,0 +1,4 @@
+add_executable(%project_name%
+               main.cpp)
+
+add_subdirectory(tests)
