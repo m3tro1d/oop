@@ -67,41 +67,13 @@ CCalculatorControl::Expression CCalculatorControl::ReadExpression()
 
 CCalculatorControl::ExpressionType CCalculatorControl::ParseExpressionType(const std::string& expression)
 {
-	// TODO: map
-	if (expression == "help")
+	auto const type = EXPRESSION_KEYWORDS.find(expression);
+	if (type == EXPRESSION_KEYWORDS.end())
 	{
-		return ExpressionType::HELP;
-	}
-	else if (expression == "exit")
-	{
-		return ExpressionType::EXIT;
-	}
-	else if (expression == "var")
-	{
-		return ExpressionType::CREATE_VARIABLE;
-	}
-	else if (expression == "let")
-	{
-		return ExpressionType::ASSIGN_VARIABLE;
-	}
-	else if (expression == "fn")
-	{
-		return ExpressionType::CREATE_FUNCTION;
-	}
-	else if (expression == "print")
-	{
-		return ExpressionType::PRINT_IDENTIFIER;
-	}
-	else if (expression == "printvars")
-	{
-		return ExpressionType::PRINT_VARIABLES;
-	}
-	else if (expression == "printfns")
-	{
-		return ExpressionType::PRINT_FUNCTIONS;
+		throw std::invalid_argument("invalid expression");
 	}
 
-	throw std::invalid_argument("invalid expression");
+	return type->second;
 }
 
 CCalculatorControl::ExpressionHandler CCalculatorControl::GetHandlerForExpression(CCalculatorControl::ExpressionType expression)
