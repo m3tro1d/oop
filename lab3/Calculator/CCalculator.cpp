@@ -27,14 +27,14 @@ void CCalculator::AssignVariable(const CCalculator::Identifier& identifier, CCal
 
 void CCalculator::AssignVariable(const CCalculator::Identifier& identifier, const CCalculator::Identifier& assignedIdentifier)
 {
-	if (!DoesIdentifierExist(identifier))
-	{
-		CreateVariable(identifier);
-	}
-
 	if (identifier == assignedIdentifier)
 	{
 		throw std::invalid_argument("can not assign variable to itself");
+	}
+
+	if (!DoesIdentifierExist(identifier))
+	{
+		CreateVariable(identifier);
 	}
 
 	m_variables[identifier] = GetIdentifierValue(assignedIdentifier);
