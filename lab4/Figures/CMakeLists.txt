@@ -5,6 +5,8 @@ add_executable(Figures
                Shapes/SolidShapes/ISolidShape.h
                Shapes/SolidShapes/Circle/CCircle.h
                Shapes/SolidShapes/Circle/CCircle.cpp
+               Shapes/SolidShapes/Rectangle/CRectangle.h
+               Shapes/SolidShapes/Rectangle/CRectangle.cpp
                main.cpp)
 
 add_subdirectory(tests)
