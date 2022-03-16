@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cmath>
+
 class CPoint
 {
 public:
@@ -7,6 +9,8 @@ public:
 
 	double GetX() const;
 	double GetY() const;
+
+	static double Distance(const CPoint& p1, const CPoint& p2);
 
 private:
 	double m_x;
