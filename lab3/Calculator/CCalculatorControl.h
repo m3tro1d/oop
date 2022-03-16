@@ -40,14 +40,14 @@ private:
 	using ExpressionHandler = std::function<void(const std::string& argument)>;
 
 	const std::map<std::string, ExpressionType> EXPRESSION_KEYWORDS = {
-		{"help", ExpressionType::HELP},
-		{"exit", ExpressionType::EXIT},
-		{"var", ExpressionType::CREATE_VARIABLE},
-		{"let", ExpressionType::ASSIGN_VARIABLE},
-		{"fn", ExpressionType::CREATE_FUNCTION},
-		{"print", ExpressionType::PRINT_IDENTIFIER},
-		{"printvars", ExpressionType::PRINT_VARIABLES},
-		{"printfns", ExpressionType::PRINT_FUNCTIONS},
+		{ "help", ExpressionType::HELP },
+		{ "exit", ExpressionType::EXIT },
+		{ "var", ExpressionType::CREATE_VARIABLE },
+		{ "let", ExpressionType::ASSIGN_VARIABLE },
+		{ "fn", ExpressionType::CREATE_FUNCTION },
+		{ "print", ExpressionType::PRINT_IDENTIFIER },
+		{ "printvars", ExpressionType::PRINT_VARIABLES },
+		{ "printfns", ExpressionType::PRINT_FUNCTIONS },
 	};
 
 	Expression ReadExpression();
