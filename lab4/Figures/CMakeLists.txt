@@ -3,6 +3,8 @@ add_executable(Figures
                Point/CPoint.cpp
                Shapes/IShape.h
                Shapes/SolidShapes/ISolidShape.h
+               Shapes/SolidShapes/Circle/CCircle.h
+               Shapes/SolidShapes/Circle/CCircle.cpp
                main.cpp)
 
 add_subdirectory(tests)
