@@ -51,7 +51,30 @@ TEST_CASE("figures work correctly")
 
 	SECTION("circle operations work correctly")
 	{
-		// TODO
+		CPoint center(12, 3);
+		double radius = 4;
+		uint32_t outlineColor = 0xFF0000;
+		uint32_t fillColor = 0xFF0055;
+		CCircle circle(center, radius, outlineColor, fillColor);
+
+		SECTION("creating a circle saves its center and radius")
+		{
+			REQUIRE(ApproximatelyEquals(circle.GetCenter().GetX(), center.GetX()));
+			REQUIRE(ApproximatelyEquals(circle.GetCenter().GetY(), center.GetY()));
+			REQUIRE(circle.GetRadius() == radius);
+		}
+
+		SECTION("circle area is calculated correctly")
+		{
+			double expected = M_PI * radius * radius;
+			REQUIRE(ApproximatelyEquals(circle.GetArea(), expected));
+		}
+
+		SECTION("circle perimeter is calculated correctly")
+		{
+			double expected = 2 * M_PI * radius;
+			REQUIRE(ApproximatelyEquals(circle.GetPerimeter(), expected));
+		}
 	}
 
 	SECTION("rectangle operations work correctly")
