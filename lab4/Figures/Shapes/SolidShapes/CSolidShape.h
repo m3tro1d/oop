@@ -3,8 +3,8 @@
 #include "../CShape.h"
 #include "ISolidShape.h"
 
-class CSolidShape : public CShape
-	, public ISolidShape
+class CSolidShape : public ISolidShape
+	, public CShape
 {
 public:
 	CSolidShape(uint32_t outlineColor, uint32_t fillColor);
