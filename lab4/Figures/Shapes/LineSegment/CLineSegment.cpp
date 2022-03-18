@@ -9,7 +9,7 @@ CLineSegment::CLineSegment(CPoint startPoint, CPoint endPoint, uint32_t outlineC
 
 double CLineSegment::GetArea() const
 {
-	return CPoint::Distance(m_startPoint, m_endPoint);
+	throw std::logic_error("not implemented");
 }
 
 double CLineSegment::GetPerimeter() const
