@@ -29,7 +29,16 @@ double CTriangle::GetPerimeter() const
 
 std::string CTriangle::ToString() const
 {
-	return "Triangle";
+	std::stringstream result;
+	result << std::fixed << std::setprecision(2)
+		   << "TRIANGLE\n"
+		   << "  (" << m_vertex1.GetX() << ", " << m_vertex1.GetY() << ")\n"
+		   << "  (" << m_vertex2.GetX() << ", " << m_vertex2.GetY() << ")\n"
+		   << "  (" << m_vertex3.GetX() << ", " << m_vertex3.GetY() << ")\n"
+		   << "  outline: #" << std::hex << m_outlineColor << "\n"
+		   << "  fill: #" << std::hex << m_fillColor << "\n";
+
+	return result.str();
 }
 
 uint32_t CTriangle::GetOutlineColor() const

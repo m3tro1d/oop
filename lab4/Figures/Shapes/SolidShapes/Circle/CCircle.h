@@ -3,6 +3,8 @@
 #include "../../../Point/CPoint.h"
 #include "../ISolidShape.h"
 #include <cmath>
+#include <iomanip>
+#include <sstream>
 
 class CCircle : public ISolidShape
 {

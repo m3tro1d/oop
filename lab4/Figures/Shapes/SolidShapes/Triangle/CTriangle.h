@@ -2,6 +2,8 @@
 
 #include "../../../Point/CPoint.h"
 #include "../ISolidShape.h"
+#include <iomanip>
+#include <sstream>
 
 class CTriangle : public ISolidShape
 {

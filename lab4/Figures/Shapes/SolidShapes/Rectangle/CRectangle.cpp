@@ -20,7 +20,14 @@ double CRectangle::GetPerimeter() const
 
 std::string CRectangle::ToString() const
 {
-	return "Rectangle";
+	std::stringstream result;
+	result << std::fixed << std::setprecision(2) << "RECTANGLE\n"
+		   << "  top left: (" << m_leftTop.GetX() << ", " << m_leftTop.GetY() << ")\n"
+		   << "  width: " << GetWidth() << "; height: " << GetHeight() << "\n"
+		   << "  outline: #" << std::hex << m_outlineColor << "\n"
+		   << "  fill: #" << std::hex << m_fillColor << "\n";
+
+	return result.str();
 }
 
 uint32_t CRectangle::GetOutlineColor() const
