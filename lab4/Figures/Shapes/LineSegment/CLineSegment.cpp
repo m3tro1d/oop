@@ -1,0 +1,45 @@
+#include "CLineSegment.h"
+
+CLineSegment::CLineSegment(CPoint startPoint, CPoint endPoint, uint32_t outlineColor)
+	: m_startPoint(startPoint)
+	, m_endPoint(endPoint)
+	, m_outlineColor(outlineColor)
+{
+}
+
+double CLineSegment::GetArea() const
+{
+	return CPoint::Distance(m_startPoint, m_endPoint);
+}
+
+double CLineSegment::GetPerimeter() const
+{
+	return CPoint::Distance(m_startPoint, m_endPoint);
+}
+
+std::string CLineSegment::ToString() const
+{
+	std::stringstream result;
+	result << std::fixed << std::setprecision(2)
+		   << "LINE SEGMENT\n"
+		   << "  start: (" << m_startPoint.GetX() << ", " << m_startPoint.GetY() << ")\n"
+		   << "  end: (" << m_endPoint.GetX() << ", " << m_endPoint.GetY() << ")\n"
+		   << "  outline: #" << std::hex << m_outlineColor << "\n";
+
+	return result.str();
+}
+
+uint32_t CLineSegment::GetOutlineColor() const
+{
+	return m_outlineColor;
+}
+
+CPoint CLineSegment::GetStartPoint() const
+{
+	return m_startPoint;
+}
+
+CPoint CLineSegment::GetEndPoint() const
+{
+	return m_endPoint;
+}

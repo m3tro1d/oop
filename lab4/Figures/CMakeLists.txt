@@ -2,6 +2,8 @@ add_executable(Figures
                Point/CPoint.h
                Point/CPoint.cpp
                Shapes/IShape.h
+               Shapes/LineSegment/CLineSegment.h
+               Shapes/LineSegment/CLineSegment.cpp
                Shapes/SolidShapes/ISolidShape.h
                Shapes/SolidShapes/Circle/CCircle.h
                Shapes/SolidShapes/Circle/CCircle.cpp
