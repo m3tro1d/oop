@@ -1,13 +1,17 @@
-#include <iostream>
+#include "ShapeProcessor.h"
 
 int main()
 {
-	// TODO
-	//  1. Parse figures from stdin in a shape vector
-	//  2. Find figure having the biggest area
-	//  3. Find figure having the smallest perimeter
-	//  4. Print these figures: area and perimeter,
-	//     outline and fill colors, specific figure data
+	try
+	{
+		ShapeProcessor processor(std::cin, std::cout);
+		processor.ProcessShapes();
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << "Error: " << e.what() << '\n';
+		return EXIT_FAILURE;
+	}
 
 	return EXIT_SUCCESS;
 }

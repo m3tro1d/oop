@@ -15,6 +15,8 @@ add_executable(Figures
                Shapes/SolidShapes/Rectangle/CRectangle.cpp
                Shapes/SolidShapes/Triangle/CTriangle.h
                Shapes/SolidShapes/Triangle/CTriangle.cpp
+               ShapeProcessor.h
+               ShapeProcessor.cpp
                main.cpp)
 
 add_subdirectory(tests)
