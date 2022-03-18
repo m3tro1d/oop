@@ -397,7 +397,23 @@ TEST_CASE("base calculator works correctly")
 
 		SECTION("overflowing function results in an error")
 		{
-			// TODO
+			const CCalculator::Identifier var1 = "var1";
+			const CCalculator::Value value1 = std::numeric_limits<CCalculator::Value>::max();
+			const CCalculator::Identifier var2 = "var2";
+			const CCalculator::Value value2 = 10;
+			calculator.AssignVariable(var1, value1);
+			calculator.AssignVariable(var2, value2);
+
+			const CCalculator::Identifier function = "function";
+			const CCalculator::Expression expression = {
+				.operation = CCalculator::Operation::MULTIPLICATION,
+				.arguments = { var1, var2 },
+			};
+			calculator.CreateFunction(function, expression);
+
+			REQUIRE_THROWS_AS(
+				calculator.GetIdentifierValue(function),
+				std::out_of_range);
 		}
 	}
 }

@@ -98,7 +98,16 @@ CCalculator::Value CCalculator::GetIdentifierValue(const CCalculator::Identifier
 		return variable->second;
 	}
 
-	return CalculateExpression(m_functions.at(identifier));
+	std::feclearexcept(FE_ALL_EXCEPT);
+
+	auto const result = CalculateExpression(m_functions.at(identifier));
+
+	if (std::fetestexcept(FE_OVERFLOW) || std::fetestexcept(FE_UNDERFLOW))
+	{
+		throw std::out_of_range("function result overflow");
+	}
+
+	return result;
 }
 
 const CCalculator::IdentifierValues& CCalculator::DumpVariables() const
@@ -108,10 +117,17 @@ const CCalculator::IdentifierValues& CCalculator::DumpVariables() const
 
 CCalculator::IdentifierValues CCalculator::DumpFunctions() const
 {
+	std::feclearexcept(FE_ALL_EXCEPT);
+
 	IdentifierValues result;
 	for (auto const& [identifier, expression] : m_functions)
 	{
 		result[identifier] = CalculateExpression(expression);
+	}
+
+	if (std::fetestexcept(FE_OVERFLOW) || std::fetestexcept(FE_UNDERFLOW))
+	{
+		throw std::out_of_range("function result overflow");
 	}
 
 	return result;

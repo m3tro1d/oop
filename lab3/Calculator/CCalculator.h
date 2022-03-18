@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cfenv>
 #include <limits>
 #include <map>
 #include <regex>
