@@ -2,7 +2,7 @@
 
 #include "../IShape.h"
 
-class ISolidShape // TODO: inherit from IShape
+class ISolidShape : public virtual IShape // FIXME: BS solution
 {
 public:
 	virtual uint32_t GetFillColor() const = 0;

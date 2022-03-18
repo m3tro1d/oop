@@ -2,7 +2,7 @@
 
 #include "IShape.h"
 
-class CShape : public IShape
+class CShape : public virtual IShape // FIXME: BS solution
 {
 public:
 	CShape(uint32_t outlineColor);
