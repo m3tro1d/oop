@@ -11,7 +11,11 @@ CTriangle::CTriangle(CPoint vertex1, CPoint vertex2, CPoint vertex3, uint32_t ou
 
 double CTriangle::GetArea() const
 {
-	return std::abs(m_vertex1.GetY() * (m_vertex2.GetY() - m_vertex3.GetY()) + m_vertex2.GetX() * (m_vertex3.GetY() - m_vertex1.GetY()) + m_vertex3.GetX() * (m_vertex1.GetY() - m_vertex2.GetY()));
+	auto val1 = m_vertex1.GetY() * (m_vertex2.GetY() - m_vertex3.GetY());
+	auto val2 = m_vertex2.GetX() * (m_vertex3.GetY() - m_vertex1.GetY());
+	auto val3 = m_vertex3.GetX() * (m_vertex1.GetY() - m_vertex2.GetY());
+
+	return std::abs(val1 + val2 + val3);
 }
 
 double CTriangle::GetPerimeter() const
