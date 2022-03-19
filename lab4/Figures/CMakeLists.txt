@@ -17,6 +17,8 @@ add_executable(Figures
                Shapes/SolidShapes/Triangle/CTriangle.cpp
                ShapeProcessor.h
                ShapeProcessor.cpp
+               Utils.h
+               Utils.cpp
                main.cpp)
 
 add_subdirectory(tests)

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../../../Point/CPoint.h"
+#include "../../../Utils.h"
 #include "../CSolidShape.h"
 #include <iomanip>
 #include <sstream>

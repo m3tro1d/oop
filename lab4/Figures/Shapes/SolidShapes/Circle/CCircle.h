@@ -2,6 +2,7 @@
 
 #include "../../../Point/CPoint.h"
 #include "../CSolidShape.h"
+#include "../../../Utils.h"
 #include <cmath>
 #include <iomanip>
 #include <sstream>

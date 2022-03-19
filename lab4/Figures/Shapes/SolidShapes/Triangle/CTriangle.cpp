@@ -34,8 +34,11 @@ std::string CTriangle::ToString() const
 		   << "  (" << m_vertex1.GetX() << ", " << m_vertex1.GetY() << ")\n"
 		   << "  (" << m_vertex2.GetX() << ", " << m_vertex2.GetY() << ")\n"
 		   << "  (" << m_vertex3.GetX() << ", " << m_vertex3.GetY() << ")\n"
-		   << "  outline: #" << std::hex << m_outlineColor << "\n"
-		   << "  fill: #" << std::hex << m_fillColor << "\n";
+		   << "  outline: ";
+	PrintColor(result, m_outlineColor);
+	result << "\n  fill: ";
+	PrintColor(result, m_fillColor);
+	result << '\n';
 
 	return result.str();
 }

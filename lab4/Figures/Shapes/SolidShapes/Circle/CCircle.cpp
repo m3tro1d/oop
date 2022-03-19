@@ -24,8 +24,11 @@ std::string CCircle::ToString() const
 		   << "CIRCLE\n"
 		   << "  center: (" << m_center.GetX() << ", " << m_center.GetY() << ")\n"
 		   << "  radius: " << m_radius << "\n"
-		   << "  outline: #" << std::hex << m_outlineColor << "\n"
-		   << "  fill: #" << std::hex << m_fillColor << "\n";
+		   << "  outline: ";
+	PrintColor(result, m_outlineColor);
+	result << "\n  fill: ";
+	PrintColor(result, m_fillColor);
+	result << '\n';
 
 	return result.str();
 }

@@ -30,8 +30,11 @@ std::string CRectangle::ToString() const
 	result << std::fixed << std::setprecision(2) << "RECTANGLE\n"
 		   << "  top left: (" << m_leftTop.GetX() << ", " << m_leftTop.GetY() << ")\n"
 		   << "  width: " << GetWidth() << "; height: " << GetHeight() << "\n"
-		   << "  outline: #" << std::hex << m_outlineColor << "\n"
-		   << "  fill: #" << std::hex << m_fillColor << "\n";
+		   << "  outline: ";
+	PrintColor(result, m_outlineColor);
+	result << "\n  fill: ";
+	PrintColor(result, m_fillColor);
+	result << '\n';
 
 	return result.str();
 }

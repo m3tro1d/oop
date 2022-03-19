@@ -17,6 +17,8 @@ add_executable(FiguresTest
                ../Shapes/SolidShapes/Triangle/CTriangle.cpp
                ../ShapeProcessor.h
                ../ShapeProcessor.cpp
+               ../Utils.h
+               ../Utils.cpp
                Figures.test.cpp)
 target_link_libraries(FiguresTest PUBLIC catch2)
 add_test(NAME FiguresTest COMMAND CarTest)
