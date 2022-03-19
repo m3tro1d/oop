@@ -27,7 +27,8 @@ double CRectangle::GetPerimeter() const
 std::string CRectangle::ToString() const
 {
 	std::stringstream result;
-	result << std::fixed << std::setprecision(2) << "RECTANGLE\n"
+	result << std::fixed << std::setprecision(2)
+		   << "RECTANGLE\n"
 		   << "  top left: (" << m_leftTop.GetX() << ", " << m_leftTop.GetY() << ")\n"
 		   << "  width: " << GetWidth() << "; height: " << GetHeight() << "\n"
 		   << "  outline: ";
