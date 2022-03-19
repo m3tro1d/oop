@@ -10,20 +10,20 @@ CTriangle::CTriangle(CPoint vertex1, CPoint vertex2, CPoint vertex3, uint32_t ou
 
 double CTriangle::GetArea() const
 {
-	auto val1 = m_vertex1.GetY() * (m_vertex2.GetY() - m_vertex3.GetY());
-	auto val2 = m_vertex2.GetX() * (m_vertex3.GetY() - m_vertex1.GetY());
-	auto val3 = m_vertex3.GetX() * (m_vertex1.GetY() - m_vertex2.GetY());
+	double val1 = m_vertex1.GetX() * (m_vertex2.GetY() - m_vertex3.GetY());
+	double val2 = m_vertex2.GetX() * (m_vertex3.GetY() - m_vertex1.GetY());
+	double val3 = m_vertex3.GetX() * (m_vertex1.GetY() - m_vertex2.GetY());
 
-	return std::abs(val1 + val2 + val3);
+	return std::abs(val1 + val2 + val3) / 2;
 }
 
 double CTriangle::GetPerimeter() const
 {
-	auto distance12 = CPoint::Distance(m_vertex1, m_vertex2);
-	auto distance23 = CPoint::Distance(m_vertex2, m_vertex3);
-	auto distance31 = CPoint::Distance(m_vertex3, m_vertex1);
+	double a = CPoint::Distance(m_vertex1, m_vertex2);
+	double b = CPoint::Distance(m_vertex2, m_vertex3);
+	double c = CPoint::Distance(m_vertex3, m_vertex1);
 
-	return distance12 + distance23 + distance31;
+	return a + b + c;
 }
 
 std::string CTriangle::ToString() const
