@@ -7,6 +7,13 @@ CRectangle::CRectangle(CPoint leftTop, CPoint rightBottom, uint32_t outlineColor
 {
 }
 
+CRectangle::CRectangle(CPoint leftTop, double width, double height, uint32_t outlineColor, uint32_t fillColor)
+	: m_leftTop(leftTop)
+	, m_rightBottom(leftTop.GetX() + width, leftTop.GetY() - height)
+	, CSolidShape(outlineColor, fillColor)
+{
+}
+
 double CRectangle::GetArea() const
 {
 	return GetWidth() * GetHeight();
