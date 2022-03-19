@@ -31,9 +31,9 @@ std::string CTriangle::ToString() const
 	std::stringstream result;
 	result << std::fixed << std::setprecision(2)
 		   << "TRIANGLE\n"
-		   << "  (" << m_vertex1.GetX() << ", " << m_vertex1.GetY() << ")\n"
-		   << "  (" << m_vertex2.GetX() << ", " << m_vertex2.GetY() << ")\n"
-		   << "  (" << m_vertex3.GetX() << ", " << m_vertex3.GetY() << ")\n"
+		   << "  vertex1: (" << m_vertex1.GetX() << ", " << m_vertex1.GetY() << ")\n"
+		   << "  vertex2: (" << m_vertex2.GetX() << ", " << m_vertex2.GetY() << ")\n"
+		   << "  vertex3: (" << m_vertex3.GetX() << ", " << m_vertex3.GetY() << ")\n"
 		   << "  outline: ";
 	PrintColor(result, m_outlineColor);
 	result << "\n  fill: ";
