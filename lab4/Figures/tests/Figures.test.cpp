@@ -190,7 +190,7 @@ TEST_CASE("shape processor works correctly")
 	std::stringstream output;
 	ShapeProcessor processor(input, output);
 
-	SECTION("one figure is processed correctly")
+	SECTION("one shape is processed correctly")
 	{
 		SECTION("line segment")
 		{
@@ -283,5 +283,35 @@ TEST_CASE("shape processor works correctly")
 			processor.ProcessShapes();
 			REQUIRE(output.str() == result);
 		}
+	}
+
+	SECTION("empty input results in an error")
+	{
+		input.str("");
+		REQUIRE_THROWS_AS(processor.ProcessShapes(), std::invalid_argument);
+	}
+
+	SECTION("invalid command results in an error")
+	{
+		input.str("orion 12 34 00ff00");
+		REQUIRE_THROWS_AS(processor.ProcessShapes(), std::invalid_argument);
+	}
+
+	SECTION("invalid command arguments result in an error")
+	{
+		input.str("rectangle whatever\n");
+		REQUIRE_THROWS_AS(processor.ProcessShapes(), std::invalid_argument);
+	}
+
+	SECTION("empty command arguments result in an error")
+	{
+		input.str("rectangle\n");
+		REQUIRE_THROWS_AS(processor.ProcessShapes(), std::invalid_argument);
+	}
+
+	SECTION("absent command arguments result in an error")
+	{
+		input.str("rectangle 12 13\n");
+		REQUIRE_THROWS_AS(processor.ProcessShapes(), std::invalid_argument);
 	}
 }
