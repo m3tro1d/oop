@@ -1,4 +1,5 @@
 #define CATCH_CONFIG_MAIN
+#include "../ShapeProcessor.h"
 #include "../Shapes/LineSegment/CLineSegment.h"
 #include "../Shapes/SolidShapes/Circle/CCircle.h"
 #include "../Shapes/SolidShapes/Rectangle/CRectangle.h"
@@ -183,4 +184,104 @@ TEST_CASE("shapes work correctly")
 	}
 }
 
-// TODO: program control tests
+TEST_CASE("shape processor works correctly")
+{
+	std::stringstream input;
+	std::stringstream output;
+	ShapeProcessor processor(input, output);
+
+	SECTION("one figure is processed correctly")
+	{
+		SECTION("line segment")
+		{
+			input.str("line 20 10 12 34 00ff00\n");
+			const std::string result = "\n[Largest area shape]\n"
+									   "LINE SEGMENT\n"
+									   "  start: (20.00, 10.00)\n"
+									   "  end: (12.00, 34.00)\n"
+									   "  outline: #00ff00\n"
+									   "  area: 0.00\n"
+									   "  perimeter: 25.30\n"
+									   "\n[Smallest perimeter shape]\n"
+									   "LINE SEGMENT\n"
+									   "  start: (20.00, 10.00)\n"
+									   "  end: (12.00, 34.00)\n"
+									   "  outline: #00ff00\n"
+									   "  area: 0.00\n"
+									   "  perimeter: 25.30\n";
+			processor.ProcessShapes();
+			REQUIRE(output.str() == result);
+		}
+
+		SECTION("circle")
+		{
+			input.str("circle 20 10 34 00ff00 e5e5e5\n");
+			const std::string result = "\n[Largest area shape]\n"
+									   "CIRCLE\n"
+									   "  center: (20.00, 10.00)\n"
+									   "  radius: 34.00\n"
+									   "  outline: #00ff00\n"
+									   "  fill: #e5e5e5\n"
+									   "  area: 3631.68\n"
+									   "  perimeter: 213.63\n"
+									   "\n[Smallest perimeter shape]\n"
+									   "CIRCLE\n"
+									   "  center: (20.00, 10.00)\n"
+									   "  radius: 34.00\n"
+									   "  outline: #00ff00\n"
+									   "  fill: #e5e5e5\n"
+									   "  area: 3631.68\n"
+									   "  perimeter: 213.63\n";
+			processor.ProcessShapes();
+			REQUIRE(output.str() == result);
+		}
+
+		SECTION("rectangle")
+		{
+			input.str("rectangle 20 10 5 7 00ff00 e5e5e5\n");
+			const std::string result = "\n[Largest area shape]\n"
+									   "RECTANGLE\n"
+									   "  top left: (20.00, 10.00)\n"
+									   "  width: 5.00; height: 7.00\n"
+									   "  outline: #00ff00\n"
+									   "  fill: #e5e5e5\n"
+									   "  area: 35.00\n"
+									   "  perimeter: 24.00\n"
+									   "\n[Smallest perimeter shape]\n"
+									   "RECTANGLE\n"
+									   "  top left: (20.00, 10.00)\n"
+									   "  width: 5.00; height: 7.00\n"
+									   "  outline: #00ff00\n"
+									   "  fill: #e5e5e5\n"
+									   "  area: 35.00\n"
+									   "  perimeter: 24.00\n";
+			processor.ProcessShapes();
+			REQUIRE(output.str() == result);
+		}
+
+		SECTION("triangle")
+		{
+			input.str("triangle 20 10 5 7 13 6.5 00ff00 e5e5e5\n");
+			const std::string result = "\n[Largest area shape]\n"
+									   "TRIANGLE\n"
+									   "  vertex1: (20.00, 10.00)\n"
+									   "  vertex2: (5.00, 7.00)\n"
+									   "  vertex3: (13.00, 6.50)\n"
+									   "  outline: #00ff00\n"
+									   "  fill: #e5e5e5\n"
+									   "  area: 15.75\n"
+									   "  perimeter: 31.14\n"
+									   "\n[Smallest perimeter shape]\n"
+									   "TRIANGLE\n"
+									   "  vertex1: (20.00, 10.00)\n"
+									   "  vertex2: (5.00, 7.00)\n"
+									   "  vertex3: (13.00, 6.50)\n"
+									   "  outline: #00ff00\n"
+									   "  fill: #e5e5e5\n"
+									   "  area: 15.75\n"
+									   "  perimeter: 31.14\n";
+			processor.ProcessShapes();
+			REQUIRE(output.str() == result);
+		}
+	}
+}
