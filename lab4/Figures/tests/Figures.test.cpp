@@ -1,9 +1,6 @@
 #define CATCH_CONFIG_MAIN
 #include "../ShapeProcessor.h"
 #include "../Shapes/LineSegment/CLineSegment.h"
-#include "../Shapes/SolidShapes/Circle/CCircle.h"
-#include "../Shapes/SolidShapes/Rectangle/CRectangle.h"
-#include "../Shapes/SolidShapes/Triangle/CTriangle.h"
 #include "catch.hpp"
 
 bool ApproximatelyEquals(double a, double b)
@@ -313,5 +310,30 @@ TEST_CASE("shape processor works correctly")
 	{
 		input.str("rectangle 12 13\n");
 		REQUIRE_THROWS_AS(processor.ProcessShapes(), std::invalid_argument);
+	}
+
+	SECTION("finding the largest area and the smallest perimeter works correctly")
+	{
+		input.str("line 20 10 12 34 00ff00\n"
+				  "circle 20 10 34 00ff00 e5e5e5\n"
+				  "rectangle 20 10 5 7 00ff00 e5e5e5\n");
+		const std::string result = "\n[Largest area shape]\n"
+								   "CIRCLE\n"
+								   "  center: (20.00, 10.00)\n"
+								   "  radius: 34.00\n"
+								   "  outline: #00ff00\n"
+								   "  fill: #e5e5e5\n"
+								   "  area: 3631.68\n"
+								   "  perimeter: 213.63\n"
+								   "\n[Smallest perimeter shape]\n"
+								   "RECTANGLE\n"
+								   "  top left: (20.00, 10.00)\n"
+								   "  width: 5.00; height: 7.00\n"
+								   "  outline: #00ff00\n"
+								   "  fill: #e5e5e5\n"
+								   "  area: 35.00\n"
+								   "  perimeter: 24.00\n";
+		processor.ProcessShapes();
+		REQUIRE(output.str() == result);
 	}
 }
