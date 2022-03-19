@@ -1,4 +1,5 @@
 #define CATCH_CONFIG_MAIN
+#include "../Shapes/LineSegment/CLineSegment.h"
 #include "../Shapes/SolidShapes/Circle/CCircle.h"
 #include "../Shapes/SolidShapes/Rectangle/CRectangle.h"
 #include "../Shapes/SolidShapes/Triangle/CTriangle.h"
@@ -54,7 +55,30 @@ TEST_CASE("shapes work correctly")
 
 	SECTION("line segment operations work correctly")
 	{
+		CPoint start(12, 3);
+		CPoint end(-5, 10);
+		CLineSegment line(start, end, outlineColor);
 
+		SECTION("creating a line segment saves its properties")
+		{
+			REQUIRE(line.GetStartPoint().GetX() == start.GetX());
+			REQUIRE(line.GetStartPoint().GetY() == start.GetY());
+			REQUIRE(line.GetEndPoint().GetX() == end.GetX());
+			REQUIRE(line.GetEndPoint().GetY() == end.GetY());
+
+			REQUIRE(line.GetOutlineColor() == outlineColor);
+		}
+
+		SECTION("line area is always 0")
+		{
+			REQUIRE(line.GetArea() == 0);
+		}
+
+		SECTION("line perimeter is calculated correctly using its length")
+		{
+			double expected = CPoint::Distance(start, end);
+			REQUIRE(ApproximatelyEquals(line.GetPerimeter(), expected));
+		}
 	}
 
 	SECTION("circle operations work correctly")
@@ -63,7 +87,7 @@ TEST_CASE("shapes work correctly")
 		double radius = 4;
 		CCircle circle(center, radius, outlineColor, fillColor);
 
-		SECTION("creating a circle saves its center, radius and colors")
+		SECTION("creating a circle saves its properties")
 		{
 			REQUIRE(circle.GetCenter().GetX() == center.GetX());
 			REQUIRE(circle.GetCenter().GetY() == center.GetY());
@@ -92,7 +116,7 @@ TEST_CASE("shapes work correctly")
 		CPoint rightBottom(10, 5);
 		CRectangle rectangle(leftTop, rightBottom, outlineColor, fillColor);
 
-		SECTION("creating a rectangle saves its points")
+		SECTION("creating a rectangle saves its properties")
 		{
 			REQUIRE(rectangle.GetLeftTop().GetX() == leftTop.GetX());
 			REQUIRE(rectangle.GetLeftTop().GetY() == leftTop.GetY());
@@ -132,7 +156,7 @@ TEST_CASE("shapes work correctly")
 		CPoint vertex3(2, 3);
 		CTriangle triangle(vertex1, vertex2, vertex3, outlineColor, fillColor);
 
-		SECTION("creating a triangle saves its vertices")
+		SECTION("creating a triangle saves its properties")
 		{
 			REQUIRE(triangle.GetVertex1().GetX() == vertex1.GetX());
 			REQUIRE(triangle.GetVertex1().GetY() == vertex1.GetY());
