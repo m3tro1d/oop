@@ -41,7 +41,7 @@ ShapeProcessor::Command ShapeProcessor::ReadCommand()
 	std::string userInput;
 	std::string arguments;
 	std::getline(m_input, userInput);
-	if (userInput.empty())
+	if (userInput.empty() || userInput.at(0) == '#')
 	{
 		return {
 			.type = CommandType::IDLE,
