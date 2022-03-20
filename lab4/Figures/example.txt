@@ -1,1 +1,22 @@
-line 10.3 20.15 100.7 200 ff0000
+# Head
+circle 400 300 100 082940 082940
+
+# Ears
+# TODO
+triangle 300 300 300 200 400 200 082940 082940
+triangle 500 300 500 200 400 200 082940 082940
+
+# Eyes
+circle 360 290 35 faf9b8 faf9b8
+circle 440 290 35 faf9b8 faf9b8
+
+# Pupils
+circle 355 285 20 aa3d12 aa3d12
+circle 435 285 20 aa3d12 aa3d12
+
+# Mouth
+# TODO
+triangle 290 400 310 400 300 420 f6f6bd 082940
+
+# Whiskers
+# TODO
