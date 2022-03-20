@@ -19,6 +19,8 @@ add_executable(Figures
                ShapeProcessor.cpp
                Utils.h
                Utils.cpp
+               Drawing/ICanvas.h
+               Drawing/ICanvasDrawable.h
                main.cpp)
 
 set(SFML_STATIC_LIBRARIES TRUE)
