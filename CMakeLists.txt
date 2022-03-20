@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.8 FATAL_ERROR)
 
 project(oop LANGUAGES CXX)
 
+# Set to 17 for SFML toolchain
 set(CMAKE_CXX_STANDARD 20)
 
 # Supply catch2
