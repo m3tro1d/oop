@@ -1,8 +1,9 @@
 #pragma once
 
+#include "../Drawing/ICanvasDrawable.h"
 #include <string>
 
-class IShape
+class IShape : public ICanvasDrawable
 {
 public:
 	virtual double GetArea() const = 0;

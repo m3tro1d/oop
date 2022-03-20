@@ -59,3 +59,14 @@ double CRectangle::GetHeight() const
 {
 	return m_leftTop.GetY() - m_rightBottom.GetY();
 }
+
+void CRectangle::Draw(ICanvas& canvas) const
+{
+	canvas.DrawPolygon(
+		{ m_leftTop,
+			{ m_rightBottom.GetX(), m_leftTop.GetY() },
+			m_rightBottom,
+			{ m_leftTop.GetX(), m_rightBottom.GetY() } },
+		m_outlineColor,
+		m_fillColor);
+}

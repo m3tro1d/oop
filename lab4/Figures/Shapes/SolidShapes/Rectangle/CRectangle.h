@@ -22,6 +22,8 @@ public:
 	double GetWidth() const;
 	double GetHeight() const;
 
+	void Draw(ICanvas& canvas) const override;
+
 private:
 	CPoint m_leftTop;
 	CPoint m_rightBottom;

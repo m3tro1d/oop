@@ -18,6 +18,8 @@ public:
 	CPoint GetStartPoint() const;
 	CPoint GetEndPoint() const;
 
+	void Draw(ICanvas& canvas) const override;
+
 private:
 	CPoint m_startPoint;
 	CPoint m_endPoint;
