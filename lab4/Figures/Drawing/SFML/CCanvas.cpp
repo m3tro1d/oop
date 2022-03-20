@@ -18,7 +18,7 @@ void CCanvas::DrawLine(CPoint from, CPoint to, uint32_t lineColor)
 	m_target.draw(line, 2, sf::Lines);
 }
 
-void CCanvas::DrawPolygon(std::vector<CPoint> points, uint32_t outlineColor, uint32_t fillColor)
+void CCanvas::DrawPolygon(const std::vector<CPoint>& points, uint32_t outlineColor, uint32_t fillColor)
 {
 	sf::ConvexShape shape;
 
