@@ -1,5 +1,4 @@
 #include "ShapeProcessor.h"
-#include "Shapes/LineSegment/CLineSegment.h"
 
 ShapeProcessor::ShapeProcessor(std::istream& input, std::ostream& output)
 	: m_input(input)
@@ -17,6 +16,8 @@ void ShapeProcessor::ProcessShapes()
 
 	PrintShapeWithLargestArea(shapes);
 	PrintShapeWithSmallestPerimeter(shapes);
+
+	Draw(shapes);
 }
 
 ShapeProcessor::ShapeVector ShapeProcessor::ReadShapes()
@@ -210,4 +211,37 @@ void ShapeProcessor::PrintShapeInfo(const Shape& shape)
 			 << shape->ToString()
 			 << "  area: " << shape->GetArea() << '\n'
 			 << "  perimeter: " << shape->GetPerimeter() << '\n';
+}
+
+void ShapeProcessor::Draw(const ShapeVector& shapes)
+{
+	sf::ContextSettings settings;
+	settings.antialiasingLevel = 8;
+	sf::RenderWindow window(
+		sf::VideoMode(800, 600),
+		"Shapes",
+		sf::Style::Default,
+		settings);
+	CCanvas canvas(window);
+
+	while (window.isOpen())
+	{
+		sf::Event event{};
+		while (window.pollEvent(event))
+		{
+			if (event.type == sf::Event::Closed)
+			{
+				window.close();
+			}
+		}
+
+		window.clear(sf::Color(0xff, 0xff, 0xff));
+
+		for (auto const& shape : shapes)
+		{
+			shape->Draw(canvas);
+		}
+
+		window.display();
+	}
 }

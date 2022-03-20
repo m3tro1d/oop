@@ -1,10 +1,13 @@
 #pragma once
 
+#include "Drawing/SFML/CCanvas.h"
 #include "Point/CPoint.h"
 #include "Shapes/IShape.h"
+#include "Shapes/LineSegment/CLineSegment.h"
 #include "Shapes/SolidShapes/Circle/CCircle.h"
 #include "Shapes/SolidShapes/Rectangle/CRectangle.h"
 #include "Shapes/SolidShapes/Triangle/CTriangle.h"
+#include <SFML/Graphics.hpp>
 #include <functional>
 #include <iostream>
 #include <map>
@@ -68,6 +71,8 @@ private:
 	void PrintShapeWithSmallestPerimeter(const ShapeVector& shapes);
 
 	void PrintShapeInfo(const std::unique_ptr<IShape>& shape);
+
+	static void Draw(const ShapeVector& shapes);
 
 	std::istream& m_input;
 	std::ostream& m_output;
