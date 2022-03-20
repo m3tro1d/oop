@@ -15,10 +15,20 @@ add_executable(FiguresTest
                ../Shapes/SolidShapes/Rectangle/CRectangle.cpp
                ../Shapes/SolidShapes/Triangle/CTriangle.h
                ../Shapes/SolidShapes/Triangle/CTriangle.cpp
-               ../ShapeProcessor.h
-               ../ShapeProcessor.cpp
                ../Utils.h
                ../Utils.cpp
                Figures.test.cpp)
-target_link_libraries(FiguresTest PUBLIC catch2)
+
+set(CMAKE_CXX_FLAGS "-Wa,-mbig-obj")
+
+set(SFML_STATIC_LIBRARIES TRUE)
+find_package(Freetype REQUIRED)
+find_package(JPEG REQUIRED)
+find_package(SFML 2 COMPONENTS window graphics system REQUIRED)
+
+target_compile_definitions(FiguresTest PRIVATE SFML_STATIC)
+
+target_link_libraries(FiguresTest PUBLIC catch2 fakeit ${SFML_LIBRARIES} ${SFML_DEPENDENCIES} ${JPEG_LIBRARIES} ${FREETYPE_LIBRARIES})
+target_include_directories(FiguresTest PUBLIC ${SFML_INCLUDE_DIR})
+
 add_test(NAME FiguresTest COMMAND CarTest)
