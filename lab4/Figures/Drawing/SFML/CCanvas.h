@@ -13,6 +13,8 @@ public:
 	void DrawCircle(CPoint center, double radius, uint32_t outlineColor, uint32_t fillColor) override;
 
 private:
+	static constexpr int OUTLINE_THICKNESS = 2;
+
 	static sf::Color BuildColor(uint32_t color);
 
 	sf::RenderTarget& m_target;

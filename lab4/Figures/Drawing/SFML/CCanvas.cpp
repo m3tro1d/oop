@@ -22,6 +22,7 @@ void CCanvas::DrawPolygon(const std::vector<CPoint>& points, uint32_t outlineCol
 {
 	sf::ConvexShape shape;
 
+	shape.setOutlineThickness(OUTLINE_THICKNESS);
 	shape.setOutlineColor(BuildColor(outlineColor));
 	shape.setFillColor(BuildColor(fillColor));
 
@@ -39,10 +40,11 @@ void CCanvas::DrawCircle(CPoint center, double radius, uint32_t outlineColor, ui
 {
 	sf::CircleShape shape;
 
+	shape.setOutlineThickness(OUTLINE_THICKNESS);
 	shape.setOutlineColor(BuildColor(outlineColor));
 	shape.setFillColor(BuildColor(fillColor));
 
-	shape.setPosition(center.GetX() + radius, center.GetY() + radius);
+	shape.setPosition(center.GetX() - radius, center.GetY() - radius);
 	shape.setRadius(radius);
 
 	m_target.draw(shape);
