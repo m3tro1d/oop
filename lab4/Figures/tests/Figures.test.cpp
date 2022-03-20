@@ -1,7 +1,10 @@
 #define CATCH_CONFIG_MAIN
-#include "../ShapeProcessor.h"
 #include "../Shapes/LineSegment/CLineSegment.h"
+#include "../Shapes/SolidShapes/Circle/CCircle.h"
+#include "../Shapes/SolidShapes/Rectangle/CRectangle.h"
+#include "../Shapes/SolidShapes/Triangle/CTriangle.h"
 #include "catch.hpp"
+#include "fakeit.hpp"
 
 bool ApproximatelyEquals(double a, double b)
 {
@@ -181,159 +184,117 @@ TEST_CASE("shapes work correctly")
 	}
 }
 
-TEST_CASE("shape processor works correctly")
+TEST_CASE("shape drawing works correctly")
 {
-	std::stringstream input;
-	std::stringstream output;
-	ShapeProcessor processor(input, output);
+	std::vector<std::string> drawnShapes;
+	fakeit::Mock<ICanvas> mockCanvas;
 
-	SECTION("one shape is processed correctly")
-	{
-		SECTION("line segment")
+	fakeit::When(Method(mockCanvas, DrawLine)).AlwaysDo([&drawnShapes](CPoint from, CPoint to, uint32_t lineColor) -> void {
+		std::stringstream result;
+		result << std::fixed << std::setprecision(2)
+			   << from.GetX() << ',' << from.GetY() << ','
+			   << to.GetX() << ',' << to.GetY() << ',';
+		PrintColor(result, lineColor);
+		drawnShapes.push_back(result.str());
+	});
+
+	fakeit::When(Method(mockCanvas, DrawPolygon)).AlwaysDo([&drawnShapes](const std::vector<CPoint>& points, uint32_t outlineColor, uint32_t fillColor) -> void {
+		std::stringstream result;
+		result << std::fixed << std::setprecision(2);
+		for (auto const& point : points)
 		{
-			input.str("line 20 10 12 34 00ff00\n");
-			const std::string result = "\n[Largest area shape]\n"
-									   "LINE SEGMENT\n"
-									   "  start: (20.00, 10.00)\n"
-									   "  end: (12.00, 34.00)\n"
-									   "  outline: #00ff00\n"
-									   "  area: 0.00\n"
-									   "  perimeter: 25.30\n"
-									   "\n[Smallest perimeter shape]\n"
-									   "LINE SEGMENT\n"
-									   "  start: (20.00, 10.00)\n"
-									   "  end: (12.00, 34.00)\n"
-									   "  outline: #00ff00\n"
-									   "  area: 0.00\n"
-									   "  perimeter: 25.30\n";
-			processor.ProcessShapes();
-			REQUIRE(output.str() == result);
+			result << point.GetX() << ',' << point.GetY() << ',';
+		}
+		PrintColor(result, outlineColor);
+		result << ',';
+		PrintColor(result, fillColor);
+		drawnShapes.push_back(result.str());
+	});
+
+	fakeit::When(Method(mockCanvas, DrawCircle)).AlwaysDo([&drawnShapes](CPoint center, double radius, uint32_t outlineColor, uint32_t fillColor) -> void {
+		std::stringstream result;
+		result << std::fixed << std::setprecision(2)
+			   << center.GetX() << ',' << center.GetY() << ','
+			   << radius << ',';
+		PrintColor(result, outlineColor);
+		result << ',';
+		PrintColor(result, fillColor);
+		drawnShapes.push_back(result.str());
+	});
+
+	ICanvas& canvas = mockCanvas.get();
+
+	CPoint p1(0, 0);
+	CPoint p2(-1, 3);
+	CPoint p3(5, 10);
+
+	double radius = 24;
+
+	uint32_t outlineColor = 0xFF0000;
+	uint32_t fillColor = 0xFF0055;
+
+	SECTION("arbitrary amount of drawings generates corresponding amount of payloads")
+	{
+		SECTION("one drawing")
+		{
+			SECTION("line")
+			{
+				canvas.DrawLine(p1, p2, outlineColor);
+				REQUIRE(drawnShapes.size() == 1);
+			}
+
+			SECTION("polygon")
+			{
+				canvas.DrawPolygon({ p1, p2, p3 }, outlineColor, fillColor);
+				REQUIRE(drawnShapes.size() == 1);
+			}
+
+			SECTION("circle")
+			{
+				canvas.DrawCircle(p1, radius, outlineColor, fillColor);
+				REQUIRE(drawnShapes.size() == 1);
+			}
+		}
+
+		SECTION("several drawings")
+		{
+			canvas.DrawLine(p1, p2, outlineColor);
+			canvas.DrawPolygon({ p1, p2, p3 }, outlineColor, fillColor);
+			canvas.DrawCircle(p1, radius, outlineColor, fillColor);
+			canvas.DrawLine(p1, p2, outlineColor);
+			canvas.DrawPolygon({ p1, p2, p3 }, outlineColor, fillColor);
+			REQUIRE(drawnShapes.size() == 5);
+		}
+	}
+
+	SECTION("drawing different shapes generates the right payload")
+	{
+		SECTION("line")
+		{
+			CLineSegment line(p1, p2, outlineColor);
+			line.Draw(canvas);
+			REQUIRE(drawnShapes.at(0) == "0.00,0.00,-1.00,3.00,#ff0000");
 		}
 
 		SECTION("circle")
 		{
-			input.str("circle 20 10 34 00ff00 e5e5e5\n");
-			const std::string result = "\n[Largest area shape]\n"
-									   "CIRCLE\n"
-									   "  center: (20.00, 10.00)\n"
-									   "  radius: 34.00\n"
-									   "  outline: #00ff00\n"
-									   "  fill: #e5e5e5\n"
-									   "  area: 3631.68\n"
-									   "  perimeter: 213.63\n"
-									   "\n[Smallest perimeter shape]\n"
-									   "CIRCLE\n"
-									   "  center: (20.00, 10.00)\n"
-									   "  radius: 34.00\n"
-									   "  outline: #00ff00\n"
-									   "  fill: #e5e5e5\n"
-									   "  area: 3631.68\n"
-									   "  perimeter: 213.63\n";
-			processor.ProcessShapes();
-			REQUIRE(output.str() == result);
+			CCircle circle(p1, radius, outlineColor, fillColor);
+			circle.Draw(canvas);
+			REQUIRE(drawnShapes.at(0) == "0.00,0.00,24.00,#ff0000,#ff0055");
 		}
 
 		SECTION("rectangle")
 		{
-			input.str("rectangle 20 10 5 7 00ff00 e5e5e5\n");
-			const std::string result = "\n[Largest area shape]\n"
-									   "RECTANGLE\n"
-									   "  top left: (20.00, 10.00)\n"
-									   "  width: 5.00; height: 7.00\n"
-									   "  outline: #00ff00\n"
-									   "  fill: #e5e5e5\n"
-									   "  area: 35.00\n"
-									   "  perimeter: 24.00\n"
-									   "\n[Smallest perimeter shape]\n"
-									   "RECTANGLE\n"
-									   "  top left: (20.00, 10.00)\n"
-									   "  width: 5.00; height: 7.00\n"
-									   "  outline: #00ff00\n"
-									   "  fill: #e5e5e5\n"
-									   "  area: 35.00\n"
-									   "  perimeter: 24.00\n";
-			processor.ProcessShapes();
-			REQUIRE(output.str() == result);
+			CRectangle rectangle(p1, p3, outlineColor, fillColor);
+			rectangle.Draw(canvas);
+			REQUIRE(drawnShapes.at(0) == "0.00,0.00,5.00,0.00,5.00,10.00,0.00,10.00,#ff0000,#ff0055");
 		}
 
 		SECTION("triangle")
 		{
-			input.str("triangle 20 10 5 7 13 6.5 00ff00 e5e5e5\n");
-			const std::string result = "\n[Largest area shape]\n"
-									   "TRIANGLE\n"
-									   "  vertex1: (20.00, 10.00)\n"
-									   "  vertex2: (5.00, 7.00)\n"
-									   "  vertex3: (13.00, 6.50)\n"
-									   "  outline: #00ff00\n"
-									   "  fill: #e5e5e5\n"
-									   "  area: 15.75\n"
-									   "  perimeter: 31.14\n"
-									   "\n[Smallest perimeter shape]\n"
-									   "TRIANGLE\n"
-									   "  vertex1: (20.00, 10.00)\n"
-									   "  vertex2: (5.00, 7.00)\n"
-									   "  vertex3: (13.00, 6.50)\n"
-									   "  outline: #00ff00\n"
-									   "  fill: #e5e5e5\n"
-									   "  area: 15.75\n"
-									   "  perimeter: 31.14\n";
-			processor.ProcessShapes();
-			REQUIRE(output.str() == result);
+			CTriangle triangle(p1, p2, p3, outlineColor, fillColor);
+			triangle.Draw(canvas);
+			REQUIRE(drawnShapes.at(0) == "0.00,0.00,-1.00,3.00,5.00,10.00,#ff0000,#ff0055");
 		}
-	}
-
-	SECTION("empty input results in an error")
-	{
-		input.str("");
-		REQUIRE_THROWS_AS(processor.ProcessShapes(), std::invalid_argument);
-	}
-
-	SECTION("invalid command results in an error")
-	{
-		input.str("orion 12 34 00ff00");
-		REQUIRE_THROWS_AS(processor.ProcessShapes(), std::invalid_argument);
-	}
-
-	SECTION("invalid command arguments result in an error")
-	{
-		input.str("rectangle whatever\n");
-		REQUIRE_THROWS_AS(processor.ProcessShapes(), std::invalid_argument);
-	}
-
-	SECTION("empty command arguments result in an error")
-	{
-		input.str("rectangle\n");
-		REQUIRE_THROWS_AS(processor.ProcessShapes(), std::invalid_argument);
-	}
-
-	SECTION("absent command arguments result in an error")
-	{
-		input.str("rectangle 12 13\n");
-		REQUIRE_THROWS_AS(processor.ProcessShapes(), std::invalid_argument);
-	}
-
-	SECTION("finding the largest area and the smallest perimeter works correctly")
-	{
-		input.str("line 20 10 12 34 00ff00\n"
-				  "circle 20 10 34 00ff00 e5e5e5\n"
-				  "rectangle 20 10 5 7 00ff00 e5e5e5\n");
-		const std::string result = "\n[Largest area shape]\n"
-								   "CIRCLE\n"
-								   "  center: (20.00, 10.00)\n"
-								   "  radius: 34.00\n"
-								   "  outline: #00ff00\n"
-								   "  fill: #e5e5e5\n"
-								   "  area: 3631.68\n"
-								   "  perimeter: 213.63\n"
-								   "\n[Smallest perimeter shape]\n"
-								   "RECTANGLE\n"
-								   "  top left: (20.00, 10.00)\n"
-								   "  width: 5.00; height: 7.00\n"
-								   "  outline: #00ff00\n"
-								   "  fill: #e5e5e5\n"
-								   "  area: 35.00\n"
-								   "  perimeter: 24.00\n";
-		processor.ProcessShapes();
-		REQUIRE(output.str() == result);
 	}
 }
