@@ -30,6 +30,11 @@ int CRational::GetDenominator() const
 
 double CRational::ToDouble() const
 {
+	if (m_denominator == 0)
+	{
+		throw std::logic_error("can not represent as double");
+	}
+
 	return m_numerator / static_cast<double>(m_denominator);
 }
 
