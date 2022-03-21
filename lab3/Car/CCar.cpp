@@ -10,7 +10,7 @@ struct SpeedLimits
 };
 
 const std::map<int, SpeedLimits> GEAR_SPEED_LIMITS = {
-	{ -1, { 0, 20 } },
+	{ -1, { 0, 20 } }, // TODO: absolute values
 	{ 0, { -20, 150 } },
 	{ 1, { 0, 30 } },
 	{ 2, { 20, 50 } },
@@ -86,7 +86,7 @@ bool CCar::SetSpeed(int speed)
 		return false;
 	}
 
-	if (m_speed < 0 && m_gear == 0)
+	if (m_speed < 0)
 	{
 		m_speed = -speed;
 		return true;
