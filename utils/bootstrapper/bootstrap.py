@@ -12,7 +12,7 @@ def copy_project_files(project_name, templates_dir, project_dir):
     shutil.copy(templates_main, project_main)
     with open(templates_cmake, 'r') as source:
         text = source.read()
-        with open(project_cmake, 'w') as destination:
+        with open(project_cmake, 'w', newline='\n') as destination:
             destination.write(text.replace('%project_name%', project_name))
 
 
@@ -25,7 +25,7 @@ def copy_test_files(project_name, templates_dir, tests_dir):
     shutil.copy(templates_main, tests_main)
     with open(templates_cmake , 'r') as source:
         text = source.read()
-        with open(tests_cmake, 'w') as destination:
+        with open(tests_cmake, 'w', newline='\n') as destination:
             destination.write(text.replace('%project_name%', project_name))
 
 
