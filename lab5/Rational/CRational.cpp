@@ -8,7 +8,7 @@ CRational::CRational()
 
 CRational::CRational(int value)
 	: m_numerator(value)
-	, m_denominator(value)
+	, m_denominator(1)
 {
 }
 
