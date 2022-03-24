@@ -158,28 +158,59 @@ bool CCalculator::IsZero(CCalculator::Value value)
 
 CCalculator::Value CCalculator::CalculateExpression(const CCalculator::Expression& expression) const
 {
+	IdentifierValues cache;
+	return CalculateExpressionImpl(cache, expression);
+}
+
+CCalculator::Value CCalculator::CalculateExpressionImpl(IdentifierValues& cache, const CCalculator::Expression& expression) const
+{
 	auto const argument1 = expression.arguments.first;
 	auto const argument2 = expression.arguments.second;
 
 	switch (expression.operation)
 	{
 	case Operation::NOTHING:
-		return GetIdentifierValue(argument1);
+		return GetIdentifierValueWithCache(cache, argument1);
 	case Operation::ADDITION:
-		return GetIdentifierValue(argument1) + GetIdentifierValue(argument2);
+		return GetIdentifierValueWithCache(cache, argument1) + GetIdentifierValueWithCache(cache, argument2);
 	case Operation::SUBTRACTION:
-		return GetIdentifierValue(argument1) - GetIdentifierValue(argument2);
+		return GetIdentifierValueWithCache(cache, argument1) - GetIdentifierValueWithCache(cache, argument2);
 	case Operation::MULTIPLICATION:
-		return GetIdentifierValue(argument1) * GetIdentifierValue(argument2);
+		return GetIdentifierValueWithCache(cache, argument1) * GetIdentifierValueWithCache(cache, argument2);
 	case Operation::DIVISION: {
-		auto const divisor = GetIdentifierValue(argument2);
+		auto const divisor = GetIdentifierValueWithCache(cache, argument2);
 		if (IsZero(divisor))
 		{
 			return NAN_VALUE;
 		}
-		return GetIdentifierValue(argument1) / divisor;
+		return GetIdentifierValueWithCache(cache, argument1) / divisor;
 	}
 	default:
 		return NAN_VALUE;
 	}
+}
+
+CCalculator::Value CCalculator::GetIdentifierValueWithCache(CCalculator::IdentifierValues& cache, const CCalculator::Identifier& identifier) const
+{
+	auto const value = cache.find(identifier);
+	if (value != cache.end())
+	{
+		return value->second;
+	}
+
+	if (!DoesIdentifierExist(identifier))
+	{
+		throw std::runtime_error("identifier does not exist");
+	}
+
+	auto const variable = m_variables.find(identifier);
+	if (variable != m_variables.end())
+	{
+		return variable->second;
+	}
+
+	auto const result = CalculateExpressionImpl(cache, m_functions.at(identifier));
+	cache[identifier] = result;
+
+	return result;
 }
