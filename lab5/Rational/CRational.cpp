@@ -40,10 +40,64 @@ double CRational::ToDouble() const
 
 CRational CRational::operator+() const
 {
-	return CRational(*this);
+	return *this;
 }
 
 CRational CRational::operator-() const
 {
-	return CRational(-m_numerator, m_denominator);
+	return { -m_numerator, m_denominator };
+}
+
+CRational operator+(const CRational& r1, const CRational& r2)
+{
+	auto const numerator = r1.m_numerator * r2.m_denominator + r1.m_denominator * r2.m_numerator;
+	auto const denominator = r1.m_denominator * r2.m_denominator;
+	return { numerator, denominator };
+}
+
+CRational operator+(const CRational& r1, const int& n)
+{
+	return r1 + CRational(n);
+}
+
+CRational operator+(const int& n, const CRational& r2)
+{
+	return r2 + n;
+}
+
+CRational operator-(const CRational& r1, const CRational& r2)
+{
+	return r1 + -r2;
+}
+
+CRational operator-(const CRational& r1, const int& n)
+{
+	return r1 - CRational(n);
+}
+
+CRational operator-(const int& n, const CRational& r2)
+{
+	return CRational(n) - r2;
+}
+
+CRational& CRational::operator+=(const CRational& other)
+{
+	*this = *this + other;
+	return *this;
+}
+
+CRational& CRational::operator+=(const int& n)
+{
+	return *this += CRational(n);
+}
+
+CRational& CRational::operator-=(const CRational& other)
+{
+	*this = *this - other;
+	return *this;
+}
+
+CRational& CRational::operator-=(const int& n)
+{
+	return *this -= CRational(n);
 }

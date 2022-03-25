@@ -17,7 +17,19 @@ public:
 	CRational operator+() const;
 	CRational operator-() const;
 
-	// TODO
+	friend CRational operator+(const CRational& r1, const CRational& r2);
+	friend CRational operator+(const CRational& r1, const int& n);
+	friend CRational operator+(const int& n, const CRational& r2);
+
+	friend CRational operator-(const CRational& r1, const CRational& r2);
+	friend CRational operator-(const CRational& r1, const int& n);
+	friend CRational operator-(const int& n, const CRational& r2);
+
+	CRational& operator+=(const CRational& other);
+	CRational& operator+=(const int& n);
+
+	CRational& operator-=(const CRational& other);
+	CRational& operator-=(const int& n);
 
 private:
 	int m_numerator;
