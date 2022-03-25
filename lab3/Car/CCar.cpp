@@ -10,8 +10,8 @@ struct SpeedLimits
 };
 
 const std::map<int, SpeedLimits> GEAR_SPEED_LIMITS = {
-	{ -1, { 0, 20 } }, // TODO: absolute values
-	{ 0, { -20, 150 } },
+	{ -1, { 0, 20 } },
+	{ 0, { 0, 150 } },
 	{ 1, { 0, 30 } },
 	{ 2, { 20, 50 } },
 	{ 3, { 30, 60 } },
@@ -59,7 +59,7 @@ bool CCar::SetGear(int gear)
 	}
 
 	auto const limits = GEAR_SPEED_LIMITS.at(gear);
-	if (m_speed < limits.lower || m_speed > limits.upper)
+	if (std::abs(m_speed) < limits.lower || std::abs(m_speed) > limits.upper)
 	{
 		return false;
 	}
