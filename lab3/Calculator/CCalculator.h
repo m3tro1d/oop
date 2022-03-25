@@ -50,7 +50,7 @@ private:
 	static bool IsZero(Value value);
 
 	Value CalculateExpression(const Expression& expression) const;
-	Value CalculateExpressionImpl(IdentifierValues& cache, const Expression& expression) const;
+	Value CalculateExpressionWithCache(IdentifierValues& cache, const Expression& expression) const;
 	Value GetIdentifierValueWithCache(IdentifierValues& cache, const Identifier& identifier) const;
 
 	IdentifierValues m_variables;

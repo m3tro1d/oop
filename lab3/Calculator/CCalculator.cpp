@@ -159,10 +159,10 @@ bool CCalculator::IsZero(CCalculator::Value value)
 CCalculator::Value CCalculator::CalculateExpression(const CCalculator::Expression& expression) const
 {
 	IdentifierValues cache;
-	return CalculateExpressionImpl(cache, expression);
+	return CalculateExpressionWithCache(cache, expression);
 }
 
-CCalculator::Value CCalculator::CalculateExpressionImpl(IdentifierValues& cache, const CCalculator::Expression& expression) const
+CCalculator::Value CCalculator::CalculateExpressionWithCache(IdentifierValues& cache, const CCalculator::Expression& expression) const
 {
 	auto const argument1 = expression.arguments.first;
 	auto const argument2 = expression.arguments.second;
@@ -209,7 +209,7 @@ CCalculator::Value CCalculator::GetIdentifierValueWithCache(CCalculator::Identif
 		return variable->second;
 	}
 
-	auto const result = CalculateExpressionImpl(cache, m_functions.at(identifier));
+	auto const result = CalculateExpressionWithCache(cache, m_functions.at(identifier));
 	cache[identifier] = result;
 
 	return result;
