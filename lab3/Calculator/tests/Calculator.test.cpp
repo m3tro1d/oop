@@ -447,7 +447,7 @@ TEST_CASE("calculator control works correctly")
 	{
 		input.str("var a\nexit\n");
 		control.StartControl();
-		auto const variables = calculator.DumpVariables();
+		auto const& variables = calculator.DumpVariables();
 		REQUIRE(variables.size() == 1);
 		REQUIRE(std::isnan(variables.at("a")));
 	}
@@ -458,7 +458,7 @@ TEST_CASE("calculator control works correctly")
 		{
 			input.str("let a=3\nexit\n");
 			control.StartControl();
-			auto const variables = calculator.DumpVariables();
+			auto const& variables = calculator.DumpVariables();
 			REQUIRE(variables.size() == 1);
 			REQUIRE(variables.at("a") == 3);
 		}
@@ -468,7 +468,7 @@ TEST_CASE("calculator control works correctly")
 			input.str(
 				"let a = 1" + std::to_string(std::numeric_limits<CCalculator::Value>::max()) + "\nexit\n");
 			control.StartControl();
-			auto const variables = calculator.DumpVariables();
+			auto const& variables = calculator.DumpVariables();
 			REQUIRE(variables.empty());
 		}
 
@@ -476,7 +476,7 @@ TEST_CASE("calculator control works correctly")
 		{
 			input.str("let a = a\nexit\n");
 			control.StartControl();
-			auto const variables = calculator.DumpVariables();
+			auto const& variables = calculator.DumpVariables();
 			REQUIRE(variables.empty());
 		}
 	}
