@@ -72,3 +72,42 @@ TEST_CASE("getting double representation of a rational number")
 		REQUIRE_THROWS_AS(r.ToDouble(), std::logic_error);
 	}
 }
+
+TEST_CASE("rational numbers summation")
+{
+	SECTION("rational + rational")
+	{
+		SECTION("no normalization")
+		{
+			CRational r1(12, 7);
+			CRational r2(13, 9);
+			auto const result = r1 + r2;
+
+			REQUIRE(ApproximatelyEquals(result.GetNumerator(), 199));
+			REQUIRE(ApproximatelyEquals(result.GetDenominator(), 63));
+		}
+
+		SECTION("with normalization")
+		{
+			// TODO
+		}
+	}
+
+	SECTION("rational + number")
+	{
+		// TODO
+	}
+}
+
+TEST_CASE("rational numbers subtraction")
+{
+	SECTION("rational - rational")
+	{
+		// TODO
+	}
+
+	SECTION("rational - number")
+	{
+		// TODO
+	}
+}
