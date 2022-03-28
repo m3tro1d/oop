@@ -20,7 +20,6 @@ add_executable(Figures
                Utils.h
                Utils.cpp
                Drawing/ICanvas.h
-               Drawing/ICanvasDrawable.h
                Drawing/SFML/CCanvas.h
                Drawing/SFML/CCanvas.cpp
                main.cpp)
