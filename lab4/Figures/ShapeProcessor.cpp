@@ -9,10 +9,6 @@ ShapeProcessor::ShapeProcessor(std::istream& input, std::ostream& output)
 void ShapeProcessor::ProcessShapes()
 {
 	auto const shapes = ReadShapes();
-	if (shapes.empty())
-	{
-		throw std::invalid_argument("no shapes provided");
-	}
 
 	PrintShapeWithLargestArea(shapes);
 	PrintShapeWithSmallestPerimeter(shapes);
@@ -102,7 +98,7 @@ ShapeProcessor::CommandHandler ShapeProcessor::GetHandlerForCommand(ShapeProcess
 	}
 }
 
-ShapeProcessor::Shape ShapeProcessor::CreateLine(const std::string& arguments)
+ShapeProcessor::IShapePtr ShapeProcessor::CreateLine(const std::string& arguments)
 {
 	std::stringstream input(arguments);
 	auto const start = ReadPoint(input);
@@ -112,7 +108,7 @@ ShapeProcessor::Shape ShapeProcessor::CreateLine(const std::string& arguments)
 	return std::make_unique<CLineSegment>(start, end, outlineColor);
 }
 
-ShapeProcessor::Shape ShapeProcessor::CreateCircle(const std::string& arguments)
+ShapeProcessor::IShapePtr ShapeProcessor::CreateCircle(const std::string& arguments)
 {
 	std::stringstream input(arguments);
 	auto const center = ReadPoint(input);
@@ -123,7 +119,7 @@ ShapeProcessor::Shape ShapeProcessor::CreateCircle(const std::string& arguments)
 	return std::make_unique<CCircle>(center, radius, outlineColor, fillColor);
 }
 
-ShapeProcessor::Shape ShapeProcessor::CreateRectangle(const std::string& arguments)
+ShapeProcessor::IShapePtr ShapeProcessor::CreateRectangle(const std::string& arguments)
 {
 	std::stringstream input(arguments);
 	auto const topLeft = ReadPoint(input);
@@ -135,7 +131,7 @@ ShapeProcessor::Shape ShapeProcessor::CreateRectangle(const std::string& argumen
 	return std::make_unique<CRectangle>(topLeft, width, height, outlineColor, fillColor);
 }
 
-ShapeProcessor::Shape ShapeProcessor::CreateTriangle(const std::string& arguments)
+ShapeProcessor::IShapePtr ShapeProcessor::CreateTriangle(const std::string& arguments)
 {
 	std::stringstream input(arguments);
 	auto const vertex1 = ReadPoint(input);
@@ -184,12 +180,15 @@ void ShapeProcessor::PrintShapeWithLargestArea(const ShapeProcessor::ShapeVector
 	auto const largestAreaShape = std::max_element(
 		shapes.begin(),
 		shapes.end(),
-		[](const Shape& shape1, const Shape& shape2) {
+		[](const IShapePtr& shape1, const IShapePtr& shape2) {
 			return shape1->GetArea() < shape2->GetArea();
 		});
 
 	m_output << "\n[Largest area shape]\n";
-	PrintShapeInfo(*largestAreaShape);
+	if (largestAreaShape != shapes.end())
+	{
+		PrintShapeInfo(*largestAreaShape);
+	}
 }
 
 void ShapeProcessor::PrintShapeWithSmallestPerimeter(const ShapeProcessor::ShapeVector& shapes)
@@ -197,15 +196,18 @@ void ShapeProcessor::PrintShapeWithSmallestPerimeter(const ShapeProcessor::Shape
 	auto const smallestPerimeterShape = std::min_element(
 		shapes.begin(),
 		shapes.end(),
-		[](const Shape& shape1, const Shape& shape2) {
+		[](const IShapePtr& shape1, const IShapePtr& shape2) {
 			return shape1->GetPerimeter() < shape2->GetPerimeter();
 		});
 
 	m_output << "\n[Smallest perimeter shape]\n";
-	PrintShapeInfo(*smallestPerimeterShape);
+	if (smallestPerimeterShape != shapes.end())
+	{
+		PrintShapeInfo(*smallestPerimeterShape);
+	}
 }
 
-void ShapeProcessor::PrintShapeInfo(const Shape& shape)
+void ShapeProcessor::PrintShapeInfo(const IShapePtr& shape)
 {
 	m_output << std::fixed << std::setprecision(PRINT_PRECISION)
 			 << shape->ToString()
@@ -229,9 +231,22 @@ void ShapeProcessor::Draw(const ShapeVector& shapes)
 		sf::Event event{};
 		while (window.pollEvent(event))
 		{
-			if (event.type == sf::Event::Closed)
+			switch (event.type)
 			{
+			case sf::Event::Closed:
 				window.close();
+				break;
+			case sf::Event::Resized: {
+				sf::FloatRect visibleArea(
+					0,
+					0,
+					static_cast<float>(event.size.width),
+					static_cast<float>(event.size.height));
+				window.setView(sf::View(visibleArea));
+				break;
+			}
+			default:
+				break;
 			}
 		}
 

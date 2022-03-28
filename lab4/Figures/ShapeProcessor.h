@@ -26,8 +26,8 @@ public:
 private:
 	static constexpr int PRINT_PRECISION = 2;
 
-	using Shape = std::unique_ptr<IShape>;
-	using ShapeVector = std::vector<Shape>;
+	using IShapePtr = std::unique_ptr<IShape>;
+	using ShapeVector = std::vector<IShapePtr>;
 
 	enum class CommandType
 	{
@@ -44,7 +44,7 @@ private:
 		std::string arguments;
 	};
 
-	using CommandHandler = std::function<Shape(const std::string& arguments)>;
+	using CommandHandler = std::function<IShapePtr(const std::string& arguments)>;
 
 	const std::map<std::string, CommandType> COMMAND_KEYWORDS = {
 		{ "line", CommandType::LINE },
@@ -58,10 +58,10 @@ private:
 	CommandType ParseCommandType(const std::string& command);
 	static CommandHandler GetHandlerForCommand(CommandType type);
 
-	static Shape CreateLine(const std::string& arguments);
-	static Shape CreateCircle(const std::string& arguments);
-	static Shape CreateRectangle(const std::string& arguments);
-	static Shape CreateTriangle(const std::string& arguments);
+	static IShapePtr CreateLine(const std::string& arguments);
+	static IShapePtr CreateCircle(const std::string& arguments);
+	static IShapePtr CreateRectangle(const std::string& arguments);
+	static IShapePtr CreateTriangle(const std::string& arguments);
 
 	static CPoint ReadPoint(std::istream& input);
 	static uint32_t ReadColor(std::istream& input);
