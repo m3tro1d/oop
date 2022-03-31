@@ -157,3 +157,197 @@ TEST_CASE("rational numbers subtraction")
 		// TODO
 	}
 }
+
+TEST_CASE("rational numbers summation-assignment")
+{
+	SECTION("+= rational")
+	{
+		// TODO
+	}
+
+	SECTION("+= number")
+	{
+		// TODO
+	}
+}
+
+TEST_CASE("rational numbers subtraction-assignment")
+{
+	SECTION("-= rational")
+	{
+		// TODO
+	}
+
+	SECTION("-= number")
+	{
+		// TODO
+	}
+}
+
+TEST_CASE("rational numbers multiplication")
+{
+	SECTION("rational * rational")
+	{
+		// TODO
+	}
+
+	SECTION("rational * number")
+	{
+		// TODO
+	}
+}
+
+TEST_CASE("rational numbers division")
+{
+	SECTION("rational / rational")
+	{
+		// TODO
+	}
+
+	SECTION("rational / number")
+	{
+		// TODO
+	}
+}
+
+TEST_CASE("rational numbers multiplication-assignment")
+{
+	SECTION("*= rational")
+	{
+		// TODO
+	}
+
+	SECTION("*= number")
+	{
+		// TODO
+	}
+}
+
+TEST_CASE("rational numbers division-assignment")
+{
+	SECTION("/= rational")
+	{
+		// TODO
+	}
+
+	SECTION("/= number")
+	{
+		// TODO
+	}
+}
+
+TEST_CASE("rational numbers comparison")
+{
+	SECTION("equality")
+	{
+		SECTION("== rational")
+		{
+			// TODO
+		}
+
+		SECTION("== number")
+		{
+			// TODO
+		}
+	}
+
+	SECTION("inequality")
+	{
+		SECTION("!= rational")
+		{
+			// TODO
+		}
+
+		SECTION("!= number")
+		{
+			// TODO
+		}
+	}
+}
+
+TEST_CASE("rational numbers greater-less relation")
+{
+	SECTION("less than")
+	{
+		SECTION("rational < rational")
+		{
+			// TODO
+		}
+
+		SECTION("rational < number")
+		{
+			// TODO
+		}
+
+		SECTION("number < rational")
+		{
+			// TODO
+		}
+	}
+
+	SECTION("less or equal to")
+	{
+		SECTION("rational <= rational")
+		{
+			// TODO
+		}
+
+		SECTION("rational <= number")
+		{
+			// TODO
+		}
+
+		SECTION("number <= rational")
+		{
+			// TODO
+		}
+	}
+
+	SECTION("more than")
+	{
+		SECTION("rational > rational")
+		{
+			// TODO
+		}
+
+		SECTION("rational > number")
+		{
+			// TODO
+		}
+
+		SECTION("number > rational")
+		{
+			// TODO
+		}
+	}
+
+	SECTION("more or equal to")
+	{
+		SECTION("rational >= rational")
+		{
+			// TODO
+		}
+
+		SECTION("rational >= number")
+		{
+			// TODO
+		}
+
+		SECTION("number >= rational")
+		{
+			// TODO
+		}
+	}
+}
+
+TEST_CASE("writing rational number in the stream")
+{
+	// TODO
+	REQUIRE(true);
+}
+
+TEST_CASE("reading rational number from the stream")
+{
+	// TODO
+	REQUIRE(true);
+}
