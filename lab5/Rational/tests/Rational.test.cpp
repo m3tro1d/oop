@@ -28,12 +28,35 @@ TEST_CASE("creating a rational number")
 
 	SECTION("with numerator and denominator")
 	{
-		int numerator = 42;
-		int denominator = 69;
-		CRational r(numerator, denominator);
+		SECTION("no normalization")
+		{
+			int numerator = 13;
+			int denominator = 69;
+			CRational r(numerator, denominator);
 
-		REQUIRE(r.GetNumerator() == numerator);
-		REQUIRE(r.GetDenominator() == denominator);
+			REQUIRE(r.GetNumerator() == numerator);
+			REQUIRE(r.GetDenominator() == denominator);
+		}
+
+		SECTION("with normalization")
+		{
+			int numerator = 100;
+			int denominator = 12;
+			CRational r(numerator, denominator);
+
+			REQUIRE(r.GetNumerator() == 25);
+			REQUIRE(r.GetDenominator() == 3);
+		}
+
+		SECTION("with negative numerator normalization")
+		{
+			int numerator = -112;
+			int denominator = 6;
+			CRational r(numerator, denominator);
+
+			REQUIRE(r.GetNumerator() == -56);
+			REQUIRE(r.GetDenominator() == 3);
+		}
 	}
 }
 
@@ -83,19 +106,42 @@ TEST_CASE("rational numbers summation")
 			CRational r2(13, 9);
 			auto const result = r1 + r2;
 
-			REQUIRE(ApproximatelyEquals(result.GetNumerator(), 199));
-			REQUIRE(ApproximatelyEquals(result.GetDenominator(), 63));
+			REQUIRE(result.GetNumerator() == 199);
+			REQUIRE(result.GetDenominator() == 63);
 		}
 
 		SECTION("with normalization")
 		{
-			// TODO
+			CRational r1(49, 100);
+			CRational r2(1, 100);
+			auto const result = r1 + r2;
+
+			REQUIRE(result.GetNumerator() == 1);
+			REQUIRE(result.GetDenominator() == 2);
 		}
 	}
 
 	SECTION("rational + number")
 	{
-		// TODO
+		SECTION("no normalization")
+		{
+			CRational r1(12, 7);
+			int n = 2;
+			auto const result = r1 + n;
+
+			REQUIRE(result.GetNumerator() == 26);
+			REQUIRE(result.GetDenominator() == 7);
+		}
+
+		SECTION("with normalization")
+		{
+			CRational r1(14, 7);
+			int n = 3;
+			auto const result = r1 + n;
+
+			REQUIRE(result.GetNumerator() == 5);
+			REQUIRE(result.GetDenominator() == 1);
+		}
 	}
 }
 

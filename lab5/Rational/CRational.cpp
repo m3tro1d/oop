@@ -16,6 +16,7 @@ CRational::CRational(int numerator, int denominator)
 	: m_numerator(numerator)
 	, m_denominator(denominator)
 {
+	Normalize();
 }
 
 int CRational::GetNumerator() const
@@ -50,9 +51,11 @@ CRational CRational::operator-() const
 
 CRational operator+(const CRational& r1, const CRational& r2)
 {
-	auto const numerator = r1.m_numerator * r2.m_denominator + r1.m_denominator * r2.m_numerator;
-	auto const denominator = r1.m_denominator * r2.m_denominator;
-	return { numerator, denominator };
+	int commonDenominator = std::lcm(r1.m_denominator, r2.m_denominator);
+	int r1Numerator = r1.m_numerator * (commonDenominator / r1.m_denominator);
+	int r2Numerator = r2.m_numerator * (commonDenominator / r2.m_denominator);
+
+	return { r1Numerator + r2Numerator, commonDenominator };
 }
 
 CRational operator+(const CRational& r1, const int& n)
@@ -62,7 +65,7 @@ CRational operator+(const CRational& r1, const int& n)
 
 CRational operator+(const int& n, const CRational& r2)
 {
-	return r2 + n;
+	return r2 + CRational(n);
 }
 
 CRational operator-(const CRational& r1, const CRational& r2)
@@ -100,4 +103,11 @@ CRational& CRational::operator-=(const CRational& other)
 CRational& CRational::operator-=(const int& n)
 {
 	return *this -= CRational(n);
+}
+
+void CRational::Normalize()
+{
+	int gcd = std::gcd(m_numerator, m_denominator);
+	m_numerator /= gcd;
+	m_denominator /= gcd;
 }

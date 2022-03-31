@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>
+#include <numeric>
 
 class CRational
 {
@@ -32,6 +33,8 @@ public:
 	CRational& operator-=(const int& n);
 
 private:
+	void Normalize();
+
 	int m_numerator;
 	int m_denominator;
 };
