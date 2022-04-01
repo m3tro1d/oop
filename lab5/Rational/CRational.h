@@ -18,7 +18,9 @@ public:
 	CRational operator+() const;
 	CRational operator-() const;
 
-	// FIND_OUT: implicit constructor call adding rational and number
+	// FIND_OUT: implicit constructor call for rational-natural number operations
+	//           instead of overrides
+
 	friend CRational operator+(const CRational& r1, const CRational& r2);
 	friend CRational operator+(const CRational& r1, const int& n);
 	friend CRational operator+(const int& n, const CRational& r2);
@@ -55,7 +57,21 @@ public:
 	friend bool operator!=(const CRational& r1, const int& n);
 	friend bool operator!=(const int& n, const CRational& r2);
 
-	// TODO: < <= > >=
+	friend bool operator<(const CRational& r1, const CRational& r2);
+	friend bool operator<(const CRational& r1, const int& n);
+	friend bool operator<(const int& n, const CRational& r2);
+
+	friend bool operator<=(const CRational& r1, const CRational& r2);
+	friend bool operator<=(const CRational& r1, const int& n);
+	friend bool operator<=(const int& n, const CRational& r2);
+
+	friend bool operator>(const CRational& r1, const CRational& r2);
+	friend bool operator>(const CRational& r1, const int& n);
+	friend bool operator>(const int& n, const CRational& r2);
+
+	friend bool operator>=(const CRational& r1, const CRational& r2);
+	friend bool operator>=(const CRational& r1, const int& n);
+	friend bool operator>=(const int& n, const CRational& r2);
 
 	friend std::ostream& operator<<(std::ostream& stream, const CRational& r);
 	friend std::istream& operator>>(std::istream& stream, CRational& r);

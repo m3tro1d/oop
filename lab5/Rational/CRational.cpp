@@ -198,6 +198,70 @@ bool operator!=(const int& n, const CRational& r2)
 	return !(n == r2);
 }
 
+bool operator<(const CRational& r1, const CRational& r2)
+{
+	int commonDenominator = std::lcm(r1.m_denominator, r2.m_denominator);
+	int r1Numerator = r1.m_numerator * (commonDenominator / r1.m_denominator);
+	int r2Numerator = r2.m_numerator * (commonDenominator / r2.m_denominator);
+
+	return r1Numerator < r2Numerator;
+}
+
+bool operator<(const CRational& r1, const int& n)
+{
+	return r1 < CRational(n);
+}
+
+bool operator<(const int& n, const CRational& r2)
+{
+	return CRational(n) < r2;
+}
+
+bool operator<=(const CRational& r1, const CRational& r2)
+{
+	return (r1 < r2) || (r1 == r2);
+}
+
+bool operator<=(const CRational& r1, const int& n)
+{
+	return (r1 < n) || (r1 == n);
+}
+
+bool operator<=(const int& n, const CRational& r2)
+{
+	return (n < r2) || (n == r2);
+}
+
+bool operator>(const CRational& r1, const CRational& r2)
+{
+	return !(r1 <= r2);
+}
+
+bool operator>(const CRational& r1, const int& n)
+{
+	return r1 > CRational(n);
+}
+
+bool operator>(const int& n, const CRational& r2)
+{
+	return CRational(n) > r2;
+}
+
+bool operator>=(const CRational& r1, const CRational& r2)
+{
+	return !(r1 < r2);
+}
+
+bool operator>=(const CRational& r1, const int& n)
+{
+	return r1 >= CRational(n);
+}
+
+bool operator>=(const int& n, const CRational& r2)
+{
+	return CRational(n) >= r2;
+}
+
 std::ostream& operator<<(std::ostream& stream, const CRational& r)
 {
 	stream << r.m_numerator << '/' << r.m_denominator;
