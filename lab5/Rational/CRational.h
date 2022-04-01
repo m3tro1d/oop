@@ -18,6 +18,7 @@ public:
 	CRational operator+() const;
 	CRational operator-() const;
 
+	// FIND_OUT: implicit constructor call adding rational and number
 	friend CRational operator+(const CRational& r1, const CRational& r2);
 	friend CRational operator+(const CRational& r1, const int& n);
 	friend CRational operator+(const int& n, const CRational& r2);
