@@ -57,7 +57,7 @@ public:
 	// TODO: < <= > >=
 
 	friend std::ostream& operator<<(std::ostream& stream, const CRational& r);
-	friend std::istream& operator>>(std::istream& stream, const CRational& r);
+	friend std::istream& operator>>(std::istream& stream, CRational& r);
 
 private:
 	void Normalize();
