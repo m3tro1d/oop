@@ -96,6 +96,12 @@ TEST_CASE("getting double representation of a rational number")
 	}
 }
 
+TEST_CASE("getting compound fraction with a rational number")
+{
+	// TODO
+	REQUIRE(true);
+}
+
 TEST_CASE("rational numbers summation")
 {
 	SECTION("rational + rational")
