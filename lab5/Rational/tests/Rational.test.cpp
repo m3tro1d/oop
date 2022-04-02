@@ -579,12 +579,20 @@ TEST_CASE("rational numbers comparison")
 	{
 		SECTION("== rational")
 		{
-			// TODO
+			CRational r1(2, 3);
+			CRational r2(2, 5);
+
+			REQUIRE(r1 == r1);
+			REQUIRE(!(r1 == r2));
 		}
 
 		SECTION("== number")
 		{
-			// TODO
+			CRational r1 = 4;
+			CRational r2(2, 3);
+
+			REQUIRE(r1 == 4);
+			REQUIRE(!(r2 == 4));
 		}
 	}
 
@@ -592,12 +600,20 @@ TEST_CASE("rational numbers comparison")
 	{
 		SECTION("!= rational")
 		{
-			// TODO
+			CRational r1(2, 3);
+			CRational r2(2, 5);
+
+			REQUIRE(!(r1 != r1));
+			REQUIRE(r1 != r2);
 		}
 
 		SECTION("!= number")
 		{
-			// TODO
+			CRational r1 = 4;
+			CRational r2(2, 3);
+
+			REQUIRE(!(r1 != 4));
+			REQUIRE(r2 != 4);
 		}
 	}
 }
