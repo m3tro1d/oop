@@ -20,25 +20,25 @@ public:
 	const CRational operator+() const;
 	const CRational operator-() const;
 
-	const CRational operator+(const CRational& other) const;
-	const CRational operator-(const CRational& other) const;
+	friend const CRational operator+(const CRational& r1, const CRational& r2);
+	friend const CRational operator-(const CRational& r1, const CRational& r2);
 
 	CRational& operator+=(const CRational& other);
 	CRational& operator-=(const CRational& other);
 
-	const CRational operator*(const CRational& other) const;
-	const CRational operator/(const CRational& other) const;
+	friend const CRational operator*(const CRational& r1, const CRational& r2);
+	friend const CRational operator/(const CRational& r1, const CRational& r2);
 
 	CRational& operator*=(const CRational& other);
 	CRational& operator/=(const CRational& other);
 
-	bool operator==(const CRational& other) const;
-	bool operator!=(const CRational& other) const;
+	friend bool operator==(const CRational& r1, const CRational& r2);
+	friend bool operator!=(const CRational& r1, const CRational& r2);
 
-	bool operator<(const CRational& other) const;
-	bool operator<=(const CRational& other) const;
-	bool operator>(const CRational& other) const;
-	bool operator>=(const CRational& other) const;
+	friend bool operator<(const CRational& r1, const CRational& r2);
+	friend bool operator<=(const CRational& r1, const CRational& r2);
+	friend bool operator>(const CRational& r1, const CRational& r2);
+	friend bool operator>=(const CRational& r1, const CRational& r2);
 
 	friend std::ostream& operator<<(std::ostream& stream, const CRational& r);
 	friend std::istream& operator>>(std::istream& stream, CRational& r);

@@ -59,18 +59,18 @@ const CRational CRational::operator-() const
 	return { -m_numerator, m_denominator };
 }
 
-const CRational CRational::operator+(const CRational& other) const
+const CRational operator+(const CRational& r1, const CRational& r2)
 {
-	int commonDenominator = std::lcm(m_denominator, other.m_denominator);
-	int numerator = m_numerator * (commonDenominator / m_denominator);
-	int otherNumerator = other.m_numerator * (commonDenominator / other.m_denominator);
+	int commonDenominator = std::lcm(r1.m_denominator, r2.m_denominator);
+	int numerator1 = r1.m_numerator * (commonDenominator / r1.m_denominator);
+	int numerator2 = r2.m_numerator * (commonDenominator / r2.m_denominator);
 
-	return { numerator + otherNumerator, commonDenominator };
+	return { numerator1 + numerator2, commonDenominator };
 }
 
-const CRational CRational::operator-(const CRational& other) const
+const CRational operator-(const CRational& r1, const CRational& r2)
 {
-	return *this + (-other);
+	return r1 + (-r2);
 }
 
 CRational& CRational::operator+=(const CRational& other)
@@ -85,23 +85,23 @@ CRational& CRational::operator-=(const CRational& other)
 	return *this;
 }
 
-const CRational CRational::operator*(const CRational& other) const
+const CRational operator*(const CRational& r1, const CRational& r2)
 {
-	int commonDenominator = std::lcm(m_denominator, other.m_denominator);
-	int numerator = m_numerator * (commonDenominator / m_denominator);
-	int otherNumerator = other.m_numerator * (commonDenominator / other.m_denominator);
+	int commonDenominator = std::lcm(r1.m_denominator, r2.m_denominator);
+	int numerator1 = r1.m_numerator * (commonDenominator / r1.m_denominator);
+	int numerator2 = r2.m_numerator * (commonDenominator / r2.m_denominator);
 
-	return { numerator * otherNumerator, commonDenominator };
+	return { numerator1 * numerator2, commonDenominator };
 }
 
-const CRational CRational::operator/(const CRational& other) const
+const CRational operator/(const CRational& r1, const CRational& r2)
 {
-	if (other.m_numerator == 0)
+	if (r2.m_numerator == 0)
 	{
 		throw std::invalid_argument("zero division");
 	}
 
-	return *this * CRational(other.m_denominator, other.m_numerator);
+	return r1 * CRational(r2.m_denominator, r2.m_numerator);
 }
 
 CRational& CRational::operator*=(const CRational& other)
@@ -116,38 +116,38 @@ CRational& CRational::operator/=(const CRational& other)
 	return *this;
 }
 
-bool CRational::operator==(const CRational& other) const
+bool operator==(const CRational& r1, const CRational& r2)
 {
-	return (m_numerator == other.m_numerator) && (m_denominator == other.m_denominator);
+	return (r1.m_numerator == r2.m_numerator) && (r1.m_denominator == r2.m_denominator);
 }
 
-bool CRational::operator!=(const CRational& other) const
+bool operator!=(const CRational& r1, const CRational& r2)
 {
-	return !(*this == other);
+	return !(r1 == r2);
 }
 
-bool CRational::operator<(const CRational& other) const
+bool operator<(const CRational& r1, const CRational& r2)
 {
-	int commonDenominator = std::lcm(m_denominator, other.m_denominator);
-	int numerator = m_numerator * (commonDenominator / m_denominator);
-	int otherNumerator = other.m_numerator * (commonDenominator / other.m_denominator);
+	int commonDenominator = std::lcm(r1.m_denominator, r2.m_denominator);
+	int numerator1 = r1.m_numerator * (commonDenominator / r1.m_denominator);
+	int numerator2 = r2.m_numerator * (commonDenominator / r2.m_denominator);
 
-	return numerator < otherNumerator;
+	return numerator1 < numerator2;
 }
 
-bool CRational::operator<=(const CRational& other) const
+bool operator<=(const CRational& r1, const CRational& r2)
 {
-	return (*this < other) || (*this == other);
+	return (r1 < r2) || (r1 == r2);
 }
 
-bool CRational::operator>(const CRational& other) const
+bool operator>(const CRational& r1, const CRational& r2)
 {
-	return !(*this <= other);
+	return !(r1 <= r2);
 }
 
-bool CRational::operator>=(const CRational& other) const
+bool operator>=(const CRational& r1, const CRational& r2)
 {
-	return !(*this < other);
+	return !(r1 < r2);
 }
 
 std::ostream& operator<<(std::ostream& stream, const CRational& r)
