@@ -87,11 +87,10 @@ CRational& CRational::operator-=(const CRational& other)
 
 const CRational operator*(const CRational& r1, const CRational& r2)
 {
-	int commonDenominator = std::lcm(r1.m_denominator, r2.m_denominator);
-	int numerator1 = r1.m_numerator * (commonDenominator / r1.m_denominator);
-	int numerator2 = r2.m_numerator * (commonDenominator / r2.m_denominator);
+	int numerator = r1.m_numerator * r2.m_numerator;
+	int denominator = r1.m_denominator * r2.m_denominator;
 
-	return { numerator1 * numerator2, commonDenominator };
+	return { numerator, denominator };
 }
 
 const CRational operator/(const CRational& r1, const CRational& r2)
