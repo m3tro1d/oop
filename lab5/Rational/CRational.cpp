@@ -1,3 +1,5 @@
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "readability-const-return-type"
 #include "CRational.h"
 
 constexpr char DIVIDER = '/';
@@ -49,48 +51,28 @@ std::pair<int, CRational> CRational::ToCompoundFraction() const
 	return { integerPart, { newNumerator, m_denominator } };
 }
 
-CRational CRational::operator+() const
+const CRational CRational::operator+() const
 {
 	return *this;
 }
 
-CRational CRational::operator-() const
+const CRational CRational::operator-() const
 {
 	return { -m_numerator, m_denominator };
 }
 
-CRational operator+(const CRational& r1, const CRational& r2)
+const CRational CRational::operator+(const CRational& other) const
 {
-	int commonDenominator = std::lcm(r1.m_denominator, r2.m_denominator);
-	int r1Numerator = r1.m_numerator * (commonDenominator / r1.m_denominator);
-	int r2Numerator = r2.m_numerator * (commonDenominator / r2.m_denominator);
+	int commonDenominator = std::lcm(m_denominator, other.m_denominator);
+	int r1Numerator = m_numerator * (commonDenominator / m_denominator);
+	int r2Numerator = other.m_numerator * (commonDenominator / other.m_denominator);
 
 	return { r1Numerator + r2Numerator, commonDenominator };
 }
 
-CRational operator+(const CRational& r1, const int& n)
+const CRational CRational::operator-(const CRational& other) const
 {
-	return r1 + CRational(n);
-}
-
-CRational operator+(const int& n, const CRational& r2)
-{
-	return CRational(n) + r2;
-}
-
-CRational operator-(const CRational& r1, const CRational& r2)
-{
-	return r1 + -r2;
-}
-
-CRational operator-(const CRational& r1, const int& n)
-{
-	return r1 - CRational(n);
-}
-
-CRational operator-(const int& n, const CRational& r2)
-{
-	return CRational(n) - r2;
+	return *this + (-other);
 }
 
 CRational& CRational::operator+=(const CRational& other)
@@ -99,59 +81,29 @@ CRational& CRational::operator+=(const CRational& other)
 	return *this;
 }
 
-CRational& CRational::operator+=(const int& n)
-{
-	return *this += CRational(n);
-}
-
 CRational& CRational::operator-=(const CRational& other)
 {
 	*this = *this - other;
 	return *this;
 }
 
-CRational& CRational::operator-=(const int& n)
+const CRational CRational::operator*(const CRational& other) const
 {
-	return *this -= CRational(n);
-}
-
-CRational operator*(const CRational& r1, const CRational& r2)
-{
-	int commonDenominator = std::lcm(r1.m_denominator, r2.m_denominator);
-	int r1Numerator = r1.m_numerator * (commonDenominator / r1.m_denominator);
-	int r2Numerator = r2.m_numerator * (commonDenominator / r2.m_denominator);
+	int commonDenominator = std::lcm(m_denominator, other.m_denominator);
+	int r1Numerator = m_numerator * (commonDenominator / m_denominator);
+	int r2Numerator = other.m_numerator * (commonDenominator / other.m_denominator);
 
 	return { r1Numerator * r2Numerator, commonDenominator };
 }
 
-CRational operator*(const CRational& r1, const int& n)
+const CRational CRational::operator/(const CRational& other) const
 {
-	return r1 * CRational(n);
-}
-
-CRational operator*(const int& n, const CRational& r2)
-{
-	return CRational(n) * r2;
-}
-
-CRational operator/(const CRational& r1, const CRational& r2)
-{
-	if (r1.m_numerator == 0)
+	if (other.m_numerator == 0)
 	{
 		throw std::invalid_argument("zero division");
 	}
 
-	return r1 * CRational(r2.m_denominator, r2.m_numerator);
-}
-
-CRational operator/(const CRational& r1, const int& n)
-{
-	return r1 / CRational(n);
-}
-
-CRational operator/(const int& n, const CRational& r2)
-{
-	return CRational(n) / r2;
+	return *this * CRational(other.m_denominator, other.m_numerator);
 }
 
 CRational& CRational::operator*=(const CRational& other)
@@ -160,114 +112,10 @@ CRational& CRational::operator*=(const CRational& other)
 	return *this;
 }
 
-CRational& CRational::operator*=(const int& n)
-{
-	return *this *= CRational(n);
-}
-
 CRational& CRational::operator/=(const CRational& other)
 {
 	*this = *this / other;
 	return *this;
-}
-
-CRational& CRational::operator/=(const int& n)
-{
-	return *this /= CRational(n);
-}
-
-bool operator==(const CRational& r1, const CRational& r2)
-{
-	return r1.m_numerator == r2.m_numerator && r1.m_denominator == r2.m_denominator;
-}
-
-bool operator==(const CRational& r1, const int& n)
-{
-	return r1 == CRational(n);
-}
-
-bool operator==(const int& n, const CRational& r2)
-{
-	return CRational(n) == r2;
-}
-
-bool operator!=(const CRational& r1, const CRational& r2)
-{
-	return !(r1 == r2);
-}
-
-bool operator!=(const CRational& r1, const int& n)
-{
-	return !(r1 == n);
-}
-
-bool operator!=(const int& n, const CRational& r2)
-{
-	return !(n == r2);
-}
-
-bool operator<(const CRational& r1, const CRational& r2)
-{
-	int commonDenominator = std::lcm(r1.m_denominator, r2.m_denominator);
-	int r1Numerator = r1.m_numerator * (commonDenominator / r1.m_denominator);
-	int r2Numerator = r2.m_numerator * (commonDenominator / r2.m_denominator);
-
-	return r1Numerator < r2Numerator;
-}
-
-bool operator<(const CRational& r1, const int& n)
-{
-	return r1 < CRational(n);
-}
-
-bool operator<(const int& n, const CRational& r2)
-{
-	return CRational(n) < r2;
-}
-
-bool operator<=(const CRational& r1, const CRational& r2)
-{
-	return (r1 < r2) || (r1 == r2);
-}
-
-bool operator<=(const CRational& r1, const int& n)
-{
-	return (r1 < n) || (r1 == n);
-}
-
-bool operator<=(const int& n, const CRational& r2)
-{
-	return (n < r2) || (n == r2);
-}
-
-bool operator>(const CRational& r1, const CRational& r2)
-{
-	return !(r1 <= r2);
-}
-
-bool operator>(const CRational& r1, const int& n)
-{
-	return r1 > CRational(n);
-}
-
-bool operator>(const int& n, const CRational& r2)
-{
-	return CRational(n) > r2;
-}
-
-bool operator>=(const CRational& r1, const CRational& r2)
-{
-	return !(r1 < r2);
-}
-
-bool operator>=(const CRational& r1, const int& n)
-{
-	return r1 >= CRational(n);
-}
-
-bool operator>=(const int& n, const CRational& r2)
-{
-	return CRational(n) >= r2;
 }
 
 std::ostream& operator<<(std::ostream& stream, const CRational& r)
@@ -298,3 +146,5 @@ void CRational::Normalize()
 	m_numerator /= gcd;
 	m_denominator /= gcd;
 }
+
+#pragma clang diagnostic pop
