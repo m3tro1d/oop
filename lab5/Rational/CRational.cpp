@@ -1,5 +1,3 @@
-#pragma clang diagnostic push
-#pragma ide diagnostic ignored "readability-const-return-type"
 #include "CRational.h"
 
 constexpr char DIVIDER = '/';
@@ -180,5 +178,3 @@ void CRational::Normalize()
 	m_numerator /= gcd;
 	m_denominator /= gcd;
 }
-
-#pragma clang diagnostic pop
