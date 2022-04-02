@@ -98,8 +98,20 @@ TEST_CASE("getting double representation of a rational number")
 
 TEST_CASE("getting compound fraction with a rational number")
 {
-	// TODO
-	REQUIRE(true);
+	SECTION("full division")
+	{
+		// TODO
+	}
+
+	SECTION("without remainder normalization")
+	{
+		// TODO
+	}
+
+	SECTION("with remainder normalization")
+	{
+		// TODO
+	}
 }
 
 TEST_CASE("rational numbers summation")
