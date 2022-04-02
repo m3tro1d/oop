@@ -32,6 +32,14 @@ public:
 	CRational& operator*=(const CRational& other);
 	CRational& operator/=(const CRational& other);
 
+	bool operator==(const CRational& other) const;
+	bool operator!=(const CRational& other) const;
+
+	bool operator<(const CRational& other) const;
+	bool operator<=(const CRational& other) const;
+	bool operator>(const CRational& other) const;
+	bool operator>=(const CRational& other) const;
+
 	friend std::ostream& operator<<(std::ostream& stream, const CRational& r);
 	friend std::istream& operator>>(std::istream& stream, CRational& r);
 
