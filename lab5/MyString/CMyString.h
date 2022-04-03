@@ -1,14 +1,16 @@
 #pragma once
 
+#include <cstring>
 #include <string>
 
 class CMyString
 {
+public:
 	CMyString();
 	CMyString(char const* pString);
 	CMyString(char const* pString, size_t length);
 	CMyString(CMyString const& other);
-	CMyString(CMyString&& other);
+	CMyString(CMyString&& other) noexcept;
 	CMyString(std::string const& stlString);
 
 	~CMyString();
@@ -21,7 +23,9 @@ class CMyString
 	void Clear();
 
 	CMyString& operator=(CMyString const& other);
+	CMyString& operator=(CMyString&& other) noexcept;
 
-	friend CMyString const operator+(CMyString const& s1, CMyString const& s2);
-	// TODO: other operators
+private:
+	char* m_data;
+	size_t m_length;
 };
