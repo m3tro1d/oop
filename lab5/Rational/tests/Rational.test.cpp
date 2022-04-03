@@ -593,7 +593,7 @@ TEST_CASE("rational numbers comparison")
 			CRational r2(2, 5);
 
 			REQUIRE(r1 == r1);
-			REQUIRE(!(r1 == r2));
+			REQUIRE_FALSE(r1 == r2);
 		}
 
 		SECTION("== number")
@@ -602,7 +602,7 @@ TEST_CASE("rational numbers comparison")
 			CRational r2(2, 3);
 
 			REQUIRE(r1 == 4);
-			REQUIRE(!(r2 == 4));
+			REQUIRE_FALSE(r2 == 4);
 		}
 	}
 
@@ -613,7 +613,7 @@ TEST_CASE("rational numbers comparison")
 			CRational r1(2, 3);
 			CRational r2(2, 5);
 
-			REQUIRE(!(r1 != r1));
+			REQUIRE_FALSE(r1 != r1);
 			REQUIRE(r1 != r2);
 		}
 
@@ -622,7 +622,7 @@ TEST_CASE("rational numbers comparison")
 			CRational r1 = 4;
 			CRational r2(2, 3);
 
-			REQUIRE(!(r1 != 4));
+			REQUIRE_FALSE(r1 != 4);
 			REQUIRE(r2 != 4);
 		}
 	}
@@ -634,17 +634,23 @@ TEST_CASE("rational numbers greater-less relation")
 	{
 		SECTION("rational < rational")
 		{
-			// TODO
+			REQUIRE(CRational(1, 5) < CRational(2, 3));
+			REQUIRE_FALSE(CRational(12, 3) < CRational(1, 3));
+			REQUIRE_FALSE(CRational(2, 3) < CRational(2, 3));
 		}
 
 		SECTION("rational < number")
 		{
-			// TODO
+			REQUIRE(CRational(1, 2) < 7);
+			REQUIRE_FALSE(CRational(7, 6) < 1);
+			REQUIRE_FALSE(CRational(4) < 4);
 		}
 
 		SECTION("number < rational")
 		{
-			// TODO
+			REQUIRE(3 < CRational(7, 2));
+			REQUIRE_FALSE(2 < CRational(7, 6));
+			REQUIRE_FALSE(4 < CRational(4));
 		}
 	}
 
@@ -670,17 +676,23 @@ TEST_CASE("rational numbers greater-less relation")
 	{
 		SECTION("rational > rational")
 		{
-			// TODO
+			REQUIRE(CRational(2, 3) > CRational(1, 5));
+			REQUIRE_FALSE(CRational(1, 3) > CRational(12, 13));
+			REQUIRE_FALSE(CRational(2, 3) > CRational(2, 3));
 		}
 
 		SECTION("rational > number")
 		{
-			// TODO
+			REQUIRE(CRational(7, 2) > 3);
+			REQUIRE_FALSE(CRational(7, 6) > 2);
+			REQUIRE_FALSE(CRational(4) > 4);
 		}
 
 		SECTION("number > rational")
 		{
-			// TODO
+			REQUIRE(7 > CRational(1, 2));
+			REQUIRE_FALSE(1 > CRational(7, 6));
+			REQUIRE_FALSE(4 > CRational(4));
 		}
 	}
 
