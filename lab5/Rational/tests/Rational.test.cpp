@@ -127,6 +127,16 @@ TEST_CASE("getting compound fraction with a rational number")
 		REQUIRE(result.second.GetNumerator() == 2);
 		REQUIRE(result.second.GetDenominator() == 3);
 	}
+
+	SECTION("negative rational")
+	{
+		CRational r(-9, 4);
+		auto const result = r.ToCompoundFraction();
+
+		REQUIRE(result.first == -2);
+		REQUIRE(result.second.GetNumerator() == -1);
+		REQUIRE(result.second.GetDenominator() == 4);
+	}
 }
 
 TEST_CASE("rational numbers summation")
