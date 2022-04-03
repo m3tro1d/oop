@@ -658,17 +658,23 @@ TEST_CASE("rational numbers greater-less relation")
 	{
 		SECTION("rational <= rational")
 		{
-			// TODO
+			REQUIRE(CRational(1, 5) <= CRational(2, 3));
+			REQUIRE_FALSE(CRational(12, 3) <= CRational(1, 3));
+			REQUIRE(CRational(2, 3) <= CRational(2, 3));
 		}
 
 		SECTION("rational <= number")
 		{
-			// TODO
+			REQUIRE(CRational(1, 2) <= 7);
+			REQUIRE_FALSE(CRational(7, 6) <= 1);
+			REQUIRE(CRational(4) <= 4);
 		}
 
 		SECTION("number <= rational")
 		{
-			// TODO
+			REQUIRE(3 <= CRational(7, 2));
+			REQUIRE_FALSE(2 <= CRational(7, 6));
+			REQUIRE(4 <= CRational(4));
 		}
 	}
 
@@ -700,17 +706,23 @@ TEST_CASE("rational numbers greater-less relation")
 	{
 		SECTION("rational >= rational")
 		{
-			// TODO
+			REQUIRE(CRational(2, 3) >= CRational(1, 5));
+			REQUIRE_FALSE(CRational(1, 3) >= CRational(12, 13));
+			REQUIRE(CRational(2, 3) >= CRational(2, 3));
 		}
 
 		SECTION("rational >= number")
 		{
-			// TODO
+			REQUIRE(CRational(7, 2) >= 3);
+			REQUIRE_FALSE(CRational(7, 6) >= 2);
+			REQUIRE(CRational(4) >= 4);
 		}
 
 		SECTION("number >= rational")
 		{
-			// TODO
+			REQUIRE(7 >= CRational(1, 2));
+			REQUIRE_FALSE(1 >= CRational(7, 6));
+			REQUIRE(4 >= CRational(4));
 		}
 	}
 }
