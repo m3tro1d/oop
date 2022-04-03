@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstring>
+#include <stdexcept>
 #include <string>
 
 class CMyString
@@ -24,6 +25,25 @@ public:
 
 	CMyString& operator=(CMyString const& other);
 	CMyString& operator=(CMyString&& other) noexcept;
+
+	// TODO
+	// friend CMyString const operator+(const CMyString& s1, const CMyString& s2);
+	// CMyString& operator+=(const CMyString& other);
+	//
+	// friend bool operator==(const CMyString& s1, const CMyString& s2);
+	// friend bool operator!=(const CMyString& s1, const CMyString& s2);
+	//
+	// friend bool operator<(const CMyString& s1, const CMyString& s2);
+	// friend bool operator>(const CMyString& s1, const CMyString& s2);
+	//
+	// friend bool operator<=(const CMyString& s1, const CMyString& s2);
+	// friend bool operator>=(const CMyString& s1, const CMyString& s2);
+	//
+	// char const& operator[](size_t index) const;
+	// char& operator[](size_t index);
+	//
+	// friend std::ostream& operator<<(std::ostream& stream, const CMyString& s);
+	// friend std::istream& operator>>(std::istream& stream, const CMyString& s);
 
 private:
 	char* m_data;
