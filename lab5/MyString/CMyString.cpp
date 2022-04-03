@@ -38,7 +38,7 @@ CMyString::CMyString(const std::string& stlString)
 {
 }
 
-CMyString::~CMyString()
+CMyString::~CMyString() noexcept
 {
 	delete[] m_data;
 }

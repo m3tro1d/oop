@@ -14,7 +14,7 @@ public:
 	CMyString(CMyString&& other) noexcept;
 	CMyString(std::string const& stlString);
 
-	~CMyString();
+	~CMyString() noexcept;
 
 	size_t GetLength() const;
 	char const* GetStringData() const;
