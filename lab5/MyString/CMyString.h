@@ -16,8 +16,8 @@ public:
 
 	~CMyString() noexcept;
 
-	size_t GetLength() const;
 	char const* GetStringData() const;
+	size_t GetLength() const;
 
 	CMyString SubString(size_t start, size_t length = SIZE_MAX) const;
 
