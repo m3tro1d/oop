@@ -9,7 +9,6 @@ line 399 240 401 230 304d64
 # Ears
 triangle 310 290 300 190 390 210 082940 082940
 triangle 490 290 500 200 410 210 082940 082940
-rectangle 286 220 15 15 ffffff ffffff
 
 # Eyes
 circle 360 290 35 faf9b8 faf9b8
