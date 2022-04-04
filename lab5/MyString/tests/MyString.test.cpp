@@ -24,7 +24,7 @@ TEST_CASE("string creation")
 	SECTION("using char pointer and length")
 	{
 		auto const cString = "Hello, wonderful World!";
-		int const length = 5;
+		size_t const length = 5;
 		CMyString s(cString, length);
 		auto const stringData = s.GetStringData();
 
@@ -68,8 +68,25 @@ TEST_CASE("string copying")
 
 TEST_CASE("string moving")
 {
-	// TODO
-	REQUIRE(true);
+	SECTION("moved string contains the same string with the same length")
+	{
+		char const* initialString = "Hello, wonderful World!";
+		size_t const initialLength = std::strlen(initialString);
+		CMyString s = initialString;
+		CMyString moved(std::move(s));
+
+		REQUIRE(std::strcmp(initialString, moved.GetStringData()) == 0);
+		REQUIRE(initialLength == moved.GetLength());
+	}
+
+	SECTION("initial string is zeroed after moving")
+	{
+		CMyString s = "Hello, wonderful World!";
+		CMyString moved(std::move(s));
+
+		REQUIRE(s.GetStringData() == nullptr);
+		REQUIRE(s.GetLength() == 0);
+	}
 }
 
 TEST_CASE("string slicing")
