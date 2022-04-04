@@ -54,53 +54,51 @@ CRational const CRational::operator-() const
 
 CRational& CRational::operator+=(CRational const& other)
 {
-	*this = *this + other;
+	int commonDenominator = std::lcm(GetDenominator(), other.GetDenominator());
+	int numerator1 = GetNumerator() * (commonDenominator / GetDenominator());
+	int numerator2 = other.GetNumerator() * (commonDenominator / other.GetDenominator());
+
+	*this = CRational(numerator1 + numerator2, commonDenominator);
 	return *this;
 }
 
 CRational& CRational::operator-=(CRational const& other)
 {
-	*this = *this - other;
-	return *this;
+	return *this += (-other);
 }
 
 CRational& CRational::operator*=(CRational const& other)
 {
-	*this = *this * other;
+	int numerator = GetNumerator() * other.GetNumerator();
+	int denominator = GetDenominator() * other.GetDenominator();
+
+	*this = CRational(numerator, denominator);
 	return *this;
 }
 
 CRational& CRational::operator/=(CRational const& other)
 {
-	*this = *this / other;
-	return *this;
+	return *this *= CRational(other.GetDenominator(), other.GetNumerator());
 }
 
-CRational const operator+(CRational const& r1, CRational const& r2)
+CRational const operator+(CRational r1, CRational const& r2)
 {
-	int commonDenominator = std::lcm(r1.GetDenominator(), r2.GetDenominator());
-	int numerator1 = r1.GetNumerator() * (commonDenominator / r1.GetDenominator());
-	int numerator2 = r2.GetNumerator() * (commonDenominator / r2.GetDenominator());
-
-	return { numerator1 + numerator2, commonDenominator };
+	return r1 += r2;
 }
 
-CRational const operator-(CRational const& r1, CRational const& r2)
+CRational const operator-(CRational r1, CRational const& r2)
 {
-	return r1 + (-r2);
+	return r1 -= r2;
 }
 
-CRational const operator*(CRational const& r1, CRational const& r2)
+CRational const operator*(CRational r1, CRational const& r2)
 {
-	int numerator = r1.GetNumerator() * r2.GetNumerator();
-	int denominator = r1.GetDenominator() * r2.GetDenominator();
-
-	return { numerator, denominator };
+	return r1 *= r2;
 }
 
-CRational const operator/(CRational const& r1, CRational const& r2)
+CRational const operator/(CRational r1, CRational const& r2)
 {
-	return r1 * CRational(r2.GetDenominator(), r2.GetNumerator());
+	return r1 /= r2;
 }
 
 bool operator==(CRational const& r1, CRational const& r2)

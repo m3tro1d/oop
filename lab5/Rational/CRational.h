@@ -33,11 +33,11 @@ private:
 	int m_denominator = 1;
 };
 
-CRational const operator+(CRational const& r1, CRational const& r2);
-CRational const operator-(CRational const& r1, CRational const& r2);
+CRational const operator+(CRational r1, CRational const& r2);
+CRational const operator-(CRational r1, CRational const& r2);
 
-CRational const operator*(CRational const& r1, CRational const& r2);
-CRational const operator/(CRational const& r1, CRational const& r2);
+CRational const operator*(CRational r1, CRational const& r2);
+CRational const operator/(CRational r1, CRational const& r2);
 
 bool operator==(CRational const& r1, CRational const& r2);
 bool operator!=(CRational const& r1, CRational const& r2);
