@@ -100,3 +100,5 @@ TEST_CASE("string clearing")
 	// TODO
 	REQUIRE(true);
 }
+
+// TODO: operators
