@@ -58,6 +58,11 @@ TEST_CASE("creating a rational number")
 			REQUIRE(r.GetDenominator() == 3);
 		}
 	}
+
+	SECTION("with zero denominator")
+	{
+		REQUIRE_THROWS_AS(CRational(42, 0), std::invalid_argument);
+	}
 }
 
 TEST_CASE("getting double representation of a rational number")
@@ -84,15 +89,6 @@ TEST_CASE("getting double representation of a rational number")
 		CRational r(numerator, denominator);
 
 		REQUIRE(ApproximatelyEquals(r.ToDouble(), numerator / static_cast<double>(denominator)));
-	}
-
-	SECTION("with zero denominator")
-	{
-		int numerator = 42;
-		int denominator = 0;
-		CRational r(numerator, denominator);
-
-		REQUIRE_THROWS_AS(r.ToDouble(), std::logic_error);
 	}
 }
 
@@ -237,7 +233,7 @@ TEST_CASE("rational numbers subtraction")
 	}
 }
 
-TEST_CASE("rational numbers summation-assignment")
+TEST_CASE("rational numbers addition-assignment")
 {
 	SECTION("+= rational")
 	{
@@ -678,7 +674,7 @@ TEST_CASE("rational numbers greater-less relation")
 		}
 	}
 
-	SECTION("more than")
+	SECTION("greater than")
 	{
 		SECTION("rational > rational")
 		{
@@ -702,7 +698,7 @@ TEST_CASE("rational numbers greater-less relation")
 		}
 	}
 
-	SECTION("more or equal to")
+	SECTION("greater or equal to")
 	{
 		SECTION("rational >= rational")
 		{
@@ -778,7 +774,7 @@ TEST_CASE("reading rational number from the stream")
 		REQUIRE(r.GetDenominator() == 5);
 	}
 
-	SECTION("positive")
+	SECTION("negative")
 	{
 		input.str("-12/7");
 		CRational r;
