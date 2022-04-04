@@ -14,6 +14,9 @@ public:
 	CMyString(CMyString&& other) noexcept;
 	CMyString(std::string const& stlString);
 
+	CMyString& operator=(CMyString const& other);
+	CMyString& operator=(CMyString&& other) noexcept;
+
 	~CMyString() noexcept;
 
 	char const* GetStringData() const;
@@ -22,9 +25,6 @@ public:
 	CMyString SubString(size_t start, size_t length = SIZE_MAX) const;
 
 	void Clear();
-
-	CMyString& operator=(CMyString const& other);
-	CMyString& operator=(CMyString&& other) noexcept;
 
 	// TODO
 	// friend CMyString const operator+(const CMyString& s1, const CMyString& s2);

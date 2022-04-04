@@ -38,6 +38,32 @@ CMyString::CMyString(const std::string& stlString)
 {
 }
 
+CMyString& CMyString::operator=(const CMyString& other)
+{
+	if (std::addressof(other) != this)
+	{
+		CMyString copy(other);
+		std::swap(m_data, copy.m_data);
+		std::swap(m_length, copy.m_length);
+	}
+	return *this;
+}
+
+CMyString& CMyString::operator=(CMyString&& other) noexcept
+{
+	if (std::addressof(other) != this)
+	{
+		delete[] m_data;
+
+		m_data = other.m_data;
+		m_length = other.m_length;
+
+		other.m_data = nullptr;
+		other.m_length = 0;
+	}
+	return *this;
+}
+
 CMyString::~CMyString() noexcept
 {
 	delete[] m_data;
@@ -73,30 +99,4 @@ void CMyString::Clear()
 {
 	std::memset(m_data, '\0', m_length);
 	m_length = 0;
-}
-
-CMyString& CMyString::operator=(const CMyString& other)
-{
-	if (std::addressof(other) != this)
-	{
-		CMyString copy(other);
-		std::swap(m_data, copy.m_data);
-		std::swap(m_length, copy.m_length);
-	}
-	return *this;
-}
-
-CMyString& CMyString::operator=(CMyString&& other) noexcept
-{
-	if (std::addressof(other) != this)
-	{
-		delete[] m_data;
-
-		m_data = other.m_data;
-		m_length = other.m_length;
-
-		other.m_data = nullptr;
-		other.m_length = 0;
-	}
-	return *this;
 }
