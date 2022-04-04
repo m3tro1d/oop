@@ -149,7 +149,7 @@ std::istream& operator>>(std::istream& stream, CRational& r)
 
 	if (!(stream >> numerator) || !(stream >> divider) || !(stream >> denominator) || divider != DIVIDER)
 	{
-		stream.setstate(std::ios_base::failbit);
+		stream.setstate(std::ios_base::failbit | stream.rdstate());
 		return stream;
 	}
 
