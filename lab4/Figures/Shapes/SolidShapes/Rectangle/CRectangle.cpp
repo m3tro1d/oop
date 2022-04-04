@@ -57,7 +57,7 @@ double CRectangle::GetWidth() const
 
 double CRectangle::GetHeight() const
 {
-	return m_leftTop.GetY() - m_rightBottom.GetY();
+	return m_rightBottom.GetY() - m_leftTop.GetY();
 }
 
 void CRectangle::Draw(ICanvas& canvas) const
