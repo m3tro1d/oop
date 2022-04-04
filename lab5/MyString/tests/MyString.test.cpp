@@ -7,20 +7,18 @@ TEST_CASE("string creation")
 	SECTION("empty string")
 	{
 		CMyString s;
-		auto const stringData = s.GetStringData();
 
+		REQUIRE(s.GetStringData()[0] == '\0');
 		REQUIRE(s.GetLength() == 0);
-		REQUIRE(stringData[0] == '\0');
 	}
 
 	SECTION("using C string")
 	{
 		auto const cString = "Hello, wonderful World!";
 		CMyString s(cString);
-		auto const stringData = s.GetStringData();
 
+		REQUIRE(std::strcmp(s.GetStringData(), cString) == 0);
 		REQUIRE(s.GetLength() == std::strlen(cString));
-		REQUIRE(std::strcmp(stringData, cString) == 0);
 	}
 
 	SECTION("using char pointer and length")
@@ -30,28 +28,57 @@ TEST_CASE("string creation")
 		CMyString s(cString, length);
 		auto const stringData = s.GetStringData();
 
-		REQUIRE(s.GetLength() == length);
 		REQUIRE(std::strcmp(stringData, "Hello") == 0);
+		REQUIRE(s.GetLength() == length);
 	}
 
 	SECTION("using STL string")
 	{
 		std::string const stlString = "Hello, wonderful World of C++ standard library!";
 		CMyString s(stlString);
-		auto const stringData = s.GetStringData();
 
+		REQUIRE(s.GetStringData() == stlString);
 		REQUIRE(s.GetLength() == stlString.length());
-		REQUIRE(stringData == stlString);
 	}
 }
 
 TEST_CASE("string copying")
 {
+	SECTION("copy contains the same string with the same length")
+	{
+		CMyString s = "Hello, wonderful World!";
+		CMyString copy(s);
+
+		REQUIRE(std::strcmp(s.GetStringData(), copy.GetStringData()) == 0);
+		REQUIRE(s.GetLength() == copy.GetLength());
+	}
+
+	SECTION("modifying the copy does not affect the original string")
+	{
+		char const* initialString = "Hello, wonderful World!";
+		CMyString s = initialString;
+		CMyString copy(s);
+		char* firstCharPtr = const_cast<char*>(copy.GetStringData());
+		*firstCharPtr = 'B';
+
+		REQUIRE(std::strcmp(s.GetStringData(), initialString) == 0);
+		REQUIRE(std::strcmp(copy.GetStringData(), initialString) != 0);
+	}
+}
+
+TEST_CASE("string moving")
+{
 	// TODO
 	REQUIRE(true);
 }
 
-TEST_CASE("string moving")
+TEST_CASE("string slicing")
+{
+	// TODO
+	REQUIRE(true);
+}
+
+TEST_CASE("string clearing")
 {
 	// TODO
 	REQUIRE(true);
