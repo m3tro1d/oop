@@ -89,9 +89,13 @@ CMyString& CMyString::operator=(CMyString&& other) noexcept
 {
 	if (std::addressof(other) != this)
 	{
-		CMyString copy(other);
-		std::swap(m_data, copy.m_data);
-		std::swap(m_length, copy.m_length);
+		delete[] m_data;
+
+		m_data = other.m_data;
+		m_length = other.m_length;
+
+		other.m_data = nullptr;
+		other.m_length = 0;
 	}
 	return *this;
 }
