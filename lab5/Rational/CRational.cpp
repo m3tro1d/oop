@@ -2,15 +2,8 @@
 
 constexpr char DIVIDER = '/';
 
-CRational::CRational()
-	: m_numerator(0)
-	, m_denominator(1)
-{
-}
-
 CRational::CRational(int value)
-	: m_numerator(value)
-	, m_denominator(1)
+	: CRational(value, 1)
 {
 }
 
@@ -18,6 +11,11 @@ CRational::CRational(int numerator, int denominator)
 	: m_numerator(numerator)
 	, m_denominator(denominator)
 {
+	if (m_denominator == 0)
+	{
+		throw std::invalid_argument("zero denominator");
+	}
+
 	Normalize();
 }
 
@@ -33,11 +31,6 @@ int CRational::GetDenominator() const
 
 double CRational::ToDouble() const
 {
-	if (m_denominator == 0)
-	{
-		throw std::logic_error("zero division");
-	}
-
 	return m_numerator / static_cast<double>(m_denominator);
 }
 
@@ -97,7 +90,7 @@ const CRational operator/(const CRational& r1, const CRational& r2)
 {
 	if (r2.m_numerator == 0)
 	{
-		throw std::invalid_argument("zero division");
+		throw std::invalid_argument("division by zero");
 	}
 
 	return r1 * CRational(r2.m_denominator, r2.m_numerator);

@@ -6,7 +6,7 @@
 class CRational
 {
 public:
-	CRational();
+	CRational() = default;
 	CRational(int value);
 	CRational(int numerator, int denominator);
 
@@ -46,6 +46,6 @@ public:
 private:
 	void Normalize();
 
-	int m_numerator;
-	int m_denominator;
+	int m_numerator = 0;
+	int m_denominator = 1;
 };
