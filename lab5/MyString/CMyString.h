@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstring>
+#include <iostream>
 #include <stdexcept>
 #include <string>
 
@@ -26,12 +27,10 @@ public:
 
 	void Clear();
 
-	// TODO
-
 	// CMyString& operator+=(const CMyString& other);
 
-	// char const& operator[](size_t index) const;
-	// char& operator[](size_t index);
+	char const& operator[](size_t index) const;
+	char& operator[](size_t index);
 
 private:
 	char* m_data;
@@ -49,6 +48,6 @@ private:
 //
 // bool operator<=(const CMyString& s1, const CMyString& s2);
 // bool operator>=(const CMyString& s1, const CMyString& s2);
-//
-// std::ostream& operator<<(std::ostream& stream, const CMyString& s);
-// std::istream& operator>>(std::istream& stream, const CMyString& s);
+
+std::ostream& operator<<(std::ostream& stream, const CMyString& s);
+std::istream& operator>>(std::istream& stream, const CMyString& s);
