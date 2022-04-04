@@ -20,28 +20,11 @@ public:
 	const CRational operator+() const;
 	const CRational operator-() const;
 
-	friend const CRational operator+(const CRational& r1, const CRational& r2);
-	friend const CRational operator-(const CRational& r1, const CRational& r2);
-
 	CRational& operator+=(const CRational& other);
 	CRational& operator-=(const CRational& other);
 
-	friend const CRational operator*(const CRational& r1, const CRational& r2);
-	friend const CRational operator/(const CRational& r1, const CRational& r2);
-
 	CRational& operator*=(const CRational& other);
 	CRational& operator/=(const CRational& other);
-
-	friend bool operator==(const CRational& r1, const CRational& r2);
-	friend bool operator!=(const CRational& r1, const CRational& r2);
-
-	friend bool operator<(const CRational& r1, const CRational& r2);
-	friend bool operator<=(const CRational& r1, const CRational& r2);
-	friend bool operator>(const CRational& r1, const CRational& r2);
-	friend bool operator>=(const CRational& r1, const CRational& r2);
-
-	friend std::ostream& operator<<(std::ostream& stream, const CRational& r);
-	friend std::istream& operator>>(std::istream& stream, CRational& r);
 
 private:
 	void Normalize();
@@ -49,3 +32,20 @@ private:
 	int m_numerator = 0;
 	int m_denominator = 1;
 };
+
+const CRational operator+(const CRational& r1, const CRational& r2);
+const CRational operator-(const CRational& r1, const CRational& r2);
+
+const CRational operator*(const CRational& r1, const CRational& r2);
+const CRational operator/(const CRational& r1, const CRational& r2);
+
+bool operator==(const CRational& r1, const CRational& r2);
+bool operator!=(const CRational& r1, const CRational& r2);
+
+bool operator<(const CRational& r1, const CRational& r2);
+bool operator<=(const CRational& r1, const CRational& r2);
+bool operator>(const CRational& r1, const CRational& r2);
+bool operator>=(const CRational& r1, const CRational& r2);
+
+std::ostream& operator<<(std::ostream& stream, const CRational& r);
+std::istream& operator>>(std::istream& stream, CRational& r);

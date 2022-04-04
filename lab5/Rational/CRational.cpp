@@ -54,9 +54,9 @@ const CRational CRational::operator-() const
 
 const CRational operator+(const CRational& r1, const CRational& r2)
 {
-	int commonDenominator = std::lcm(r1.m_denominator, r2.m_denominator);
-	int numerator1 = r1.m_numerator * (commonDenominator / r1.m_denominator);
-	int numerator2 = r2.m_numerator * (commonDenominator / r2.m_denominator);
+	int commonDenominator = std::lcm(r1.GetDenominator(), r2.GetDenominator());
+	int numerator1 = r1.GetNumerator() * (commonDenominator / r1.GetDenominator());
+	int numerator2 = r2.GetNumerator() * (commonDenominator / r2.GetDenominator());
 
 	return { numerator1 + numerator2, commonDenominator };
 }
@@ -80,20 +80,20 @@ CRational& CRational::operator-=(const CRational& other)
 
 const CRational operator*(const CRational& r1, const CRational& r2)
 {
-	int numerator = r1.m_numerator * r2.m_numerator;
-	int denominator = r1.m_denominator * r2.m_denominator;
+	int numerator = r1.GetNumerator() * r2.GetNumerator();
+	int denominator = r1.GetDenominator() * r2.GetDenominator();
 
 	return { numerator, denominator };
 }
 
 const CRational operator/(const CRational& r1, const CRational& r2)
 {
-	if (r2.m_numerator == 0)
+	if (r2.GetDenominator() == 0)
 	{
 		throw std::invalid_argument("division by zero");
 	}
 
-	return r1 * CRational(r2.m_denominator, r2.m_numerator);
+	return r1 * CRational(r2.GetDenominator(), r2.GetNumerator());
 }
 
 CRational& CRational::operator*=(const CRational& other)
@@ -110,7 +110,7 @@ CRational& CRational::operator/=(const CRational& other)
 
 bool operator==(const CRational& r1, const CRational& r2)
 {
-	return (r1.m_numerator == r2.m_numerator) && (r1.m_denominator == r2.m_denominator);
+	return (r1.GetNumerator() == r2.GetNumerator()) && (r1.GetDenominator() == r2.GetDenominator());
 }
 
 bool operator!=(const CRational& r1, const CRational& r2)
@@ -120,9 +120,9 @@ bool operator!=(const CRational& r1, const CRational& r2)
 
 bool operator<(const CRational& r1, const CRational& r2)
 {
-	int commonDenominator = std::lcm(r1.m_denominator, r2.m_denominator);
-	int numerator1 = r1.m_numerator * (commonDenominator / r1.m_denominator);
-	int numerator2 = r2.m_numerator * (commonDenominator / r2.m_denominator);
+	int commonDenominator = std::lcm(r1.GetDenominator(), r2.GetDenominator());
+	int numerator1 = r1.GetNumerator() * (commonDenominator / r1.GetDenominator());
+	int numerator2 = r2.GetNumerator() * (commonDenominator / r2.GetDenominator());
 
 	return numerator1 < numerator2;
 }
@@ -144,7 +144,7 @@ bool operator>=(const CRational& r1, const CRational& r2)
 
 std::ostream& operator<<(std::ostream& stream, const CRational& r)
 {
-	stream << r.m_numerator << '/' << r.m_denominator;
+	stream << r.GetNumerator() << '/' << r.GetDenominator();
 	return stream;
 }
 
