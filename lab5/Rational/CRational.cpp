@@ -100,11 +100,6 @@ CRational const operator*(CRational const& r1, CRational const& r2)
 
 CRational const operator/(CRational const& r1, CRational const& r2)
 {
-	if (r2.GetDenominator() == 0)
-	{
-		throw std::invalid_argument("division by zero");
-	}
-
 	return r1 * CRational(r2.GetDenominator(), r2.GetNumerator());
 }
 
