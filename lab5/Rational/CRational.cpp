@@ -52,6 +52,30 @@ CRational const CRational::operator-() const
 	return { -m_numerator, m_denominator };
 }
 
+CRational& CRational::operator+=(CRational const& other)
+{
+	*this = *this + other;
+	return *this;
+}
+
+CRational& CRational::operator-=(CRational const& other)
+{
+	*this = *this - other;
+	return *this;
+}
+
+CRational& CRational::operator*=(CRational const& other)
+{
+	*this = *this * other;
+	return *this;
+}
+
+CRational& CRational::operator/=(CRational const& other)
+{
+	*this = *this / other;
+	return *this;
+}
+
 CRational const operator+(CRational const& r1, CRational const& r2)
 {
 	int commonDenominator = std::lcm(r1.GetDenominator(), r2.GetDenominator());
@@ -64,18 +88,6 @@ CRational const operator+(CRational const& r1, CRational const& r2)
 CRational const operator-(CRational const& r1, CRational const& r2)
 {
 	return r1 + (-r2);
-}
-
-CRational& CRational::operator+=(CRational const& other)
-{
-	*this = *this + other;
-	return *this;
-}
-
-CRational& CRational::operator-=(CRational const& other)
-{
-	*this = *this - other;
-	return *this;
 }
 
 CRational const operator*(CRational const& r1, CRational const& r2)
@@ -94,18 +106,6 @@ CRational const operator/(CRational const& r1, CRational const& r2)
 	}
 
 	return r1 * CRational(r2.GetDenominator(), r2.GetNumerator());
-}
-
-CRational& CRational::operator*=(CRational const& other)
-{
-	*this = *this * other;
-	return *this;
-}
-
-CRational& CRational::operator/=(CRational const& other)
-{
-	*this = *this / other;
-	return *this;
 }
 
 bool operator==(CRational const& r1, CRational const& r2)
