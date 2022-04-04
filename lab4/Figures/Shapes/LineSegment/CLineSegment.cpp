@@ -25,7 +25,7 @@ std::string CLineSegment::ToString() const
 		   << "  start: (" << m_startPoint.GetX() << ", " << m_startPoint.GetY() << ")\n"
 		   << "  end: (" << m_endPoint.GetX() << ", " << m_endPoint.GetY() << ")\n"
 		   << "  outline: ";
-	PrintColor(result, m_outlineColor);
+	PrintColor(result, GetOutlineColor());
 	result << '\n';
 
 	return result.str();
@@ -43,5 +43,5 @@ CPoint CLineSegment::GetEndPoint() const
 
 void CLineSegment::Draw(ICanvas& canvas) const
 {
-	canvas.DrawLine(m_startPoint, m_endPoint, m_outlineColor);
+	canvas.DrawLine(m_startPoint, m_endPoint, GetOutlineColor());
 }

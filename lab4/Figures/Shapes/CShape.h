@@ -9,6 +9,6 @@ public:
 
 	uint32_t GetOutlineColor() const final;
 
-protected:
+private:
 	uint32_t m_outlineColor;
 };

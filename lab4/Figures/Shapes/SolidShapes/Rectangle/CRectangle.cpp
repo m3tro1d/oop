@@ -32,9 +32,9 @@ std::string CRectangle::ToString() const
 		   << "  top left: (" << m_leftTop.GetX() << ", " << m_leftTop.GetY() << ")\n"
 		   << "  width: " << GetWidth() << "; height: " << GetHeight() << "\n"
 		   << "  outline: ";
-	PrintColor(result, m_outlineColor);
+	PrintColor(result, GetOutlineColor());
 	result << "\n  fill: ";
-	PrintColor(result, m_fillColor);
+	PrintColor(result, GetFillColor());
 	result << '\n';
 
 	return result.str();
@@ -67,6 +67,6 @@ void CRectangle::Draw(ICanvas& canvas) const
 			{ m_rightBottom.GetX(), m_leftTop.GetY() },
 			m_rightBottom,
 			{ m_leftTop.GetX(), m_rightBottom.GetY() } },
-		m_outlineColor,
-		m_fillColor);
+		GetOutlineColor(),
+		GetFillColor());
 }

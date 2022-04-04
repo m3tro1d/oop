@@ -11,7 +11,7 @@ public:
 	uint32_t GetOutlineColor() const final;
 	uint32_t GetFillColor() const final;
 
-protected:
+private:
 	uint32_t m_outlineColor;
 	uint32_t m_fillColor;
 };

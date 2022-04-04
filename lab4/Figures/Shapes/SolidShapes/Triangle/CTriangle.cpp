@@ -35,9 +35,9 @@ std::string CTriangle::ToString() const
 		   << "  vertex2: (" << m_vertex2.GetX() << ", " << m_vertex2.GetY() << ")\n"
 		   << "  vertex3: (" << m_vertex3.GetX() << ", " << m_vertex3.GetY() << ")\n"
 		   << "  outline: ";
-	PrintColor(result, m_outlineColor);
+	PrintColor(result, GetOutlineColor());
 	result << "\n  fill: ";
-	PrintColor(result, m_fillColor);
+	PrintColor(result, GetFillColor());
 	result << '\n';
 
 	return result.str();
@@ -64,6 +64,6 @@ void CTriangle::Draw(ICanvas& canvas) const
 		{ m_vertex1,
 			m_vertex2,
 			m_vertex3 },
-		m_outlineColor,
-		m_fillColor);
+		GetOutlineColor(),
+		GetFillColor());
 }

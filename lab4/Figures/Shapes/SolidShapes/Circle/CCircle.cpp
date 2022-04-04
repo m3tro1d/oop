@@ -25,9 +25,9 @@ std::string CCircle::ToString() const
 		   << "  center: (" << m_center.GetX() << ", " << m_center.GetY() << ")\n"
 		   << "  radius: " << m_radius << "\n"
 		   << "  outline: ";
-	PrintColor(result, m_outlineColor);
+	PrintColor(result, GetOutlineColor());
 	result << "\n  fill: ";
-	PrintColor(result, m_fillColor);
+	PrintColor(result, GetFillColor());
 	result << '\n';
 
 	return result.str();
@@ -45,5 +45,5 @@ double CCircle::GetRadius() const
 
 void CCircle::Draw(ICanvas& canvas) const
 {
-	canvas.DrawCircle(m_center, m_radius, m_outlineColor, m_fillColor);
+	canvas.DrawCircle(m_center, m_radius, GetOutlineColor(), GetFillColor());
 }
