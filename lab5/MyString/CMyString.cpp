@@ -13,9 +13,9 @@ CMyString::CMyString(const char* pString)
 }
 
 CMyString::CMyString(const char* pString, size_t length)
+	: m_data(new char[length + 1])
+	, m_length(length)
 {
-	m_length = length;
-	m_data = new char[m_length + 1];
 	std::memcpy(m_data, pString, m_length);
 	m_data[m_length] = '\0';
 }
