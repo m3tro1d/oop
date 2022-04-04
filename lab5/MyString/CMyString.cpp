@@ -72,6 +72,7 @@ CMyString CMyString::SubString(size_t start, size_t length) const
 void CMyString::Clear()
 {
 	std::memset(m_data, '\0', m_length);
+	m_length = 0;
 }
 
 CMyString& CMyString::operator=(const CMyString& other)
