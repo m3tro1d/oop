@@ -17,14 +17,14 @@ public:
 
 	std::pair<int, CRational> ToCompoundFraction() const;
 
-	const CRational operator+() const;
-	const CRational operator-() const;
+	CRational const operator+() const;
+	CRational const operator-() const;
 
-	CRational& operator+=(const CRational& other);
-	CRational& operator-=(const CRational& other);
+	CRational& operator+=(CRational const& other);
+	CRational& operator-=(CRational const& other);
 
-	CRational& operator*=(const CRational& other);
-	CRational& operator/=(const CRational& other);
+	CRational& operator*=(CRational const& other);
+	CRational& operator/=(CRational const& other);
 
 private:
 	void Normalize();
@@ -33,19 +33,19 @@ private:
 	int m_denominator = 1;
 };
 
-const CRational operator+(const CRational& r1, const CRational& r2);
-const CRational operator-(const CRational& r1, const CRational& r2);
+CRational const operator+(CRational const& r1, CRational const& r2);
+CRational const operator-(CRational const& r1, CRational const& r2);
 
-const CRational operator*(const CRational& r1, const CRational& r2);
-const CRational operator/(const CRational& r1, const CRational& r2);
+CRational const operator*(CRational const& r1, CRational const& r2);
+CRational const operator/(CRational const& r1, CRational const& r2);
 
-bool operator==(const CRational& r1, const CRational& r2);
-bool operator!=(const CRational& r1, const CRational& r2);
+bool operator==(CRational const& r1, CRational const& r2);
+bool operator!=(CRational const& r1, CRational const& r2);
 
-bool operator<(const CRational& r1, const CRational& r2);
-bool operator<=(const CRational& r1, const CRational& r2);
-bool operator>(const CRational& r1, const CRational& r2);
-bool operator>=(const CRational& r1, const CRational& r2);
+bool operator<(CRational const& r1, CRational const& r2);
+bool operator<=(CRational const& r1, CRational const& r2);
+bool operator>(CRational const& r1, CRational const& r2);
+bool operator>=(CRational const& r1, CRational const& r2);
 
-std::ostream& operator<<(std::ostream& stream, const CRational& r);
+std::ostream& operator<<(std::ostream& stream, CRational const& r);
 std::istream& operator>>(std::istream& stream, CRational& r);

@@ -42,17 +42,17 @@ std::pair<int, CRational> CRational::ToCompoundFraction() const
 	return { integerPart, { newNumerator, m_denominator } };
 }
 
-const CRational CRational::operator+() const
+CRational const CRational::operator+() const
 {
 	return *this;
 }
 
-const CRational CRational::operator-() const
+CRational const CRational::operator-() const
 {
 	return { -m_numerator, m_denominator };
 }
 
-const CRational operator+(const CRational& r1, const CRational& r2)
+CRational const operator+(CRational const& r1, CRational const& r2)
 {
 	int commonDenominator = std::lcm(r1.GetDenominator(), r2.GetDenominator());
 	int numerator1 = r1.GetNumerator() * (commonDenominator / r1.GetDenominator());
@@ -61,24 +61,24 @@ const CRational operator+(const CRational& r1, const CRational& r2)
 	return { numerator1 + numerator2, commonDenominator };
 }
 
-const CRational operator-(const CRational& r1, const CRational& r2)
+CRational const operator-(CRational const& r1, CRational const& r2)
 {
 	return r1 + (-r2);
 }
 
-CRational& CRational::operator+=(const CRational& other)
+CRational& CRational::operator+=(CRational const& other)
 {
 	*this = *this + other;
 	return *this;
 }
 
-CRational& CRational::operator-=(const CRational& other)
+CRational& CRational::operator-=(CRational const& other)
 {
 	*this = *this - other;
 	return *this;
 }
 
-const CRational operator*(const CRational& r1, const CRational& r2)
+CRational const operator*(CRational const& r1, CRational const& r2)
 {
 	int numerator = r1.GetNumerator() * r2.GetNumerator();
 	int denominator = r1.GetDenominator() * r2.GetDenominator();
@@ -86,7 +86,7 @@ const CRational operator*(const CRational& r1, const CRational& r2)
 	return { numerator, denominator };
 }
 
-const CRational operator/(const CRational& r1, const CRational& r2)
+CRational const operator/(CRational const& r1, CRational const& r2)
 {
 	if (r2.GetDenominator() == 0)
 	{
@@ -96,29 +96,29 @@ const CRational operator/(const CRational& r1, const CRational& r2)
 	return r1 * CRational(r2.GetDenominator(), r2.GetNumerator());
 }
 
-CRational& CRational::operator*=(const CRational& other)
+CRational& CRational::operator*=(CRational const& other)
 {
 	*this = *this * other;
 	return *this;
 }
 
-CRational& CRational::operator/=(const CRational& other)
+CRational& CRational::operator/=(CRational const& other)
 {
 	*this = *this / other;
 	return *this;
 }
 
-bool operator==(const CRational& r1, const CRational& r2)
+bool operator==(CRational const& r1, CRational const& r2)
 {
 	return (r1.GetNumerator() == r2.GetNumerator()) && (r1.GetDenominator() == r2.GetDenominator());
 }
 
-bool operator!=(const CRational& r1, const CRational& r2)
+bool operator!=(CRational const& r1, CRational const& r2)
 {
 	return !(r1 == r2);
 }
 
-bool operator<(const CRational& r1, const CRational& r2)
+bool operator<(CRational const& r1, CRational const& r2)
 {
 	int commonDenominator = std::lcm(r1.GetDenominator(), r2.GetDenominator());
 	int numerator1 = r1.GetNumerator() * (commonDenominator / r1.GetDenominator());
@@ -127,22 +127,22 @@ bool operator<(const CRational& r1, const CRational& r2)
 	return numerator1 < numerator2;
 }
 
-bool operator<=(const CRational& r1, const CRational& r2)
+bool operator<=(CRational const& r1, CRational const& r2)
 {
 	return (r1 < r2) || (r1 == r2);
 }
 
-bool operator>(const CRational& r1, const CRational& r2)
+bool operator>(CRational const& r1, CRational const& r2)
 {
 	return !(r1 <= r2);
 }
 
-bool operator>=(const CRational& r1, const CRational& r2)
+bool operator>=(CRational const& r1, CRational const& r2)
 {
 	return !(r1 < r2);
 }
 
-std::ostream& operator<<(std::ostream& stream, const CRational& r)
+std::ostream& operator<<(std::ostream& stream, CRational const& r)
 {
 	stream << r.GetNumerator() << '/' << r.GetDenominator();
 	return stream;
