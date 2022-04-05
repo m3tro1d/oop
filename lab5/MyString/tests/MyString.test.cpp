@@ -107,14 +107,79 @@ TEST_CASE("string assignment")
 
 TEST_CASE("string slicing")
 {
-	// TODO
-	REQUIRE(true);
+	CMyString s = "Hello, wonderful World!";
+
+	SECTION("slicing with fixed length returns a substring of specified length")
+	{
+		size_t const start = 0;
+		size_t const length = 5;
+
+		auto const subString = s.SubString(start, length);
+
+		REQUIRE(std::strcmp(subString.GetStringData(), "Hello") == 0);
+	}
+
+	SECTION("slicing without explicit length returns all original string to the end")
+	{
+		size_t const start = 7;
+
+		auto const subString = s.SubString(start);
+
+		REQUIRE(std::strcmp(subString.GetStringData(), "wonderful World!") == 0);
+	}
+
+	SECTION("if length is out of range, returns all original string to the end")
+	{
+		size_t const start = 7;
+		size_t const length = 420;
+
+		auto const subString = s.SubString(start, length);
+
+		REQUIRE(std::strcmp(subString.GetStringData(), "wonderful World!") == 0);
+	}
+
+	SECTION("out of range start index results in an error")
+	{
+		size_t const start = 420;
+
+		REQUIRE_THROWS_AS(s.SubString(start), std::out_of_range);
+	}
 }
 
 TEST_CASE("string clearing")
 {
-	// TODO
-	REQUIRE(true);
+	CMyString s = "Hello, wonderful World!";
+	s.Clear();
+
+	REQUIRE(std::strcmp(s.GetStringData(), "") == 0);
+	REQUIRE(s.GetLength() == 0);
+}
+
+TEST_CASE("subscript access")
+{
+	SECTION("modifying the character changes the string")
+	{
+		CMyString s = "Hello, wonderful World!";
+		s[0] = 'W';
+
+		REQUIRE(std::strcmp(s.GetStringData(), "Wello, wonderful World!") == 0);
+	}
+
+	SECTION("getting constant character at specified index works correctly")
+	{
+		CMyString const s = "Hello, wonderful World!";
+
+		REQUIRE(s[5] == ',');
+	}
+
+	SECTION("trying to access index out of range results in an error")
+	{
+		CMyString s = "Hello, wonderful World!";
+		CMyString const sConst = "Hello, wonderful World!";
+
+		REQUIRE_THROWS_AS(s[420] = 'W', std::out_of_range);
+		REQUIRE_THROWS_AS(sConst[420], std::out_of_range);
+	}
 }
 
 TEST_CASE("string concatenation")
