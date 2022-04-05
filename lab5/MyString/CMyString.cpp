@@ -87,7 +87,7 @@ CMyString CMyString::SubString(size_t start, size_t length) const
 	}
 
 	size_t copyLength = length;
-	if (start + length > m_length)
+	if (length > m_length - start)
 	{
 		copyLength = m_length - start;
 	}
