@@ -31,4 +31,4 @@ target_compile_definitions(FiguresTest PRIVATE SFML_STATIC)
 target_link_libraries(FiguresTest PUBLIC catch2 fakeit ${SFML_LIBRARIES} ${SFML_DEPENDENCIES} ${JPEG_LIBRARIES} ${FREETYPE_LIBRARIES})
 target_include_directories(FiguresTest PUBLIC ${SFML_INCLUDE_DIR})
 
-add_test(NAME FiguresTest COMMAND CarTest)
+add_test(NAME FiguresTest COMMAND FiguresTest)
