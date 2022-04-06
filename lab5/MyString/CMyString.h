@@ -32,6 +32,8 @@ public:
 	char const& operator[](size_t index) const;
 	char& operator[](size_t index);
 
+	friend std::istream& operator>>(std::istream& stream, CMyString& s);
+
 private:
 	char* m_data;
 	size_t m_length;
@@ -49,4 +51,3 @@ bool operator<=(CMyString const& s1, CMyString const& s2);
 bool operator>=(CMyString const& s1, CMyString const& s2);
 
 std::ostream& operator<<(std::ostream& stream, CMyString const& s);
-// std::istream& operator>>(std::istream& stream, CMyString const& s);

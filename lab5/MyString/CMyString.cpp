@@ -1,5 +1,7 @@
 #include "CMyString.h"
 
+static constexpr size_t MAX_STRING = 1000;
+
 CMyString::CMyString()
 	: m_data(new char[1])
 	, m_length(0)
@@ -140,6 +142,25 @@ char& CMyString::operator[](size_t index)
 	}
 
 	return m_data[index];
+}
+
+std::istream& operator>>(std::istream& stream, CMyString& s)
+{
+	char* result = new char[MAX_STRING + 1];
+	size_t resultLength = 0;
+	char ch;
+
+	while (stream.get(ch) && ch != '\n')
+	{
+		result[resultLength++] = ch;
+	}
+	result[resultLength] = '\0';
+
+	delete[] s.m_data;
+	s.m_data = result;
+	s.m_length = resultLength;
+
+	return stream;
 }
 
 CMyString const operator+(CMyString s1, CMyString const& s2)
