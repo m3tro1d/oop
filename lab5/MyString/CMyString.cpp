@@ -106,6 +106,22 @@ void CMyString::Clear()
 	m_length = 0;
 }
 
+CMyString& CMyString::operator+=(CMyString const& other)
+{
+	size_t resultLength = m_length + other.m_length;
+	char* result = new char[resultLength + 1];
+
+	std::memcpy(result, m_data, m_length);
+	std::memcpy(result + m_length, other.m_data, other.m_length);
+	result[resultLength] = '\0';
+
+	delete[] m_data;
+	m_data = result;
+	m_length = resultLength;
+
+	return *this;
+}
+
 char const& CMyString::operator[](size_t index) const
 {
 	if (index > m_length)
@@ -124,6 +140,11 @@ char& CMyString::operator[](size_t index)
 	}
 
 	return m_data[index];
+}
+
+CMyString const operator+(CMyString s1, CMyString const& s2)
+{
+	return s1 += s2;
 }
 
 static int StrCmp(CMyString const& s1, CMyString const& s2)

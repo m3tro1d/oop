@@ -6,7 +6,7 @@ TEST_CASE("string creation")
 {
 	SECTION("empty string")
 	{
-		CMyString s;
+		CMyString const s;
 
 		REQUIRE(std::strcmp(s.GetStringData(), "") == 0);
 		REQUIRE(s.GetLength() == 0);
@@ -17,7 +17,7 @@ TEST_CASE("string creation")
 		SECTION("valid C string is copied")
 		{
 			auto const cString = "Hello, wonderful World!";
-			CMyString s(cString);
+			CMyString const s(cString);
 
 			REQUIRE(std::strcmp(s.GetStringData(), cString) == 0);
 			REQUIRE(s.GetLength() == std::strlen(cString));
@@ -25,7 +25,7 @@ TEST_CASE("string creation")
 
 		SECTION("null pointer results in an empty string")
 		{
-			CMyString s(nullptr);
+			CMyString const s(nullptr);
 
 			REQUIRE(std::strcmp(s.GetStringData(), "") == 0);
 			REQUIRE(s.GetLength() == 0);
@@ -38,7 +38,7 @@ TEST_CASE("string creation")
 		{
 			auto const cString = "Hello, wonderful World!";
 			size_t const length = 5;
-			CMyString s(cString, length);
+			CMyString const s(cString, length);
 
 			REQUIRE(std::strcmp(s.GetStringData(), "Hello") == 0);
 			REQUIRE(s.GetLength() == length);
@@ -46,7 +46,7 @@ TEST_CASE("string creation")
 
 		SECTION("null pointer results in an empty string")
 		{
-			CMyString s(nullptr, 42);
+			CMyString const s(nullptr, 42);
 
 			REQUIRE(std::strcmp(s.GetStringData(), "") == 0);
 			REQUIRE(s.GetLength() == 0);
@@ -56,7 +56,7 @@ TEST_CASE("string creation")
 		{
 			auto const cString = "Hello\0, wonderful\0 World!";
 			size_t const length = 25;
-			CMyString s(cString, length);
+			CMyString const s(cString, length);
 
 			REQUIRE(std::memcmp(s.GetStringData(), cString, length) == 0);
 			REQUIRE(s.GetLength() == length);
@@ -68,7 +68,7 @@ TEST_CASE("string creation")
 		SECTION("usual STL string is copied")
 		{
 			std::string const stlString = "Hello, wonderful World of C++ standard library!";
-			CMyString s(stlString);
+			CMyString const s(stlString);
 
 			REQUIRE(s.GetStringData() == stlString);
 			REQUIRE(s.GetLength() == stlString.length());
@@ -78,7 +78,7 @@ TEST_CASE("string creation")
 		{
 			size_t const length = 25;
 			std::string const stlString("Hello\0, wonderful\0 World!", length);
-			CMyString s(stlString);
+			CMyString const s(stlString);
 
 			REQUIRE(std::memcmp(s.GetStringData(), stlString.c_str(), length) == 0);
 			REQUIRE(s.GetLength() == length);
@@ -93,7 +93,7 @@ TEST_CASE("string creation from other strings")
 		SECTION("copy contains the same string with the same length")
 		{
 			CMyString s = "Hello, wonderful World!";
-			CMyString copy(s);
+			CMyString const copy(s);
 
 			REQUIRE(std::strcmp(s.GetStringData(), copy.GetStringData()) == 0);
 			REQUIRE(s.GetLength() == copy.GetLength());
@@ -103,7 +103,7 @@ TEST_CASE("string creation from other strings")
 		{
 			char const* initialString = "Hello, wonderful World!";
 			CMyString s = initialString;
-			CMyString copy(s);
+			CMyString const copy(s);
 			char* firstCharPtr = const_cast<char*>(copy.GetStringData());
 			*firstCharPtr = 'B';
 
@@ -118,8 +118,8 @@ TEST_CASE("string creation from other strings")
 		{
 			char const* initialString = "Hello, wonderful World!";
 			size_t const initialLength = std::strlen(initialString);
-			CMyString s = initialString;
-			CMyString moved(std::move(s));
+			CMyString const s = initialString;
+			CMyString const moved(std::move(s));
 
 			REQUIRE(std::strcmp(initialString, moved.GetStringData()) == 0);
 			REQUIRE(initialLength == moved.GetLength());
@@ -128,7 +128,7 @@ TEST_CASE("string creation from other strings")
 		SECTION("initial string is zeroed after moving")
 		{
 			CMyString s = "Hello, wonderful World!";
-			CMyString moved(std::move(s));
+			CMyString const moved(std::move(s));
 
 			REQUIRE(s.GetStringData() == nullptr);
 			REQUIRE(s.GetLength() == 0);
@@ -230,12 +230,20 @@ TEST_CASE("string concatenation")
 {
 	SECTION("concatenation-assignment")
 	{
-		// TODO
+		CMyString s1 = "Hello, ";
+		CMyString const s2 = "World!";
+		s1 += s2;
+
+		REQUIRE(std::strcmp(s1.GetStringData(), "Hello, World!") == 0);
 	}
 
 	SECTION("plain concatenation")
 	{
-		// TODO
+		CMyString const s1 = "Hello, ";
+		CMyString const s2 = "World!";
+		auto const result = s1 + s2;
+
+		REQUIRE(std::strcmp(result.GetStringData(), "Hello, World!") == 0);
 	}
 }
 
@@ -300,7 +308,7 @@ TEST_CASE("string input-output using streams")
 		SECTION("usual string")
 		{
 			std::string const originalString = "Hello, World!";
-			CMyString s = originalString;
+			CMyString const s = originalString;
 			output << s;
 
 			REQUIRE(output.str() == originalString);
@@ -310,7 +318,7 @@ TEST_CASE("string input-output using streams")
 		{
 			char const* originalString = "Hello\0, Worl\0d!";
 			size_t const length = 15;
-			CMyString s(originalString, length);
+			CMyString const s(originalString, length);
 			output << s;
 
 			REQUIRE(std::memcmp(output.str().c_str(), originalString, length) == 0);
