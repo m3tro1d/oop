@@ -118,7 +118,7 @@ TEST_CASE("string creation from other strings")
 		{
 			char const* initialString = "Hello, wonderful World!";
 			size_t const initialLength = std::strlen(initialString);
-			CMyString const s = initialString;
+			CMyString s = initialString;
 			CMyString const moved(std::move(s));
 
 			REQUIRE(std::strcmp(initialString, moved.GetStringData()) == 0);
@@ -140,12 +140,23 @@ TEST_CASE("string assignment")
 {
 	SECTION("copy assignment")
 	{
-		// TODO
+		CMyString s = "Hello, wonderful World!";
+		CMyString copy;
+		copy = s;
+
+		REQUIRE(std::strcmp(s.GetStringData(), copy.GetStringData()) == 0);
 	}
 
 	SECTION("move assignment")
 	{
-		// TODO
+		char const* initialString = "Hello, wonderful World!";
+		CMyString s = initialString;
+		CMyString moved;
+		moved = std::move(s);
+
+		REQUIRE(std::strcmp(moved.GetStringData(), initialString) == 0);
+		REQUIRE(s.GetStringData() == nullptr);
+		REQUIRE(s.GetLength() == 0);
 	}
 }
 
