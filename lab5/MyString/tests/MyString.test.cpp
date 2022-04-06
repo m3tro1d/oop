@@ -54,8 +54,8 @@ TEST_CASE("string creation")
 
 		SECTION("null characters in the middle are ignored")
 		{
-			auto const cString = "Hello\0, wonderful World!";
-			size_t const length = 24;
+			auto const cString = "Hello\0, wonderful\0 World!";
+			size_t const length = 25;
 			CMyString s(cString, length);
 
 			REQUIRE(std::memcmp(s.GetStringData(), cString, length) == 0);
@@ -76,8 +76,8 @@ TEST_CASE("string creation")
 
 		SECTION("null characters in the middle are ignored")
 		{
-			size_t const length = 24;
-			std::string const stlString("Hello\0, wonderful World!", length);
+			size_t const length = 25;
+			std::string const stlString("Hello\0, wonderful\0 World!", length);
 			CMyString s(stlString);
 
 			REQUIRE(std::memcmp(s.GetStringData(), stlString.c_str(), length) == 0);
