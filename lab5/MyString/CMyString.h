@@ -39,10 +39,8 @@ private:
 
 // CMyString const operator+(CMyString s1, CMyString const& s2);
 
-// TODO
-
-// bool operator==(CMyString const& s1, CMyString const& s2);
-// bool operator!=(CMyString const& s1, CMyString const& s2);
+bool operator==(CMyString const& s1, CMyString const& s2);
+bool operator!=(CMyString const& s1, CMyString const& s2);
 
 // bool operator<(CMyString const& s1, CMyString const& s2);
 // bool operator>(CMyString const& s1, CMyString const& s2);

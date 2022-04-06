@@ -243,12 +243,14 @@ TEST_CASE("string comparison")
 {
 	SECTION("equality")
 	{
-		// TODO
+		REQUIRE(CMyString("Hello, World!") == CMyString("Hello, World!"));
+		REQUIRE_FALSE(CMyString("Hello, World!") == CMyString("Goodbye, World!"));
 	}
 
 	SECTION("inequality")
 	{
-		// TODO
+		REQUIRE_FALSE(CMyString("Hello, World!") != CMyString("Hello, World!"));
+		REQUIRE(CMyString("Hello, World!") != CMyString("Goodbye, World!"));
 	}
 }
 

@@ -126,6 +126,23 @@ char& CMyString::operator[](size_t index)
 	return m_data[index];
 }
 
+bool operator==(CMyString const& s1, CMyString const& s2)
+{
+	if (s1.GetLength() != s2.GetLength())
+	{
+		return false;
+	}
+
+	int result = std::memcmp(s1.GetStringData(), s2.GetStringData(), s1.GetLength());
+
+	return result == 0;
+}
+
+bool operator!=(CMyString const& s1, CMyString const& s2)
+{
+	return !(s1 == s2);
+}
+
 std::ostream& operator<<(std::ostream& stream, CMyString const& s)
 {
 	for (size_t i = 0; i < s.GetLength(); ++i)
