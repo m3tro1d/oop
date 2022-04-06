@@ -271,7 +271,26 @@ TEST_CASE("string input-output using streams")
 {
 	SECTION("writing")
 	{
-		// TODO
+		std::stringstream output;
+
+		SECTION("usual string")
+		{
+			std::string const originalString = "Hello, World!";
+			CMyString s = originalString;
+			output << s;
+
+			REQUIRE(output.str() == originalString);
+		}
+
+		SECTION("containing null characters")
+		{
+			char const* originalString = "Hello\0, Worl\0d!";
+			size_t const length = 15;
+			CMyString s(originalString, length);
+			output << s;
+
+			REQUIRE(std::memcmp(output.str().c_str(), originalString, length) == 0);
+		}
 	}
 
 	SECTION("reading")
