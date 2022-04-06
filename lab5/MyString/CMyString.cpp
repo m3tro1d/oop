@@ -8,14 +8,19 @@ CMyString::CMyString()
 }
 
 CMyString::CMyString(const char* pString)
-	: CMyString(pString, std::strlen(pString))
+	: CMyString(pString, pString != nullptr ? std::strlen(pString) : 0)
 {
 }
 
 CMyString::CMyString(const char* pString, size_t length)
-	: m_data(new char[length + 1])
-	, m_length(length)
 {
+	if (pString == nullptr)
+	{
+		length = 0;
+	}
+
+	m_data = new char[length + 1];
+	m_length = length;
 	std::memcpy(m_data, pString, m_length);
 	m_data[m_length] = '\0';
 }

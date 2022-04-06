@@ -8,37 +8,81 @@ TEST_CASE("string creation")
 	{
 		CMyString s;
 
-		REQUIRE(s.GetStringData()[0] == '\0');
+		REQUIRE(std::strcmp(s.GetStringData(), "") == 0);
 		REQUIRE(s.GetLength() == 0);
 	}
 
 	SECTION("using C string")
 	{
-		auto const cString = "Hello, wonderful World!";
-		CMyString s(cString);
+		SECTION("valid C string is copied")
+		{
+			auto const cString = "Hello, wonderful World!";
+			CMyString s(cString);
 
-		REQUIRE(std::strcmp(s.GetStringData(), cString) == 0);
-		REQUIRE(s.GetLength() == std::strlen(cString));
+			REQUIRE(std::strcmp(s.GetStringData(), cString) == 0);
+			REQUIRE(s.GetLength() == std::strlen(cString));
+		}
+
+		SECTION("null pointer results in an empty string")
+		{
+			CMyString s(nullptr);
+
+			REQUIRE(std::strcmp(s.GetStringData(), "") == 0);
+			REQUIRE(s.GetLength() == 0);
+		}
 	}
 
 	SECTION("using char pointer and length")
 	{
-		auto const cString = "Hello, wonderful World!";
-		size_t const length = 5;
-		CMyString s(cString, length);
-		auto const stringData = s.GetStringData();
+		SECTION("valid C string is copied")
+		{
+			auto const cString = "Hello, wonderful World!";
+			size_t const length = 5;
+			CMyString s(cString, length);
 
-		REQUIRE(std::strcmp(stringData, "Hello") == 0);
-		REQUIRE(s.GetLength() == length);
+			REQUIRE(std::strcmp(s.GetStringData(), "Hello") == 0);
+			REQUIRE(s.GetLength() == length);
+		}
+
+		SECTION("null pointer results in an empty string")
+		{
+			CMyString s(nullptr, 42);
+
+			REQUIRE(std::strcmp(s.GetStringData(), "") == 0);
+			REQUIRE(s.GetLength() == 0);
+		}
+
+		SECTION("null characters in the middle are ignored")
+		{
+			auto const cString = "Hello\0, wonderful World!";
+			size_t const length = 24;
+			CMyString s(cString, length);
+
+			REQUIRE(std::memcmp(s.GetStringData(), cString, length) == 0);
+			REQUIRE(s.GetLength() == length);
+		}
 	}
 
 	SECTION("using STL string")
 	{
-		std::string const stlString = "Hello, wonderful World of C++ standard library!";
-		CMyString s(stlString);
+		SECTION("usual STL string is copied")
+		{
+			std::string const stlString = "Hello, wonderful World of C++ standard library!";
+			CMyString s(stlString);
 
-		REQUIRE(s.GetStringData() == stlString);
-		REQUIRE(s.GetLength() == stlString.length());
+			REQUIRE(s.GetStringData() == stlString);
+			REQUIRE(s.GetLength() == stlString.length());
+		}
+
+		SECTION("null characters in the middle are ignored")
+		{
+			size_t const length = 24;
+			std::string const stlString("Hello\0, wonderful World!", length);
+			CMyString s(stlString);
+
+			REQUIRE(std::memcmp(s.GetStringData(), stlString.c_str(), length) == 0);
+			REQUIRE(s.GetLength() == length);
+		}
 	}
 }
 
