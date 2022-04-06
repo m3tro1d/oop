@@ -110,6 +110,15 @@ TEST_CASE("string creation from other strings")
 			REQUIRE(std::strcmp(s.GetStringData(), initialString) == 0);
 			REQUIRE(std::strcmp(copy.GetStringData(), initialString) != 0);
 		}
+
+		SECTION("copying ignores null characters")
+		{
+			CMyString s = "Hello\0, wonderful NULL\0!";
+			CMyString const copy(s);
+
+			REQUIRE(std::strcmp(s.GetStringData(), copy.GetStringData()) == 0);
+			REQUIRE(s.GetLength() == copy.GetLength());
+		}
 	}
 
 	SECTION("moving")
@@ -193,6 +202,17 @@ TEST_CASE("string slicing")
 		REQUIRE(std::strcmp(subString.GetStringData(), "wonderful World!") == 0);
 	}
 
+	SECTION("slicing ignores null characters")
+	{
+		CMyString sNulls = "Hello\0, wonderful\0 NULL!";
+		size_t const start = 0;
+		size_t const length = 8;
+
+		auto const subString = sNulls.SubString(start, length);
+
+		REQUIRE(std::strcmp(subString.GetStringData(), "Hello\0, ") == 0);
+	}
+
 	SECTION("out of range start index results in an error")
 	{
 		size_t const start = 420;
@@ -255,6 +275,15 @@ TEST_CASE("string concatenation")
 		auto const result = s1 + s2;
 
 		REQUIRE(std::strcmp(result.GetStringData(), "Hello, World!") == 0);
+	}
+
+	SECTION("null characters are ignored")
+	{
+		CMyString const s1("Hello\0, ", 8);
+		CMyString const s2("World\0!", 7);
+		auto const result = s1 + s2;
+
+		REQUIRE(std::memcmp(result.GetStringData(), "Hello\0, World\0!", 15) == 0);
 	}
 }
 
@@ -338,6 +367,36 @@ TEST_CASE("string input-output using streams")
 
 	SECTION("reading")
 	{
-		// TODO
+		std::stringstream input;
+
+		SECTION("usual string")
+		{
+			char const* originalString = "Hello, World!";
+			input.str(originalString);
+			CMyString s;
+			input >> s;
+
+			REQUIRE(std::strcmp(s.GetStringData(), originalString) == 0);
+		}
+
+		SECTION("containing null characters")
+		{
+			std::string const originalString("Hello\0, Worl\0d!", 15);
+			input.str(originalString);
+			CMyString s;
+			input >> s;
+
+			REQUIRE(std::memcmp(s.GetStringData(), originalString.c_str(), 15) == 0);
+		}
+
+		SECTION("out of several lines only first one is read")
+		{
+			char const* originalString = "Hello\n, World\n!\n";
+			input.str(originalString);
+			CMyString s;
+			input >> s;
+
+			REQUIRE(std::strcmp(s.GetStringData(), "Hello") == 0);
+		}
 	}
 }
