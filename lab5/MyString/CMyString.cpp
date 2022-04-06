@@ -126,21 +126,57 @@ char& CMyString::operator[](size_t index)
 	return m_data[index];
 }
 
-bool operator==(CMyString const& s1, CMyString const& s2)
+static int StrCmp(CMyString const& s1, CMyString const& s2)
 {
-	if (s1.GetLength() != s2.GetLength())
+	size_t minLength = std::min(s1.GetLength(), s2.GetLength());
+	int result = std::memcmp(s1.GetStringData(), s2.GetStringData(), minLength);
+
+	if (result != 0)
 	{
-		return false;
+		return result;
 	}
 
-	int result = std::memcmp(s1.GetStringData(), s2.GetStringData(), s1.GetLength());
+	if (s2.GetLength() > minLength)
+	{
+		return -1;
+	}
 
-	return result == 0;
+	if (s1.GetLength() > minLength)
+	{
+		return 1;
+	}
+
+	return result;
+}
+
+bool operator==(CMyString const& s1, CMyString const& s2)
+{
+	return StrCmp(s1, s2) == 0;
 }
 
 bool operator!=(CMyString const& s1, CMyString const& s2)
 {
-	return !(s1 == s2);
+	return StrCmp(s1, s2) != 0;
+}
+
+bool operator<(CMyString const& s1, CMyString const& s2)
+{
+	return StrCmp(s1, s2) < 0;
+}
+
+bool operator>(CMyString const& s1, CMyString const& s2)
+{
+	return StrCmp(s1, s2) > 0;
+}
+
+bool operator<=(CMyString const& s1, CMyString const& s2)
+{
+	return StrCmp(s1, s2) <= 0;
+}
+
+bool operator>=(CMyString const& s1, CMyString const& s2)
+{
+	return StrCmp(s1, s2) >= 0;
 }
 
 std::ostream& operator<<(std::ostream& stream, CMyString const& s)

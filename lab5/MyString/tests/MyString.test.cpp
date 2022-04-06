@@ -256,14 +256,38 @@ TEST_CASE("string comparison")
 
 TEST_CASE("lexicographical comparison")
 {
-	SECTION("strict: <, >")
+	SECTION("strict")
 	{
-		// TODO
+		SECTION("less than")
+		{
+			REQUIRE(CMyString("122") < CMyString("123"));
+			REQUIRE_FALSE(CMyString("123") < CMyString("12212"));
+			REQUIRE_FALSE(CMyString("123") < CMyString("123"));
+		}
+
+		SECTION("greater than")
+		{
+			REQUIRE(CMyString("123") > CMyString("122"));
+			REQUIRE_FALSE(CMyString("12212") > CMyString("123"));
+			REQUIRE_FALSE(CMyString("123") > CMyString("123"));
+		}
 	}
 
-	SECTION("not strict: <=, >=")
+	SECTION("not strict")
 	{
-		// TODO
+		SECTION("less or equal to")
+		{
+			REQUIRE(CMyString("122") <= CMyString("123"));
+			REQUIRE_FALSE(CMyString("123") <= CMyString("12212"));
+			REQUIRE(CMyString("123") <= CMyString("123"));
+		}
+
+		SECTION("greater or equal to")
+		{
+			REQUIRE(CMyString("123") >= CMyString("122"));
+			REQUIRE_FALSE(CMyString("12212") >= CMyString("123"));
+			REQUIRE(CMyString("123") >= CMyString("123"));
+		}
 	}
 }
 

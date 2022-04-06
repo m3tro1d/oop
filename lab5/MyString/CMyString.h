@@ -42,11 +42,11 @@ private:
 bool operator==(CMyString const& s1, CMyString const& s2);
 bool operator!=(CMyString const& s1, CMyString const& s2);
 
-// bool operator<(CMyString const& s1, CMyString const& s2);
-// bool operator>(CMyString const& s1, CMyString const& s2);
+bool operator<(CMyString const& s1, CMyString const& s2);
+bool operator>(CMyString const& s1, CMyString const& s2);
 
-// bool operator<=(CMyString const& s1, CMyString const& s2);
-// bool operator>=(CMyString const& s1, CMyString const& s2);
+bool operator<=(CMyString const& s1, CMyString const& s2);
+bool operator>=(CMyString const& s1, CMyString const& s2);
 
 std::ostream& operator<<(std::ostream& stream, CMyString const& s);
 // std::istream& operator>>(std::istream& stream, CMyString const& s);
