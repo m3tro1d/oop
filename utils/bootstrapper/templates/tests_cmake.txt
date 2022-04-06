@@ -1,4 +1,4 @@
 add_executable(%project_name%Test
                %project_name%.test.cpp)
 target_link_libraries(%project_name%Test PUBLIC catch2)
-add_test(NAME %project_name%Test COMMAND CarTest)
+add_test(NAME %project_name%Test COMMAND %project_name%Test)
