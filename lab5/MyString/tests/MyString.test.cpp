@@ -400,3 +400,21 @@ TEST_CASE("string input-output using streams")
 		}
 	}
 }
+
+TEST_CASE("string iterators")
+{
+	SECTION("mutable iterator")
+	{
+		// TODO
+		CMyString s = "Hello";
+		for (auto const& ch : s)
+		{
+			std::cout << ch;
+		}
+	}
+
+	SECTION("const iterator")
+	{
+		// TODO
+	}
+}

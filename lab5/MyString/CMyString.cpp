@@ -108,6 +108,16 @@ void CMyString::Clear()
 	m_length = 0;
 }
 
+CMyString::Iterator CMyString::begin()
+{
+	return m_data;
+}
+
+CMyString::Iterator CMyString::end()
+{
+	return m_data + m_length;
+}
+
 CMyString& CMyString::operator+=(CMyString const& other)
 {
 	size_t resultLength = m_length + other.m_length;
@@ -228,4 +238,47 @@ std::ostream& operator<<(std::ostream& stream, CMyString const& s)
 		stream << s.GetStringData()[i];
 	}
 	return stream;
+}
+
+CMyString::Iterator::Iterator(CMyString::Iterator::PointerType ptr)
+	: m_ptr(ptr)
+{
+}
+
+CMyString::Iterator& CMyString::Iterator::operator++()
+{
+	++m_ptr;
+	return *this;
+}
+
+CMyString::Iterator const CMyString::Iterator::operator++(int)
+{
+	Iterator iterator = *this;
+	++(*this);
+	return iterator;
+}
+
+CMyString::Iterator::PointerType CMyString::Iterator::operator->() const
+{
+	return m_ptr;
+}
+
+CMyString::Iterator::ValueType& CMyString::Iterator::operator*() const
+{
+	return *m_ptr;
+}
+
+CMyString::Iterator::ReferenceType CMyString::Iterator::operator[](size_t index) const
+{
+	return *(m_ptr + index);
+}
+
+bool CMyString::Iterator::operator==(const CMyString::Iterator& other) const
+{
+	return m_ptr == other.m_ptr;
+}
+
+bool CMyString::Iterator::operator!=(const CMyString::Iterator& other) const
+{
+	return !(*this == other);
 }

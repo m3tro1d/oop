@@ -8,6 +8,30 @@
 class CMyString
 {
 public:
+	class Iterator
+	{
+	public:
+		using ValueType = char;
+		using PointerType = ValueType*;
+		using ReferenceType = ValueType&;
+
+		Iterator(PointerType ptr);
+
+		Iterator& operator++();
+		Iterator const operator++(int);
+
+		PointerType operator->() const;
+		ReferenceType operator*() const;
+
+		ReferenceType operator[](size_t index) const;
+
+		bool operator==(Iterator const& other) const;
+		bool operator!=(Iterator const& other) const;
+
+	private:
+		PointerType m_ptr;
+	};
+
 	CMyString();
 	CMyString(char const* pString);
 	CMyString(char const* pString, size_t length);
@@ -26,6 +50,9 @@ public:
 	CMyString SubString(size_t start, size_t length = SIZE_MAX) const;
 
 	void Clear();
+
+	Iterator begin();
+	Iterator end();
 
 	CMyString& operator+=(CMyString const& other);
 
