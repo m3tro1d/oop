@@ -27,7 +27,7 @@ public:
 
 	void Clear();
 
-	CMyString& operator+=(CMyString const& other);
+	// CMyString& operator+=(CMyString const& other);
 
 	char const& operator[](size_t index) const;
 	char& operator[](size_t index);
@@ -37,7 +37,7 @@ private:
 	size_t m_length;
 };
 
-CMyString const operator+(CMyString s1, CMyString const& s2);
+// CMyString const operator+(CMyString s1, CMyString const& s2);
 
 // TODO
 
@@ -51,4 +51,4 @@ CMyString const operator+(CMyString s1, CMyString const& s2);
 // bool operator>=(CMyString const& s1, CMyString const& s2);
 
 std::ostream& operator<<(std::ostream& stream, CMyString const& s);
-std::istream& operator>>(std::istream& stream, CMyString const& s);
+// std::istream& operator>>(std::istream& stream, CMyString const& s);
