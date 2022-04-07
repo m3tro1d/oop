@@ -110,12 +110,22 @@ void CMyString::Clear()
 
 CMyString::Iterator CMyString::begin()
 {
-	return m_data;
+	return Iterator(m_data);
 }
 
 CMyString::Iterator CMyString::end()
 {
-	return m_data + m_length;
+	return Iterator(m_data + m_length);
+}
+
+CMyString::ConstIterator CMyString::cbegin() const
+{
+	return ConstIterator(m_data);
+}
+
+CMyString::ConstIterator CMyString::cend() const
+{
+	return ConstIterator(m_data + m_length);
 }
 
 CMyString& CMyString::operator+=(CMyString const& other)
@@ -279,6 +289,49 @@ bool CMyString::Iterator::operator==(const CMyString::Iterator& other) const
 }
 
 bool CMyString::Iterator::operator!=(const CMyString::Iterator& other) const
+{
+	return !(*this == other);
+}
+
+CMyString::ConstIterator::ConstIterator(CMyString::ConstIterator::PointerType ptr)
+	: m_ptr(ptr)
+{
+}
+
+CMyString::ConstIterator& CMyString::ConstIterator::operator++()
+{
+	++m_ptr;
+	return *this;
+}
+
+CMyString::ConstIterator const CMyString::ConstIterator::operator++(int)
+{
+	ConstIterator iterator = *this;
+	++(*this);
+	return iterator;
+}
+
+CMyString::ConstIterator::PointerType CMyString::ConstIterator::operator->() const
+{
+	return m_ptr;
+}
+
+CMyString::ConstIterator::ValueType& CMyString::ConstIterator::operator*() const
+{
+	return *m_ptr;
+}
+
+CMyString::ConstIterator::ReferenceType CMyString::ConstIterator::operator[](size_t index) const
+{
+	return *(m_ptr + index);
+}
+
+bool CMyString::ConstIterator::operator==(const CMyString::ConstIterator& other) const
+{
+	return m_ptr == other.m_ptr;
+}
+
+bool CMyString::ConstIterator::operator!=(const CMyString::ConstIterator& other) const
 {
 	return !(*this == other);
 }

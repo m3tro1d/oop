@@ -15,7 +15,7 @@ public:
 		using PointerType = ValueType*;
 		using ReferenceType = ValueType&;
 
-		Iterator(PointerType ptr);
+		explicit Iterator(PointerType ptr);
 
 		Iterator& operator++();
 		Iterator const operator++(int);
@@ -27,6 +27,30 @@ public:
 
 		bool operator==(Iterator const& other) const;
 		bool operator!=(Iterator const& other) const;
+
+	private:
+		PointerType m_ptr;
+	};
+
+	class ConstIterator
+	{
+	public:
+		using ValueType = char;
+		using PointerType = ValueType*;
+		using ReferenceType = ValueType&;
+
+		explicit ConstIterator(PointerType ptr);
+
+		ConstIterator& operator++();
+		ConstIterator const operator++(int);
+
+		PointerType operator->() const;
+		ReferenceType operator*() const;
+
+		ReferenceType operator[](size_t index) const;
+
+		bool operator==(ConstIterator const& other) const;
+		bool operator!=(ConstIterator const& other) const;
 
 	private:
 		PointerType m_ptr;
@@ -53,6 +77,9 @@ public:
 
 	Iterator begin();
 	Iterator end();
+
+	ConstIterator cbegin() const;
+	ConstIterator cend() const;
 
 	CMyString& operator+=(CMyString const& other);
 

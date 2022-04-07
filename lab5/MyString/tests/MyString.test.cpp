@@ -407,14 +407,19 @@ TEST_CASE("string iterators")
 	{
 		// TODO
 		CMyString s = "Hello";
-		for (auto const& ch : s)
+		for (CMyString::Iterator it = s.begin(); it != s.end(); ++it)
 		{
-			std::cout << ch;
+			std::cout << *it;
 		}
 	}
 
 	SECTION("const iterator")
 	{
 		// TODO
+		CMyString const s = "Hello";
+		for (CMyString::ConstIterator it = s.cbegin(); it != s.cend(); ++it)
+		{
+			std::cout << *it;
+		}
 	}
 }
