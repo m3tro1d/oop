@@ -403,28 +403,84 @@ TEST_CASE("string input-output using streams")
 
 TEST_CASE("string iterators")
 {
+	std::stringstream output;
+
 	SECTION("straight")
 	{
 		SECTION("mutable")
 		{
-			// TODO
-			CMyString s = "Hello";
-			for (CMyString::Iterator it = s.begin(); it != s.end(); ++it)
+			auto const initialString = "Hello, wonderful World!";
+			auto const initialStringNulls = "Hello\0, wonderful\0 World!";
+			CMyString s = initialString;
+			CMyString sNulls = initialStringNulls;
+
+			SECTION("covers all string")
 			{
-				std::cout << *it;
+				for (auto it = s.begin(); it != s.end(); ++it)
+				{
+					output << *it;
+				}
+				REQUIRE(output.str() == initialString);
 			}
-			std::cout << '\n';
+
+			SECTION("ignores null characters")
+			{
+				for (auto it = sNulls.begin(); it != sNulls.end(); ++it)
+				{
+					output << *it;
+				}
+				REQUIRE(std::memcmp(output.str().c_str(), initialStringNulls, sNulls.GetLength()) == 0);
+			}
+
+			SECTION("string can be modified through an iterator")
+			{
+				*s.begin() = 'W';
+				REQUIRE(s == "Wello, wonderful World!");
+			}
+
+			SECTION("point to beginning and end")
+			{
+				auto begin = s.begin();
+				auto end = s.end();
+
+				REQUIRE(std::addressof(*begin) == s.GetStringData());
+				REQUIRE(std::addressof(*end) == (s.GetStringData() + s.GetLength()));
+			}
 		}
 
 		SECTION("const")
 		{
-			// TODO
-			CMyString const s = "Hello";
-			for (CMyString::ConstIterator it = s.cbegin(); it != s.cend(); ++it)
+			auto const initialString = "Hello, wonderful World!";
+			auto const initialStringNulls = "Hello\0, wonderful\0 World!";
+			CMyString const s = initialString;
+			CMyString const sNulls = initialStringNulls;
+
+			SECTION("covers all string")
 			{
-				std::cout << *it;
+				for (auto it = s.cbegin(); it != s.cend(); ++it)
+				{
+					output << *it;
+				}
+				REQUIRE(output.str() == initialString);
 			}
-			std::cout << '\n';
+
+			SECTION("ignores null characters")
+			{
+				for (auto it = sNulls.cbegin(); it != sNulls.cend(); ++it)
+				{
+					output << *it;
+				}
+				REQUIRE(std::memcmp(output.str().c_str(), initialStringNulls, sNulls.GetLength()) == 0);
+			}
+
+			SECTION("point to beginning and end")
+			{
+				auto cbegin = s.cbegin();
+				auto cend = s.cend();
+
+				REQUIRE(std::addressof(*cbegin) == s.GetStringData());
+				REQUIRE(std::addressof(*cend) == (s.GetStringData() + s.GetLength()));
+			}
 		}
 	}
 
@@ -432,24 +488,80 @@ TEST_CASE("string iterators")
 	{
 		SECTION("mutable")
 		{
-			// TODO
-			CMyString s = "Hello";
-			for (CMyString::ReverseIterator it = s.rbegin(); it != s.rend(); ++it)
+			auto const initialString = "Hello, wonderful World!";
+			auto const initialStringNulls = "Hello\0, wonderful\0 World!";
+			CMyString s = initialString;
+			CMyString sNulls = initialStringNulls;
+
+			SECTION("covers all string")
 			{
-				std::cout << *it;
+				for (auto it = s.rbegin(); it != s.rend(); ++it)
+				{
+					output << *it;
+				}
+				REQUIRE(output.str() == "!dlroW lufrednow ,olleH");
 			}
-			std::cout << '\n';
+
+			SECTION("ignores null characters")
+			{
+				for (auto it = sNulls.rbegin(); it != sNulls.rend(); ++it)
+				{
+					output << *it;
+				}
+				// TODO: fail
+				REQUIRE(std::memcmp(output.str().c_str(), "!dlroW \0lufrednow ,\0olleH", sNulls.GetLength()) == 0);
+			}
+
+			SECTION("string can be modified through an iterator")
+			{
+				s.rend()[1] = 'W';
+				REQUIRE(s == "Wello, wonderful World!");
+			}
+
+			SECTION("point to beginning and end")
+			{
+				auto rbegin = s.rbegin();
+				auto rend = s.rend();
+
+				REQUIRE(std::addressof(*rbegin) == (s.GetStringData() + s.GetLength() - 1));
+				REQUIRE(std::addressof(*rend) == (s.GetStringData() - 1));
+			}
 		}
 
 		SECTION("const")
 		{
-			// TODO
-			CMyString const s = "Hello";
-			for (CMyString::ConstReverseIterator it = s.crbegin(); it != s.crend(); ++it)
+			auto const initialString = "Hello, wonderful World!";
+			auto const initialStringNulls = "Hello\0, wonderful\0 World!";
+			CMyString const s = initialString;
+			CMyString const sNulls = initialStringNulls;
+
+			SECTION("covers all string")
 			{
-				std::cout << *it;
+				for (auto it = s.crbegin(); it != s.crend(); ++it)
+				{
+					output << *it;
+				}
+				REQUIRE(output.str() == "!dlroW lufrednow ,olleH");
 			}
-			std::cout << '\n';
+
+			SECTION("ignores null characters")
+			{
+				for (auto it = sNulls.crbegin(); it != sNulls.crend(); ++it)
+				{
+					output << *it;
+				}
+				// TODO: fail
+				REQUIRE(std::memcmp(output.str().c_str(), "!dlroW \0lufrednow ,\0olleH", sNulls.GetLength()) == 0);
+			}
+
+			SECTION("point to beginning and end")
+			{
+				auto crbegin = s.crbegin();
+				auto crend = s.crend();
+
+				REQUIRE(std::addressof(*crbegin) == (s.GetStringData() + s.GetLength() - 1));
+				REQUIRE(std::addressof(*crend) == (s.GetStringData() - 1));
+			}
 		}
 	}
 }
