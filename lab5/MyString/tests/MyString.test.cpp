@@ -491,7 +491,7 @@ TEST_CASE("string iterators")
 			auto const initialString = "Hello, wonderful World!";
 			auto const initialStringNulls = "Hello\0, wonderful\0 World!";
 			CMyString s = initialString;
-			CMyString sNulls = initialStringNulls;
+			CMyString sNulls(initialStringNulls, 25);
 
 			SECTION("covers all string")
 			{
@@ -508,7 +508,7 @@ TEST_CASE("string iterators")
 				{
 					output << *it;
 				}
-				// TODO: fail
+
 				REQUIRE(std::memcmp(output.str().c_str(), "!dlroW \0lufrednow ,\0olleH", sNulls.GetLength()) == 0);
 			}
 
@@ -533,7 +533,7 @@ TEST_CASE("string iterators")
 			auto const initialString = "Hello, wonderful World!";
 			auto const initialStringNulls = "Hello\0, wonderful\0 World!";
 			CMyString const s = initialString;
-			CMyString const sNulls = initialStringNulls;
+			CMyString sNulls(initialStringNulls, 25);
 
 			SECTION("covers all string")
 			{
@@ -550,7 +550,7 @@ TEST_CASE("string iterators")
 				{
 					output << *it;
 				}
-				// TODO: fail
+
 				REQUIRE(std::memcmp(output.str().c_str(), "!dlroW \0lufrednow ,\0olleH", sNulls.GetLength()) == 0);
 			}
 
