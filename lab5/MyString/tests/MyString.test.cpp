@@ -403,23 +403,53 @@ TEST_CASE("string input-output using streams")
 
 TEST_CASE("string iterators")
 {
-	SECTION("mutable iterator")
+	SECTION("straight")
 	{
-		// TODO
-		CMyString s = "Hello";
-		for (CMyString::Iterator it = s.begin(); it != s.end(); ++it)
+		SECTION("mutable")
 		{
-			std::cout << *it;
+			// TODO
+			CMyString s = "Hello";
+			for (CMyString::Iterator it = s.begin(); it != s.end(); ++it)
+			{
+				std::cout << *it;
+			}
+			std::cout << '\n';
+		}
+
+		SECTION("const")
+		{
+			// TODO
+			CMyString const s = "Hello";
+			for (CMyString::ConstIterator it = s.cbegin(); it != s.cend(); ++it)
+			{
+				std::cout << *it;
+			}
+			std::cout << '\n';
 		}
 	}
 
-	SECTION("const iterator")
+	SECTION("reverse")
 	{
-		// TODO
-		CMyString const s = "Hello";
-		for (CMyString::ConstIterator it = s.cbegin(); it != s.cend(); ++it)
+		SECTION("mutable")
 		{
-			std::cout << *it;
+			// TODO
+			CMyString s = "Hello";
+			for (CMyString::ReverseIterator it = s.rbegin(); it != s.rend(); ++it)
+			{
+				std::cout << *it;
+			}
+			std::cout << '\n';
+		}
+
+		SECTION("const")
+		{
+			// TODO
+			CMyString const s = "Hello";
+			for (CMyString::ConstReverseIterator it = s.crbegin(); it != s.crend(); ++it)
+			{
+				std::cout << *it;
+			}
+			std::cout << '\n';
 		}
 	}
 }

@@ -128,6 +128,26 @@ CMyString::ConstIterator CMyString::cend() const
 	return ConstIterator(m_data + m_length);
 }
 
+CMyString::ReverseIterator CMyString::rbegin()
+{
+	return ReverseIterator(m_data + m_length - 1);
+}
+
+CMyString::ReverseIterator CMyString::rend()
+{
+	return ReverseIterator(m_data - 1);
+}
+
+CMyString::ConstReverseIterator CMyString::crbegin() const
+{
+	return ConstReverseIterator(m_data + m_length - 1);
+}
+
+CMyString::ConstReverseIterator CMyString::crend() const
+{
+	return ConstReverseIterator(m_data - 1);
+}
+
 CMyString& CMyString::operator+=(CMyString const& other)
 {
 	size_t resultLength = m_length + other.m_length;
@@ -289,6 +309,92 @@ bool CMyString::Iterator::operator==(const CMyString::Iterator& other) const
 }
 
 bool CMyString::Iterator::operator!=(const CMyString::Iterator& other) const
+{
+	return !(*this == other);
+}
+
+CMyString::ReverseIterator::ReverseIterator(CMyString::Iterator::PointerType ptr)
+	: m_ptr(ptr)
+{
+}
+
+CMyString::ReverseIterator& CMyString::ReverseIterator::operator++()
+{
+	--m_ptr;
+	return *this;
+}
+
+CMyString::ReverseIterator const CMyString::ReverseIterator::operator++(int)
+{
+	ReverseIterator iterator = *this;
+	++(*this);
+	return iterator;
+}
+
+CMyString::ReverseIterator::PointerType CMyString::ReverseIterator::operator->() const
+{
+	return m_ptr;
+}
+
+CMyString::ReverseIterator::ValueType& CMyString::ReverseIterator::operator*() const
+{
+	return *m_ptr;
+}
+
+CMyString::ReverseIterator::ReferenceType CMyString::ReverseIterator::operator[](size_t index) const
+{
+	return *(m_ptr + index);
+}
+
+bool CMyString::ReverseIterator::operator==(const CMyString::ReverseIterator& other) const
+{
+	return m_ptr == other.m_ptr;
+}
+
+bool CMyString::ReverseIterator::operator!=(const CMyString::ReverseIterator& other) const
+{
+	return !(*this == other);
+}
+
+CMyString::ConstReverseIterator::ConstReverseIterator(CMyString::ConstReverseIterator::PointerType ptr)
+	: m_ptr(ptr)
+{
+}
+
+CMyString::ConstReverseIterator& CMyString::ConstReverseIterator::operator++()
+{
+	--m_ptr;
+	return *this;
+}
+
+CMyString::ConstReverseIterator const CMyString::ConstReverseIterator::operator++(int)
+{
+	ConstReverseIterator iterator = *this;
+	++(*this);
+	return iterator;
+}
+
+CMyString::ConstReverseIterator::PointerType CMyString::ConstReverseIterator::operator->() const
+{
+	return m_ptr;
+}
+
+CMyString::ConstReverseIterator::ValueType& CMyString::ConstReverseIterator::operator*() const
+{
+	return *m_ptr;
+}
+
+CMyString::ConstReverseIterator::ReferenceType CMyString::ConstReverseIterator::operator[](size_t index) const
+{
+	return *(m_ptr + index);
+}
+
+bool CMyString::ConstReverseIterator::operator==(const CMyString::ConstReverseIterator& other) const
+{
+	return m_ptr == other.m_ptr;
+}
+
+bool CMyString::ConstReverseIterator::operator!=(const CMyString::ConstReverseIterator& other) const
 {
 	return !(*this == other);
 }
