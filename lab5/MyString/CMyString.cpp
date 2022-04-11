@@ -6,6 +6,7 @@ CMyString::CMyString()
 	: m_data(new char[1])
 	, m_length(0)
 {
+	// TODO: move to const
 	m_data[0] = '\0';
 }
 
@@ -104,7 +105,7 @@ CMyString CMyString::SubString(size_t start, size_t length) const
 
 void CMyString::Clear()
 {
-	std::memset(m_data, '\0', m_length);
+	m_data[0] = '\0';
 	m_length = 0;
 }
 
@@ -186,6 +187,7 @@ char& CMyString::operator[](size_t index)
 
 std::istream& operator>>(std::istream& stream, CMyString& s)
 {
+	// TODO: no limit
 	char* result = new char[MAX_STRING + 1];
 	size_t resultLength = 0;
 	char ch;

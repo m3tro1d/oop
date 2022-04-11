@@ -8,6 +8,7 @@
 class CMyString
 {
 public:
+	// TODO: lab07 IteratorBase
 	class Iterator
 	{
 	public:

@@ -145,6 +145,7 @@ TEST_CASE("string creation from other strings")
 	}
 }
 
+// TODO: check self-assignment
 TEST_CASE("string assignment")
 {
 	SECTION("copy assignment")
@@ -228,6 +229,8 @@ TEST_CASE("string clearing")
 
 	REQUIRE(std::strcmp(s.GetStringData(), "") == 0);
 	REQUIRE(s.GetLength() == 0);
+
+	// TODO: concatenation and check
 }
 
 TEST_CASE("subscript access")
