@@ -145,7 +145,6 @@ TEST_CASE("string creation from other strings")
 	}
 }
 
-// TODO: check self-assignment
 TEST_CASE("string assignment")
 {
 	SECTION("copy assignment")
@@ -167,6 +166,21 @@ TEST_CASE("string assignment")
 		REQUIRE(std::strcmp(moved.GetStringData(), initialString) == 0);
 		REQUIRE(s.GetStringData() == nullptr);
 		REQUIRE(s.GetLength() == 0);
+	}
+
+	SECTION("self-assignment has no effect")
+	{
+		char const* initialString = "Hello, wonderful World!";
+		CMyString s = initialString;
+		size_t const initialLength = s.GetLength();
+
+		s = s;
+		REQUIRE(std::strcmp(s.GetStringData(), initialString) == 0);
+		REQUIRE(s.GetLength() == initialLength);
+
+		s = std::move(s);
+		REQUIRE(std::strcmp(s.GetStringData(), initialString) == 0);
+		REQUIRE(s.GetLength() == initialLength);
 	}
 }
 
