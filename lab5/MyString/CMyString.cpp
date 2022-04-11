@@ -1,13 +1,13 @@
 #include "CMyString.h"
 
 static constexpr size_t MAX_STRING = 1000;
+constexpr char STRING_END = '\0';
 
 CMyString::CMyString()
 	: m_data(new char[1])
 	, m_length(0)
 {
-	// TODO: move to const
-	m_data[0] = '\0';
+	m_data[0] = STRING_END;
 }
 
 CMyString::CMyString(const char* pString)
@@ -25,7 +25,7 @@ CMyString::CMyString(const char* pString, size_t length)
 	m_data = new char[length + 1];
 	m_length = length;
 	std::memcpy(m_data, pString, m_length);
-	m_data[m_length] = '\0';
+	m_data[m_length] = STRING_END;
 }
 
 CMyString::CMyString(CMyString const& other)
@@ -105,7 +105,7 @@ CMyString CMyString::SubString(size_t start, size_t length) const
 
 void CMyString::Clear()
 {
-	m_data[0] = '\0';
+	m_data[0] = STRING_END;
 	m_length = 0;
 }
 
@@ -116,7 +116,7 @@ CMyString& CMyString::operator+=(CMyString const& other)
 
 	std::memcpy(result, m_data, m_length);
 	std::memcpy(result + m_length, other.m_data, other.m_length);
-	result[resultLength] = '\0';
+	result[resultLength] = STRING_END;
 
 	delete[] m_data;
 	m_data = result;
@@ -156,7 +156,7 @@ std::istream& operator>>(std::istream& stream, CMyString& s)
 	{
 		result[resultLength++] = ch;
 	}
-	result[resultLength] = '\0';
+	result[resultLength] = STRING_END;
 
 	delete[] s.m_data;
 	s.m_data = result;
