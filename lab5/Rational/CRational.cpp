@@ -137,7 +137,7 @@ bool operator>=(CRational const& r1, CRational const& r2)
 
 std::ostream& operator<<(std::ostream& stream, CRational const& r)
 {
-	stream << r.GetNumerator() << '/' << r.GetDenominator();
+	stream << r.GetNumerator() << DIVIDER << r.GetDenominator();
 	return stream;
 }
 
