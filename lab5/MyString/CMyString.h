@@ -8,102 +8,7 @@
 class CMyString
 {
 public:
-	// TODO: lab07 IteratorBase
-	class Iterator
-	{
-	public:
-		using ValueType = char;
-		using PointerType = ValueType*;
-		using ReferenceType = ValueType&;
-
-		explicit Iterator(PointerType ptr);
-
-		Iterator& operator++();
-		Iterator const operator++(int);
-
-		PointerType operator->() const;
-		ReferenceType operator*() const;
-
-		ReferenceType operator[](size_t index) const;
-
-		bool operator==(Iterator const& other) const;
-		bool operator!=(Iterator const& other) const;
-
-	private:
-		PointerType m_ptr;
-	};
-
-	class ConstIterator
-	{
-	public:
-		using ValueType = char;
-		using PointerType = ValueType*;
-		using ReferenceType = ValueType&;
-
-		explicit ConstIterator(PointerType ptr);
-
-		ConstIterator& operator++();
-		ConstIterator const operator++(int);
-
-		PointerType operator->() const;
-		ReferenceType operator*() const;
-
-		ReferenceType operator[](size_t index) const;
-
-		bool operator==(ConstIterator const& other) const;
-		bool operator!=(ConstIterator const& other) const;
-
-	private:
-		PointerType m_ptr;
-	};
-
-	class ReverseIterator
-	{
-	public:
-		using ValueType = char;
-		using PointerType = ValueType*;
-		using ReferenceType = ValueType&;
-
-		explicit ReverseIterator(PointerType ptr);
-
-		ReverseIterator& operator++();
-		ReverseIterator const operator++(int);
-
-		PointerType operator->() const;
-		ReferenceType operator*() const;
-
-		ReferenceType operator[](size_t index) const;
-
-		bool operator==(ReverseIterator const& other) const;
-		bool operator!=(ReverseIterator const& other) const;
-
-	private:
-		PointerType m_ptr;
-	};
-
-	class ConstReverseIterator
-	{
-	public:
-		using ValueType = char;
-		using PointerType = ValueType*;
-		using ReferenceType = ValueType&;
-
-		explicit ConstReverseIterator(PointerType ptr);
-
-		ConstReverseIterator& operator++();
-		ConstReverseIterator const operator++(int);
-
-		PointerType operator->() const;
-		ReferenceType operator*() const;
-
-		ReferenceType operator[](size_t index) const;
-
-		bool operator==(ConstReverseIterator const& other) const;
-		bool operator!=(ConstReverseIterator const& other) const;
-
-	private:
-		PointerType m_ptr;
-	};
+	// TODO: check lab07 IteratorBase and remake iterators with templates
 
 	CMyString();
 	CMyString(char const* pString);
@@ -123,18 +28,6 @@ public:
 	CMyString SubString(size_t start, size_t length = SIZE_MAX) const;
 
 	void Clear();
-
-	Iterator begin();
-	Iterator end();
-
-	ConstIterator cbegin() const;
-	ConstIterator cend() const;
-
-	ReverseIterator rbegin();
-	ReverseIterator rend();
-
-	ConstReverseIterator crbegin() const;
-	ConstReverseIterator crend() const;
 
 	CMyString& operator+=(CMyString const& other);
 
