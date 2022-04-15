@@ -1,6 +1,5 @@
 #include "CMyString.h"
 
-static constexpr size_t MAX_STRING = 1000;
 constexpr char STRING_END = '\0';
 
 CMyString::CMyString()
@@ -195,22 +194,41 @@ char& CMyString::operator[](size_t index)
 	return m_data[index];
 }
 
+static char* Reallocate(char* ptr, size_t length, size_t newLength)
+{
+	if (newLength < length)
+	{
+		return ptr;
+	}
+
+	char* newPtr = new char[newLength];
+	std::memcpy(newPtr, ptr, length);
+	delete[] ptr;
+
+	return newPtr;
+}
+
 std::istream& operator>>(std::istream& stream, CMyString& s)
 {
-	// TODO: no limit
-	char* result = new char[MAX_STRING + 1];
-	size_t resultLength = 0;
-	char ch;
+	size_t length = 0;
+	size_t size = 1;
+	char* result = new char[size];
 
+	char ch;
 	while (stream.get(ch) && ch != '\n')
 	{
-		result[resultLength++] = ch;
+		result[length++] = ch;
+		if (length == size)
+		{
+			Reallocate(result, size, size * 2);
+			size *= 2;
+		}
 	}
-	result[resultLength] = STRING_END;
+	result[length] = STRING_END;
 
 	delete[] s.m_data;
 	s.m_data = result;
-	s.m_length = resultLength;
+	s.m_length = length;
 
 	return stream;
 }
