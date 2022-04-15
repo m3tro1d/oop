@@ -528,4 +528,13 @@ TEST_CASE("string iterators")
 		auto end = s.end();
 		REQUIRE(end - begin == initialLength);
 	}
+
+	SECTION("discrete access through iterator")
+	{
+		auto begin = s.begin();
+		REQUIRE(begin[1] == 'e');
+
+		begin[1] = 'o';
+		REQUIRE(std::memcmp(s.GetStringData(), "Holl\0o", initialLength) == 0);
+	}
 }

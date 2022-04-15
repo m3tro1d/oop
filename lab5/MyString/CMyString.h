@@ -82,6 +82,11 @@ public:
 			return it1.m_item - it2.m_item;
 		}
 
+		ReferenceType operator[](DifferenceType index)
+		{
+			return m_item[index];
+		}
+
 	private:
 		char* m_item = nullptr;
 	};
