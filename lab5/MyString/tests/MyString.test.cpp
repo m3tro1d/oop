@@ -238,13 +238,23 @@ TEST_CASE("string slicing")
 
 TEST_CASE("string clearing")
 {
-	CMyString s = "Hello, wonderful World!";
-	s.Clear();
+	SECTION("string becomes empty after clearing")
+	{
+		CMyString s = "Hello, wonderful World!";
+		s.Clear();
 
-	REQUIRE(std::strcmp(s.GetStringData(), "") == 0);
-	REQUIRE(s.GetLength() == 0);
+		REQUIRE(std::strcmp(s.GetStringData(), "") == 0);
+		REQUIRE(s.GetLength() == 0);
+	}
 
-	// TODO: concatenation and check
+	SECTION("clearing and subsequent concatenation produces string with expected length")
+	{
+		CMyString s = "Hello, wonderful World!";
+		s.Clear();
+		s += "Bye, ugly World!";
+
+		REQUIRE(s.GetLength() == 16);
+	}
 }
 
 TEST_CASE("subscript access")
