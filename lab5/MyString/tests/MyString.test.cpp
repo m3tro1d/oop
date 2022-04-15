@@ -521,4 +521,11 @@ TEST_CASE("string iterators")
 			}
 		}
 	}
+
+	SECTION("difference between iterators")
+	{
+		auto begin = s.begin();
+		auto end = s.end();
+		REQUIRE(end - begin == initialLength);
+	}
 }

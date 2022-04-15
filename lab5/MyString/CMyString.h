@@ -77,6 +77,11 @@ public:
 			return !(it1 == it2);
 		}
 
+		friend DifferenceType operator-(MyType const& it1, MyType const& it2)
+		{
+			return it1.m_item - it2.m_item;
+		}
+
 	private:
 		char* m_item = nullptr;
 	};
