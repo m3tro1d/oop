@@ -420,18 +420,67 @@ TEST_CASE("string input-output using streams")
 
 TEST_CASE("string iterators")
 {
+	auto const initialString = "Hell\0o";
+	size_t const initialLength = 6;
+
+	CMyString s(initialString, initialLength);
+	CMyString const sConst(initialString, initialLength);
+
 	std::stringstream output;
 
 	SECTION("straight")
 	{
 		SECTION("mutable")
 		{
-			// TODO
+			SECTION("string is iterated from beginning to end")
+			{
+				for (auto it = s.begin(); it != s.end(); ++it)
+				{
+					output << *it;
+				}
+				REQUIRE(std::memcmp(output.str().c_str(), initialString, initialLength) == 0);
+			}
+
+			SECTION("string can be modified through an iterator")
+			{
+				auto it = s.begin();
+				*it = 'W';
+				for (it = s.begin(); it != s.end(); ++it)
+				{
+					output << *it;
+				}
+				REQUIRE(std::memcmp(output.str().c_str(), "Well\0o", initialLength) == 0);
+			}
+
+			SECTION("range-based loop is supported")
+			{
+				for (auto ch : s)
+				{
+					output << ch;
+				}
+				REQUIRE(std::memcmp(output.str().c_str(), initialString, initialLength) == 0);
+			}
 		}
 
 		SECTION("const")
 		{
-			// TODO
+			SECTION("string is iterated from beginning to end")
+			{
+				for (auto it = sConst.cbegin(); it != sConst.cend(); ++it)
+				{
+					output << *it;
+				}
+				REQUIRE(std::memcmp(output.str().c_str(), initialString, initialLength) == 0);
+			}
+
+			SECTION("range-based loop is supported")
+			{
+				for (auto ch : sConst)
+				{
+					output << ch;
+				}
+				REQUIRE(std::memcmp(output.str().c_str(), initialString, initialLength) == 0);
+			}
 		}
 	}
 
@@ -439,12 +488,23 @@ TEST_CASE("string iterators")
 	{
 		SECTION("mutable")
 		{
-			// TODO
+			SECTION("string is iterated from end to beginning")
+			{
+				// TODO
+			}
+
+			SECTION("string can be modified through an iterator")
+			{
+				// TODO
+			}
 		}
 
 		SECTION("const")
 		{
-			// TODO
+			SECTION("string is iterated from end to beginning")
+			{
+				// TODO
+			}
 		}
 	}
 }

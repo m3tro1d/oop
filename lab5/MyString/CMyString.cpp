@@ -109,6 +109,36 @@ void CMyString::Clear()
 	m_length = 0;
 }
 
+CMyString::iterator CMyString::begin()
+{
+	return m_data;
+}
+
+CMyString::iterator CMyString::end()
+{
+	return m_data + m_length;
+}
+
+CMyString::const_iterator CMyString::begin() const
+{
+	return m_data;
+}
+
+CMyString::const_iterator CMyString::end() const
+{
+	return m_data + m_length;
+}
+
+CMyString::const_iterator CMyString::cbegin() const
+{
+	return m_data;
+}
+
+CMyString::const_iterator CMyString::cend() const
+{
+	return m_data + m_length;
+}
+
 CMyString& CMyString::operator+=(CMyString const& other)
 {
 	size_t resultLength = m_length + other.m_length;
