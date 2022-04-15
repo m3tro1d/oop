@@ -139,6 +139,26 @@ CMyString::const_iterator CMyString::cend() const
 	return m_data + m_length;
 }
 
+CMyString::reverse_iterator CMyString::rbegin()
+{
+	return m_data + m_length - 1;
+}
+
+CMyString::reverse_iterator CMyString::rend()
+{
+	return m_data - 1;
+}
+
+CMyString::const_reverse_iterator CMyString::crbegin() const
+{
+	return m_data + m_length - 1;
+}
+
+CMyString::const_reverse_iterator CMyString::crend() const
+{
+	return m_data - 1;
+}
+
 CMyString& CMyString::operator+=(CMyString const& other)
 {
 	size_t resultLength = m_length + other.m_length;

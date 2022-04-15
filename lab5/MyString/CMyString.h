@@ -8,13 +8,13 @@
 class CMyString
 {
 public:
-	template <bool IsConst>
+	template <bool IsConst, bool IsStraight>
 	class IteratorBase
 	{
-		friend class IteratorBase<true>;
+		friend class IteratorBase<true, IsStraight>;
 
 	public:
-		using MyType = IteratorBase<IsConst>;
+		using MyType = IteratorBase<IsConst, IsStraight>;
 		using ValueType = std::conditional_t<IsConst, char const, char>;
 		using ReferenceType = ValueType&;
 		using DifferenceType = std::ptrdiff_t;
@@ -27,7 +27,7 @@ public:
 		{
 		}
 
-		IteratorBase(IteratorBase<false> const& other)
+		IteratorBase(IteratorBase<false, IsStraight> const& other)
 			: m_item(other.m_item)
 		{
 		}
@@ -39,7 +39,15 @@ public:
 
 		MyType& operator+=(DifferenceType offset)
 		{
-			m_item += offset;
+			if (IsStraight)
+			{
+				m_item += offset;
+			}
+			else
+			{
+				m_item -= offset;
+			}
+
 			return *this;
 		}
 
@@ -73,8 +81,10 @@ public:
 		char* m_item = nullptr;
 	};
 
-	using iterator = IteratorBase<false>;
-	using const_iterator = IteratorBase<true>;
+	using iterator = IteratorBase<false, true>;
+	using const_iterator = IteratorBase<true, true>;
+	using reverse_iterator = IteratorBase<false, false>;
+	using const_reverse_iterator = IteratorBase<true, false>;
 
 	CMyString();
 	CMyString(char const* pString);
@@ -104,8 +114,13 @@ public:
 	const_iterator cbegin() const;
 	const_iterator cend() const;
 
-	CMyString&
-	operator+=(CMyString const& other);
+	reverse_iterator rbegin();
+	reverse_iterator rend();
+
+	const_reverse_iterator crbegin() const;
+	const_reverse_iterator crend() const;
+
+	CMyString& operator+=(CMyString const& other);
 
 	char const& operator[](size_t index) const;
 	char& operator[](size_t index);

@@ -490,12 +490,22 @@ TEST_CASE("string iterators")
 		{
 			SECTION("string is iterated from end to beginning")
 			{
-				// TODO
+				for (auto it = s.rbegin(); it != s.rend(); ++it)
+				{
+					output << *it;
+				}
+				REQUIRE(std::memcmp(output.str().c_str(), "o\0lleH", initialLength) == 0);
 			}
 
 			SECTION("string can be modified through an iterator")
 			{
-				// TODO
+				auto it = s.rbegin();
+				*it = 'W';
+				for (it = s.rbegin(); it != s.rend(); ++it)
+				{
+					output << *it;
+				}
+				REQUIRE(std::memcmp(output.str().c_str(), "W\0lleH", initialLength) == 0);
 			}
 		}
 
@@ -503,7 +513,11 @@ TEST_CASE("string iterators")
 		{
 			SECTION("string is iterated from end to beginning")
 			{
-				// TODO
+				for (auto it = sConst.crbegin(); it != sConst.crend(); ++it)
+				{
+					output << *it;
+				}
+				REQUIRE(std::memcmp(output.str().c_str(), "o\0lleH", initialLength) == 0);
 			}
 		}
 	}
