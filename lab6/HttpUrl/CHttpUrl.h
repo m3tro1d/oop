@@ -1,6 +1,8 @@
 #pragma once
 
+#include "CUrlParsingError.h"
 #include <string>
+#include <unordered_map>
 
 class CHttpUrl
 {
@@ -13,9 +15,16 @@ public:
 	};
 	using Port = unsigned short;
 
-	CHttpUrl(std::string const& url);
-	CHttpUrl(std::string const& domain, std::string const& document, Protocol protocol = Protocol::HTTP);
-	CHttpUrl(std::string const& domain, std::string const& document, Protocol protocol, Port port);
+	explicit CHttpUrl(std::string const& url);
+	CHttpUrl(
+		std::string domain,
+		std::string document,
+		Protocol protocol = Protocol::HTTP);
+	CHttpUrl(
+		std::string domain,
+		std::string document,
+		Protocol protocol,
+		Port port);
 
 	std::string GetURL() const;
 	std::string GetDomain() const;
@@ -24,8 +33,16 @@ public:
 	Port GetPort() const;
 
 private:
-	Protocol protocol;
-	std::string domain;
-	std::string document;
-	Port port;
+	const std::unordered_map<Protocol, Port> DEFAULT_PORTS = {
+		{ Protocol::HTTP, 80 },
+		{ Protocol::HTTPS, 443 },
+		{ Protocol::FTP, 21 },
+	};
+
+	Port GetPortForProtocol(Protocol protocol);
+
+	Protocol m_protocol;
+	std::string m_domain;
+	std::string m_document;
+	Port m_port;
 };
