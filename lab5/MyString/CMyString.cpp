@@ -104,6 +104,8 @@ CMyString CMyString::SubString(size_t start, size_t length) const
 
 void CMyString::Clear()
 {
+	delete[] m_data;
+	m_data = new char[1];
 	m_data[0] = STRING_END;
 	m_length = 0;
 }
