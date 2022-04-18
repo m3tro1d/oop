@@ -532,6 +532,16 @@ TEST_CASE("string iterators")
 		}
 	}
 
+	SECTION("addition with arbitrary numbers")
+	{
+		auto begin = s.begin();
+		auto end = s.end();
+		auto sum = begin + initialLength;
+
+		REQUIRE(std::distance(begin, sum) == initialLength);
+		REQUIRE(sum == end);
+	}
+
 	SECTION("difference between iterators")
 	{
 		auto begin = s.begin();
