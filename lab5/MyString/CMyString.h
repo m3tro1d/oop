@@ -15,10 +15,11 @@ public:
 
 	public:
 		using MyType = IteratorBase<IsConst, IsStraight>;
-		using ValueType = std::conditional_t<IsConst, char const, char>;
-		using ReferenceType = ValueType&;
-		using DifferenceType = std::ptrdiff_t;
-		using IteratorCategory = std::random_access_iterator_tag;
+		using value_type = std::conditional_t<IsConst, char const, char>;
+		using reference = value_type&;
+		using pointer = value_type*;
+		using difference_type = std::ptrdiff_t;
+		using iterator_category = std::random_access_iterator_tag;
 
 		IteratorBase() = default;
 
@@ -32,12 +33,12 @@ public:
 		{
 		}
 
-		ReferenceType operator*() const
+		reference operator*() const
 		{
 			return *m_item;
 		}
 
-		MyType& operator+=(DifferenceType offset)
+		MyType& operator+=(difference_type offset)
 		{
 			if (IsStraight)
 			{
@@ -51,13 +52,13 @@ public:
 			return *this;
 		}
 
-		MyType operator+(DifferenceType offset) const
+		MyType operator+(difference_type offset) const
 		{
 			MyType self(m_item);
 			return self += offset;
 		}
 
-		friend MyType operator+(DifferenceType offset, MyType const& it)
+		friend MyType operator+(difference_type offset, MyType const& it)
 		{
 			return it + offset;
 		}
@@ -77,12 +78,12 @@ public:
 			return !(it1 == it2);
 		}
 
-		friend DifferenceType operator-(MyType const& it1, MyType const& it2)
+		friend difference_type operator-(MyType const& it1, MyType const& it2)
 		{
 			return it1.m_item - it2.m_item;
 		}
 
-		ReferenceType operator[](DifferenceType index)
+		reference operator[](difference_type index)
 		{
 			return m_item[index];
 		}

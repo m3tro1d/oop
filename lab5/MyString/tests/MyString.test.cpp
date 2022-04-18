@@ -547,4 +547,10 @@ TEST_CASE("string iterators")
 		begin[1] = 'o';
 		REQUIRE(std::memcmp(s.GetStringData(), "Holl\0o", initialLength) == 0);
 	}
+
+	SECTION("compatible with STL algorithms")
+	{
+		std::copy(s.begin(), s.end(), std::ostream_iterator<char>(output));
+		REQUIRE(std::memcmp(output.str().c_str(), initialString, initialLength) == 0);
+	}
 }
