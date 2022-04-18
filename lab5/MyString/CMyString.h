@@ -11,8 +11,6 @@ public:
 	template <bool IsConst, bool IsStraight>
 	class IteratorBase
 	{
-		friend class IteratorBase<true, IsStraight>;
-
 	public:
 		using MyType = IteratorBase<IsConst, IsStraight>;
 		using value_type = std::conditional_t<IsConst, char const, char>;
@@ -68,6 +66,36 @@ public:
 			return *this += 1;
 		}
 
+		MyType& operator-=(difference_type offset)
+		{
+			if (IsStraight)
+			{
+				m_item -= offset;
+			}
+			else
+			{
+				m_item += offset;
+			}
+
+			return *this;
+		}
+
+		MyType operator-(difference_type offset) const
+		{
+			MyType self(m_item);
+			return self -= offset;
+		}
+
+		friend MyType operator-(difference_type offset, MyType const& it)
+		{
+			return it - offset;
+		}
+
+		MyType& operator--()
+		{
+			return *this -= 1;
+		}
+
 		friend bool operator==(MyType const& it1, MyType const& it2)
 		{
 			return it1.m_item == it2.m_item;
@@ -85,6 +113,7 @@ public:
 
 		reference operator[](difference_type index)
 		{
+			// TODO: bound checking
 			return m_item[index];
 		}
 
