@@ -113,7 +113,6 @@ public:
 
 		reference operator[](difference_type index)
 		{
-			// TODO: bound checking
 			return m_item[index];
 		}
 
