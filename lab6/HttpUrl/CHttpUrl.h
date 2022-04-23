@@ -39,7 +39,8 @@ private:
 		{ Protocol::HTTPS, 443 },
 	};
 
-	Port GetPortForProtocol(Protocol protocol);
+	Port GetPortForProtocol(Protocol protocol) const;
+	bool HasDefaultPort() const;
 
 	Protocol m_protocol;
 	std::string m_domain;

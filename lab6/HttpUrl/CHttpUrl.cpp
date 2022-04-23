@@ -32,8 +32,13 @@ CHttpUrl::CHttpUrl(
 
 std::string CHttpUrl::GetURL() const
 {
-	// TODO: build URL by a template
-	return {};
+	std::string result = ProtocolToString(GetProtocol());
+	result += "://";
+	result += GetDomain();
+	result += HasDefaultPort() ? "" : ":" + std::to_string(GetPort());
+	result += GetDocument();
+
+	return result;
 }
 
 std::string CHttpUrl::GetDomain() const
@@ -61,15 +66,15 @@ std::string CHttpUrl::ProtocolToString(CHttpUrl::Protocol protocol)
 	switch (protocol)
 	{
 	case Protocol::HTTP:
-		return "HTTP";
+		return "http";
 	case Protocol::HTTPS:
-		return "HTTPS";
+		return "https";
 	default:
 		throw std::runtime_error("no string value for protocol");
 	}
 }
 
-CHttpUrl::Port CHttpUrl::GetPortForProtocol(CHttpUrl::Protocol protocol)
+CHttpUrl::Port CHttpUrl::GetPortForProtocol(CHttpUrl::Protocol protocol) const
 {
 	auto const result = DEFAULT_PORTS.find(protocol);
 	if (result == DEFAULT_PORTS.end())
@@ -78,4 +83,9 @@ CHttpUrl::Port CHttpUrl::GetPortForProtocol(CHttpUrl::Protocol protocol)
 	}
 
 	return result->second;
+}
+
+bool CHttpUrl::HasDefaultPort() const
+{
+	return DEFAULT_PORTS.find(GetProtocol())->second == GetPort();
 }
