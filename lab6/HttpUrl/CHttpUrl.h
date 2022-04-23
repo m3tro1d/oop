@@ -40,8 +40,10 @@ private:
 		{ Protocol::HTTPS, 443 },
 	};
 
-	static Protocol StringToProtocol(std::string const& str);
-	static Port StringToPort(std::string const& str);
+	static Protocol ParseProtocol(std::string const& str);
+	static std::string ParseDomain(std::string const& str);
+	static std::string ParseDocument(std::string const& str);
+	static Port ParsePort(std::string const& str);
 
 	static Port GetDefaultPort(Protocol protocol);
 

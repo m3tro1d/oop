@@ -12,10 +12,10 @@ CHttpUrl::CHttpUrl(std::string const& url)
 		throw CUrlParsingError::InvalidUrlError();
 	}
 
-	m_domain = matches[1];
-	m_document = matches[3];
-	m_protocol = StringToProtocol(matches[0]);
-	m_port = StringToPort(matches[2]);
+	m_domain = ParseDomain(matches[1]);
+	m_document = ParseDocument(matches[3]);
+	m_protocol = ParseProtocol(matches[0]);
+	m_port = ParsePort(matches[2]);
 }
 
 CHttpUrl::CHttpUrl(
@@ -31,16 +31,11 @@ CHttpUrl::CHttpUrl(
 	std::string const& document,
 	CHttpUrl::Protocol protocol,
 	CHttpUrl::Port port)
+	: m_domain(ParseDomain(domain))
+	, m_document(document)
+	, m_protocol(protocol)
+	, m_port(port)
 {
-	if (domain.empty())
-	{
-		throw CUrlParsingError::InvalidUrlError();
-	}
-
-	m_domain = domain;
-	m_document = document;
-	m_protocol = protocol;
-	m_port = port;
 }
 
 std::string CHttpUrl::GetURL() const
@@ -87,7 +82,7 @@ std::string CHttpUrl::ProtocolToString(CHttpUrl::Protocol protocol)
 	}
 }
 
-CHttpUrl::Protocol CHttpUrl::StringToProtocol(std::string const& str)
+CHttpUrl::Protocol CHttpUrl::ParseProtocol(std::string const& str)
 {
 	if (str == "http")
 	{
@@ -101,7 +96,27 @@ CHttpUrl::Protocol CHttpUrl::StringToProtocol(std::string const& str)
 	throw CUrlParsingError::InvalidProtocolError();
 }
 
-CHttpUrl::Port CHttpUrl::StringToPort(std::string const& str)
+std::string CHttpUrl::ParseDomain(const std::string& str)
+{
+	if (str.empty())
+	{
+		throw CUrlParsingError::InvalidUrlError();
+	}
+
+	return str;
+}
+
+std::string CHttpUrl::ParseDocument(const std::string& str)
+{
+	if (str.empty())
+	{
+		return "/";
+	}
+
+	return str;
+}
+
+CHttpUrl::Port CHttpUrl::ParsePort(std::string const& str)
 {
 	int port;
 	try
