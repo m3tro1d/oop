@@ -113,6 +113,11 @@ std::string CHttpUrl::ParseDocument(const std::string& str)
 		return "/";
 	}
 
+	if (str.at(0) != '/')
+	{
+		return "/" + str;
+	}
+
 	return str;
 }
 
