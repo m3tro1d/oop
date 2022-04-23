@@ -108,14 +108,18 @@ CHttpUrl::Port CHttpUrl::StringToPort(std::string const& str)
 	{
 		port = std::stoi(str);
 	}
-	catch (std::exception const&)
+	catch (std::invalid_argument const&)
 	{
 		throw CUrlParsingError::InvalidPortError();
+	}
+	catch (std::out_of_range const&)
+	{
+		throw CUrlParsingError::PortOutOfRangeError();
 	}
 
 	if (port < std::numeric_limits<Port>::min() || port > std::numeric_limits<Port>::max())
 	{
-		throw CUrlParsingError::InvalidPortError();
+		throw CUrlParsingError::PortOutOfRangeError();
 	}
 
 	return static_cast<Port>(port);
