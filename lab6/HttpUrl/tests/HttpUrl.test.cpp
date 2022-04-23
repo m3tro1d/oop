@@ -133,6 +133,11 @@ TEST_CASE("constructing an URL")
 				REQUIRE_THROWS_AS(CHttpUrl("http://github.com:100000000000000000/whatever"), CUrlParsingError);
 				REQUIRE_THROWS_AS(CHttpUrl("http://github.com:-1/whatever"), CUrlParsingError);
 			}
+
+			SECTION("valid withing a string")
+			{
+				REQUIRE_THROWS_AS(CHttpUrl("whatever https://github.com/sneed "), CUrlParsingError);
+			}
 		}
 	}
 }
