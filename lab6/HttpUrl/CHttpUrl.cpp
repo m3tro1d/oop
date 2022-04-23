@@ -65,7 +65,7 @@ std::string CHttpUrl::ProtocolToString(CHttpUrl::Protocol protocol)
 	case Protocol::HTTPS:
 		return "HTTPS";
 	default:
-		return "";
+		throw std::runtime_error("no string value for protocol");
 	}
 }
 
@@ -74,7 +74,7 @@ CHttpUrl::Port CHttpUrl::GetPortForProtocol(CHttpUrl::Protocol protocol)
 	auto const result = DEFAULT_PORTS.find(protocol);
 	if (result == DEFAULT_PORTS.end())
 	{
-		throw CUrlParsingError("no default port for protocol");
+		throw std::runtime_error("no default port for protocol");
 	}
 
 	return result->second;

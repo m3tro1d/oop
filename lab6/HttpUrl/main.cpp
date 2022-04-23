@@ -17,6 +17,10 @@ int main()
 		{
 			std::cerr << e.what() << '\n';
 		}
+		catch (std::runtime_error const& e)
+		{
+			std::cerr << "impl: " << e.what() << '\n';
+		}
 	}
 
 	return EXIT_SUCCESS;
