@@ -1,6 +1,6 @@
 #define CATCH_CONFIG_MAIN
-#include "catch.hpp"
 #include "../CHttpUrl.h"
+#include "catch.hpp"
 
 TEST_CASE("constructing an URL")
 {
@@ -24,7 +24,7 @@ TEST_CASE("constructing an URL")
 	{
 		SECTION("with http protocol")
 		{
-			CHttpUrl url(domain, document, CHttpUrl::Protocol::HTTP);
+			CHttpUrl url(domain, document);
 
 			REQUIRE(url.GetDomain() == domain);
 			REQUIRE(url.GetDocument() == document);
@@ -41,6 +41,11 @@ TEST_CASE("constructing an URL")
 			REQUIRE(url.GetProtocol() == CHttpUrl::Protocol::HTTPS);
 			REQUIRE(url.GetPort() == 443);
 		}
+	}
+
+	SECTION("with empty domain")
+	{
+		REQUIRE_THROWS_AS(CHttpUrl("", document, protocol, port), CUrlParsingError);
 	}
 
 	SECTION("from a string")
@@ -67,6 +72,25 @@ TEST_CASE("constructing an URL")
 
 TEST_CASE("building a string URL")
 {
-	// TODO
-	REQUIRE(true);
+	std::string const sourceUrl = "http://github.com/m3tro1d";
+	std::string const sourceUrl1 = "http://github.com:69/m3tro1d";
+	std::string const domain = "github.com";
+	std::string const document = "/m3tro1d";
+	CHttpUrl::Protocol const protocol = CHttpUrl::Protocol::HTTP;
+	CHttpUrl::Port const port = 80;
+	CHttpUrl::Port const port1 = 69;
+
+	SECTION("with default port")
+	{
+		CHttpUrl url(domain, document, protocol, port);
+
+		REQUIRE(url.GetURL() == sourceUrl);
+	}
+
+	SECTION("with custom port")
+	{
+		CHttpUrl url(domain, document, protocol, port1);
+
+		REQUIRE(url.GetURL() == sourceUrl1);
+	}
 }

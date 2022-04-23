@@ -1,33 +1,33 @@
 #include "CHttpUrl.h"
 
-#include <utility>
-
 CHttpUrl::CHttpUrl(std::string const& url)
 {
 	// TODO: initialize fields with a regex
 }
 
 CHttpUrl::CHttpUrl(
-	std::string domain,
-	std::string document,
+	std::string const& domain,
+	std::string const& document,
 	CHttpUrl::Protocol protocol)
-	: m_domain(std::move(domain))
-	, m_document(std::move(document))
-	, m_protocol(protocol)
-	, m_port(GetPortForProtocol(protocol))
+	: CHttpUrl(domain, document, protocol, GetDefaultPort(protocol))
 {
 }
 
 CHttpUrl::CHttpUrl(
-	std::string domain,
-	std::string document,
+	std::string const& domain,
+	std::string const& document,
 	CHttpUrl::Protocol protocol,
 	CHttpUrl::Port port)
-	: m_domain(std::move(domain))
-	, m_document(std::move(document))
-	, m_protocol(protocol)
-	, m_port(port)
 {
+	if (domain.empty())
+	{
+		throw CUrlParsingError::InvalidUrlError();
+	}
+
+	m_domain = domain;
+	m_document = document;
+	m_protocol = protocol;
+	m_port = port;
 }
 
 std::string CHttpUrl::GetURL() const
@@ -74,7 +74,7 @@ std::string CHttpUrl::ProtocolToString(CHttpUrl::Protocol protocol)
 	}
 }
 
-CHttpUrl::Port CHttpUrl::GetPortForProtocol(CHttpUrl::Protocol protocol) const
+CHttpUrl::Port CHttpUrl::GetDefaultPort(CHttpUrl::Protocol protocol)
 {
 	auto const result = DEFAULT_PORTS.find(protocol);
 	if (result == DEFAULT_PORTS.end())
