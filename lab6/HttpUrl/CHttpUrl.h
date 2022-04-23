@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CUrlParsingError.h"
+#include <regex>
 #include <string>
 #include <unordered_map>
 
@@ -39,7 +40,11 @@ private:
 		{ Protocol::HTTPS, 443 },
 	};
 
+	static Protocol StringToProtocol(std::string const& str);
+	static Port StringToPort(std::string const& str);
+
 	static Port GetDefaultPort(Protocol protocol);
+
 	bool HasDefaultPort() const;
 
 	Protocol m_protocol;

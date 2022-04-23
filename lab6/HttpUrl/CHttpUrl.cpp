@@ -2,7 +2,20 @@
 
 CHttpUrl::CHttpUrl(std::string const& url)
 {
-	// TODO: initialize fields with a regex
+	std::regex urlRegex(
+		R"((https?)://(0-9A-Za-z\-.)(?::(\d+))?(?:/(.*))?)",
+		std::regex::icase);
+
+	std::smatch matches;
+	if (!std::regex_match(url, matches, urlRegex))
+	{
+		throw CUrlParsingError::InvalidUrlError();
+	}
+
+	m_domain = matches[1];
+	m_document = matches[3];
+	m_protocol = StringToProtocol(matches[0]);
+	m_port = StringToPort(matches[2]);
 }
 
 CHttpUrl::CHttpUrl(
@@ -36,7 +49,7 @@ std::string CHttpUrl::GetURL() const
 	result += "://";
 	result += GetDomain();
 	result += HasDefaultPort() ? "" : ":" + std::to_string(GetPort());
-	result += GetDocument();
+	result += "/" + GetDocument();
 
 	return result;
 }
@@ -72,6 +85,40 @@ std::string CHttpUrl::ProtocolToString(CHttpUrl::Protocol protocol)
 	default:
 		throw std::runtime_error("no string value for protocol");
 	}
+}
+
+CHttpUrl::Protocol CHttpUrl::StringToProtocol(std::string const& str)
+{
+	if (str == "http")
+	{
+		return Protocol::HTTP;
+	}
+	else if (str == "https")
+	{
+		return Protocol::HTTPS;
+	}
+
+	throw CUrlParsingError::InvalidProtocolError();
+}
+
+CHttpUrl::Port CHttpUrl::StringToPort(std::string const& str)
+{
+	int port;
+	try
+	{
+		port = std::stoi(str);
+	}
+	catch (std::exception const&)
+	{
+		throw CUrlParsingError::InvalidPortError();
+	}
+
+	if (port < std::numeric_limits<Port>::min() || port > std::numeric_limits<Port>::max())
+	{
+		throw CUrlParsingError::InvalidPortError();
+	}
+
+	return static_cast<Port>(port);
 }
 
 CHttpUrl::Port CHttpUrl::GetDefaultPort(CHttpUrl::Protocol protocol)
