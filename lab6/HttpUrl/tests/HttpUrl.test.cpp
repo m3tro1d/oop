@@ -139,7 +139,37 @@ TEST_CASE("constructing an URL")
 
 TEST_CASE("building a string URL")
 {
-	REQUIRE(true);
+	std::string const sourceUrl = "http://github.com/m3tro1d";
+	std::string const domain = "github.com";
+	std::string const document = "/m3tro1d";
+	CHttpUrl::Protocol const protocol = CHttpUrl::Protocol::HTTP;
+	CHttpUrl::Port const port = 80;
+
+	std::string const sourceUrlWCustomPort = "http://github.com:12/m3tro1d";
+	CHttpUrl::Port const customPort = 12;
+
+	std::string const sourceUrlWODocument = "http://github.com/";
+
+	SECTION("with standard port")
+	{
+		CHttpUrl url(domain, document, protocol, port);
+
+		REQUIRE(url.GetUrl() == sourceUrl);
+	}
+
+	SECTION("with non-standard port")
+	{
+		CHttpUrl url(domain, document, protocol, customPort);
+
+		REQUIRE(url.GetUrl() == sourceUrlWCustomPort);
+	}
+
+	SECTION("with empty document")
+	{
+		CHttpUrl url(domain, "", protocol);
+
+		REQUIRE(url.GetUrl() == sourceUrlWODocument);
+	}
 }
 
 TEST_CASE("converting protocol to string")

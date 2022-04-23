@@ -44,7 +44,7 @@ std::string CHttpUrl::GetUrl() const
 	result += "://";
 	result += GetDomain();
 	result += HasDefaultPort() ? "" : ":" + std::to_string(GetPort());
-	result += "/" + GetDocument();
+	result += GetDocument();
 
 	return result;
 }
