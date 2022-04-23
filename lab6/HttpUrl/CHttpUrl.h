@@ -31,6 +31,8 @@ public:
 	Protocol GetProtocol() const;
 	Port GetPort() const;
 
+	static std::string ProtocolToString(Protocol protocol);
+
 private:
 	const std::unordered_map<Protocol, Port> DEFAULT_PORTS = {
 		{ Protocol::HTTP, 80 },

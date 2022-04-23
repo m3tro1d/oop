@@ -56,6 +56,19 @@ CHttpUrl::Port CHttpUrl::GetPort() const
 	return m_port;
 }
 
+std::string CHttpUrl::ProtocolToString(CHttpUrl::Protocol protocol)
+{
+	switch (protocol)
+	{
+	case Protocol::HTTP:
+		return "HTTP";
+	case Protocol::HTTPS:
+		return "HTTPS";
+	default:
+		return "";
+	}
+}
+
 CHttpUrl::Port CHttpUrl::GetPortForProtocol(CHttpUrl::Protocol protocol)
 {
 	auto const result = DEFAULT_PORTS.find(protocol);
