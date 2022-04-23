@@ -28,7 +28,7 @@ int main()
 
 void PrintUrlInfo(std::ostream& output, CHttpUrl const& url)
 {
-	output << "URL: " << url.GetURL() << '\n'
+	output << "URL: " << url.GetUrl() << '\n'
 		   << "Protocol: " << CHttpUrl::ProtocolToString(url.GetProtocol()) << '\n'
 		   << "Domain: " << url.GetDomain() << '\n'
 		   << "Port: " << url.GetPort() << '\n'

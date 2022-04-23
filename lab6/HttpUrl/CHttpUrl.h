@@ -26,7 +26,7 @@ public:
 		Protocol protocol,
 		Port port);
 
-	std::string GetURL() const;
+	std::string GetUrl() const;
 	std::string GetDomain() const;
 	std::string GetDocument() const;
 	Protocol GetProtocol() const;

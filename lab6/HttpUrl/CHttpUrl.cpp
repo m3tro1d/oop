@@ -38,7 +38,7 @@ CHttpUrl::CHttpUrl(
 {
 }
 
-std::string CHttpUrl::GetURL() const
+std::string CHttpUrl::GetUrl() const
 {
 	std::string result = ProtocolToString(GetProtocol());
 	result += "://";

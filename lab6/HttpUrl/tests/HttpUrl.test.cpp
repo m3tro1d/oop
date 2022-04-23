@@ -84,13 +84,13 @@ TEST_CASE("building a string URL")
 	{
 		CHttpUrl url(domain, document, protocol, port);
 
-		REQUIRE(url.GetURL() == sourceUrl);
+		REQUIRE(url.GetUrl() == sourceUrl);
 	}
 
 	SECTION("with custom port")
 	{
 		CHttpUrl url(domain, document, protocol, port1);
 
-		REQUIRE(url.GetURL() == sourceUrl1);
+		REQUIRE(url.GetUrl() == sourceUrl1);
 	}
 }
