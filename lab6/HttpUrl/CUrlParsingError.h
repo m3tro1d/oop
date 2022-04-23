@@ -2,7 +2,7 @@
 
 #include <stdexcept>
 
-class CUrlParsingError : std::invalid_argument
+class CUrlParsingError : public std::invalid_argument
 {
 public:
 	explicit CUrlParsingError(std::string const& message);
