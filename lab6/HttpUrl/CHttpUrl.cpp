@@ -3,7 +3,7 @@
 CHttpUrl::CHttpUrl(std::string const& url)
 {
 	std::regex urlRegex(
-		R"((https?)://(0-9A-Za-z\-.)(?::(\d+))?(?:/(.*))?)",
+		R"((https?)://([0-9A-Za-z\-.]+)(?::(\d+))?(?:/(.*))?)",
 		std::regex::icase);
 
 	std::smatch matches;
@@ -12,10 +12,10 @@ CHttpUrl::CHttpUrl(std::string const& url)
 		throw CUrlParsingError::InvalidUrlError();
 	}
 
-	m_domain = ParseDomain(matches[1]);
-	m_document = ParseDocument(matches[3]);
-	m_protocol = ParseProtocol(matches[0]);
-	m_port = ParsePort(matches[2]);
+	m_domain = ParseDomain(matches[2]);
+	m_document = ParseDocument(matches[4]);
+	m_protocol = ParseProtocol(matches[1]);
+	m_port = matches[3].str().empty() ? GetDefaultPort(m_protocol) : ParsePort(matches[3]);
 }
 
 CHttpUrl::CHttpUrl(
@@ -32,7 +32,7 @@ CHttpUrl::CHttpUrl(
 	CHttpUrl::Protocol protocol,
 	CHttpUrl::Port port)
 	: m_domain(ParseDomain(domain))
-	, m_document(document)
+	, m_document(ParseDocument(document))
 	, m_protocol(protocol)
 	, m_port(port)
 {

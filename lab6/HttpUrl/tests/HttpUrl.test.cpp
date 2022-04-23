@@ -5,6 +5,8 @@
 TEST_CASE("constructing an URL")
 {
 	std::string const sourceUrl = "http://github.com/m3tro1d";
+	std::string const sourceUrlWPort = "http://github.com:80/m3tro1d";
+	std::string const sourceUrlWODocument = "http://github.com";
 	std::string const domain = "github.com";
 	std::string const document = "/m3tro1d";
 	CHttpUrl::Protocol const protocol = CHttpUrl::Protocol::HTTP;
@@ -12,26 +14,33 @@ TEST_CASE("constructing an URL")
 
 	SECTION("with all fields")
 	{
-		CHttpUrl url(domain, document, protocol, port);
+		SECTION("with not empty document")
+		{
+			CHttpUrl url(domain, document, protocol, port);
 
-		REQUIRE(url.GetDomain() == domain);
-		REQUIRE(url.GetDocument() == document);
-		REQUIRE(url.GetProtocol() == protocol);
-		REQUIRE(url.GetPort() == port);
+			REQUIRE(url.GetDomain() == domain);
+			REQUIRE(url.GetDocument() == document);
+			REQUIRE(url.GetProtocol() == protocol);
+			REQUIRE(url.GetPort() == port);
+		}
+
+		SECTION("with empty document")
+		{
+			CHttpUrl url(domain, "", protocol, port);
+
+			REQUIRE(url.GetDocument() == "/");
+		}
+
+		SECTION("with document without leading slash")
+		{
+			CHttpUrl url(domain, "wut", protocol, port);
+
+			REQUIRE(url.GetDocument() == "/wut");
+		}
 	}
 
 	SECTION("without port")
 	{
-		SECTION("with http protocol")
-		{
-			CHttpUrl url(domain, document);
-
-			REQUIRE(url.GetDomain() == domain);
-			REQUIRE(url.GetDocument() == document);
-			REQUIRE(url.GetProtocol() == CHttpUrl::Protocol::HTTP);
-			REQUIRE(url.GetPort() == 80);
-		}
-
 		SECTION("with https protocol")
 		{
 			CHttpUrl url(domain, document, CHttpUrl::Protocol::HTTPS);
@@ -41,56 +50,100 @@ TEST_CASE("constructing an URL")
 			REQUIRE(url.GetProtocol() == CHttpUrl::Protocol::HTTPS);
 			REQUIRE(url.GetPort() == 443);
 		}
-	}
 
-	SECTION("with empty domain")
-	{
-		REQUIRE_THROWS_AS(CHttpUrl("", document, protocol, port), CUrlParsingError);
+		SECTION("with not empty document")
+		{
+			CHttpUrl url(domain, document, protocol);
+
+			REQUIRE(url.GetDomain() == domain);
+			REQUIRE(url.GetDocument() == document);
+			REQUIRE(url.GetProtocol() == protocol);
+			REQUIRE(url.GetPort() == port);
+		}
+
+		SECTION("with empty document")
+		{
+			CHttpUrl url(domain, "", protocol);
+
+			REQUIRE(url.GetDocument() == "/");
+		}
+
+		SECTION("with document without leading slash")
+		{
+			CHttpUrl url(domain, "wut", protocol);
+
+			REQUIRE(url.GetDocument() == "/wut");
+		}
 	}
 
 	SECTION("from a string")
 	{
 		SECTION("valid URL")
 		{
-			SECTION("without port")
+			SECTION("with explicit port")
 			{
-				// TODO
+				CHttpUrl url(sourceUrlWPort);
+
+				REQUIRE(url.GetDomain() == domain);
+				REQUIRE(url.GetDocument() == document);
+				REQUIRE(url.GetProtocol() == protocol);
+				REQUIRE(url.GetPort() == port);
 			}
 
-			SECTION("with port")
+			SECTION("without port")
 			{
-				// TODO
+				CHttpUrl url(sourceUrl);
+
+				REQUIRE(url.GetDomain() == domain);
+				REQUIRE(url.GetDocument() == document);
+				REQUIRE(url.GetProtocol() == protocol);
+				REQUIRE(url.GetPort() == port);
+			}
+
+			SECTION("without document")
+			{
+				CHttpUrl url(sourceUrlWODocument);
+
+				REQUIRE(url.GetDomain() == domain);
+				REQUIRE(url.GetDocument() == "/");
+				REQUIRE(url.GetProtocol() == protocol);
+				REQUIRE(url.GetPort() == port);
 			}
 		}
 
 		SECTION("invalid URL")
 		{
-			// TODO
+			SECTION("overall")
+			{
+				REQUIRE_THROWS_AS(CHttpUrl("wut"), CUrlParsingError);
+			}
+
+			SECTION("with empty domain")
+			{
+				REQUIRE_THROWS_AS(CHttpUrl("http:///whatever"), CUrlParsingError);
+			}
+
+			SECTION("with invalid port")
+			{
+				REQUIRE_THROWS_AS(CHttpUrl("http://github.com:alksjd/whatever"), CUrlParsingError);
+			}
+
+			SECTION("with out-of-range port")
+			{
+				REQUIRE_THROWS_AS(CHttpUrl("http://github.com:100000000000000000/whatever"), CUrlParsingError);
+				REQUIRE_THROWS_AS(CHttpUrl("http://github.com:-1/whatever"), CUrlParsingError);
+			}
 		}
 	}
 }
 
 TEST_CASE("building a string URL")
 {
-	std::string const sourceUrl = "http://github.com/m3tro1d";
-	std::string const sourceUrl1 = "http://github.com:69/m3tro1d";
-	std::string const domain = "github.com";
-	std::string const document = "/m3tro1d";
-	CHttpUrl::Protocol const protocol = CHttpUrl::Protocol::HTTP;
-	CHttpUrl::Port const port = 80;
-	CHttpUrl::Port const port1 = 69;
+	REQUIRE(true);
+}
 
-	SECTION("with default port")
-	{
-		CHttpUrl url(domain, document, protocol, port);
-
-		REQUIRE(url.GetUrl() == sourceUrl);
-	}
-
-	SECTION("with custom port")
-	{
-		CHttpUrl url(domain, document, protocol, port1);
-
-		REQUIRE(url.GetUrl() == sourceUrl1);
-	}
+TEST_CASE("converting protocol to string")
+{
+	REQUIRE(CHttpUrl::ProtocolToString(CHttpUrl::Protocol::HTTP) == "http");
+	REQUIRE(CHttpUrl::ProtocolToString(CHttpUrl::Protocol::HTTPS) == "https");
 }
