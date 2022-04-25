@@ -8,12 +8,14 @@ TEST_CASE("constructing an URL")
 	std::string const sourceUrlWPort = "http://github.com:80/m3tro1d";
 	std::string const sourceUrlWODocument = "http://github.com";
 	std::string const sourceUrlWMixedCaseProtocol = "hTTp://github.com/m3tro1d";
+	std::string const sourceUrlWMinPort = "hTTp://github.com:1/m3tro1d";
 	std::string const sourceUrlWMaxPort = "hTTp://github.com:65535/m3tro1d";
 
 	std::string const domain = "github.com";
 	std::string const document = "/m3tro1d";
 	CHttpUrl::Protocol const protocol = CHttpUrl::Protocol::HTTP;
 	CHttpUrl::Port const port = 80;
+	CHttpUrl::Port const minPort = 1;
 	CHttpUrl::Port const maxPort = 65535;
 
 	SECTION("with all fields")
@@ -121,11 +123,13 @@ TEST_CASE("constructing an URL")
 				REQUIRE(url.GetProtocol() == protocol);
 			}
 
-			SECTION("max port is parsed correctly")
+			SECTION("borderline port is parsed correctly")
 			{
-				CHttpUrl url = sourceUrlWMaxPort;
+				CHttpUrl urlMin = sourceUrlWMinPort;
+				REQUIRE(urlMin.GetPort() == minPort);
 
-				REQUIRE(url.GetPort() == maxPort);
+				CHttpUrl urlMax = sourceUrlWMaxPort;
+				REQUIRE(urlMax.GetPort() == maxPort);
 			}
 		}
 
@@ -148,8 +152,10 @@ TEST_CASE("constructing an URL")
 
 			SECTION("with out-of-range port")
 			{
-				REQUIRE_THROWS_AS(CHttpUrl("http://github.com:100000000000000000/whatever"), CUrlParsingError);
 				REQUIRE_THROWS_AS(CHttpUrl("http://github.com:-1/whatever"), CUrlParsingError);
+				REQUIRE_THROWS_AS(CHttpUrl("http://github.com:0/whatever"), CUrlParsingError);
+				REQUIRE_THROWS_AS(CHttpUrl("http://github.com:100000000000000000/whatever"), CUrlParsingError);
+				REQUIRE_THROWS_AS(CHttpUrl("http://github.com:65536/whatever"), CUrlParsingError);
 			}
 
 			SECTION("valid withing a string")
