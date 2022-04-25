@@ -75,7 +75,7 @@ bool CStringStack::IsEmpty() const
 	return m_size == 0;
 }
 
-size_t CStringStack::Size() const
+size_t CStringStack::GetSize() const
 {
 	return m_size;
 }

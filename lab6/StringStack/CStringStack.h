@@ -20,7 +20,7 @@ public:
 	void Pop();
 
 	bool IsEmpty() const;
-	size_t Size() const;
+	size_t GetSize() const;
 
 private:
 	static constexpr size_t REALLOCATION_FACTOR = 2;
