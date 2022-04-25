@@ -5,6 +5,8 @@
 class CStringStack
 {
 public:
+	using size_type = std::size_t;
+
 	CStringStack() = default;
 	CStringStack(CStringStack const& other);
 	CStringStack(CStringStack&& other) noexcept;
@@ -20,15 +22,15 @@ public:
 	void Pop();
 
 	bool IsEmpty() const;
-	size_t GetCapacity() const;
-	size_t GetSize() const;
+	size_type GetCapacity() const;
+	size_type GetSize() const;
 
 private:
-	static constexpr size_t REALLOCATION_FACTOR = 2;
+	static constexpr size_type REALLOCATION_FACTOR = 2;
 
-	void Reallocate(size_t newSize);
+	void Reallocate(size_type newSize);
 
 	std::string* m_data = nullptr;
-	size_t m_capacity = 1;
-	size_t m_size = 0;
+	size_type m_capacity = 1;
+	size_type m_size = 0;
 };

@@ -75,17 +75,17 @@ bool CStringStack::IsEmpty() const
 	return m_size == 0;
 }
 
-size_t CStringStack::GetCapacity() const
+CStringStack::size_type CStringStack::GetCapacity() const
 {
 	return m_capacity;
 }
 
-size_t CStringStack::GetSize() const
+CStringStack::size_type CStringStack::GetSize() const
 {
 	return m_size;
 }
 
-void CStringStack::Reallocate(size_t newSize)
+void CStringStack::Reallocate(size_type newSize)
 {
 	// TODO
 }
