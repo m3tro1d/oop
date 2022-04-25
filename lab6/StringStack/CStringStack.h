@@ -31,6 +31,6 @@ private:
 	void Reallocate(size_type newSize);
 
 	std::string* m_data = nullptr;
-	size_type m_capacity = 1;
+	size_type m_capacity = 0;
 	size_type m_size = 0;
 };
