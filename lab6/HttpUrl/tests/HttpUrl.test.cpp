@@ -7,10 +7,14 @@ TEST_CASE("constructing an URL")
 	std::string const sourceUrl = "http://github.com/m3tro1d";
 	std::string const sourceUrlWPort = "http://github.com:80/m3tro1d";
 	std::string const sourceUrlWODocument = "http://github.com";
+	std::string const sourceUrlWMixedCaseProtocol = "hTTp://github.com/m3tro1d";
+	std::string const sourceUrlWMaxPort = "hTTp://github.com:65535/m3tro1d";
+
 	std::string const domain = "github.com";
 	std::string const document = "/m3tro1d";
 	CHttpUrl::Protocol const protocol = CHttpUrl::Protocol::HTTP;
 	CHttpUrl::Port const port = 80;
+	CHttpUrl::Port const maxPort = 65535;
 
 	SECTION("with all fields")
 	{
@@ -82,7 +86,7 @@ TEST_CASE("constructing an URL")
 		{
 			SECTION("with explicit port")
 			{
-				CHttpUrl url(sourceUrlWPort);
+				CHttpUrl url = sourceUrlWPort;
 
 				REQUIRE(url.GetDomain() == domain);
 				REQUIRE(url.GetDocument() == document);
@@ -92,7 +96,7 @@ TEST_CASE("constructing an URL")
 
 			SECTION("without port")
 			{
-				CHttpUrl url(sourceUrl);
+				CHttpUrl url = sourceUrl;
 
 				REQUIRE(url.GetDomain() == domain);
 				REQUIRE(url.GetDocument() == document);
@@ -102,12 +106,26 @@ TEST_CASE("constructing an URL")
 
 			SECTION("without document")
 			{
-				CHttpUrl url(sourceUrlWODocument);
+				CHttpUrl url = sourceUrlWODocument;
 
 				REQUIRE(url.GetDomain() == domain);
 				REQUIRE(url.GetDocument() == "/");
 				REQUIRE(url.GetProtocol() == protocol);
 				REQUIRE(url.GetPort() == port);
+			}
+
+			SECTION("protocol parsing is case-insensitive")
+			{
+				CHttpUrl url = sourceUrlWMixedCaseProtocol;
+
+				REQUIRE(url.GetProtocol() == protocol);
+			}
+
+			SECTION("max port is parsed correctly")
+			{
+				CHttpUrl url = sourceUrlWMaxPort;
+
+				REQUIRE(url.GetPort() == maxPort);
 			}
 		}
 

@@ -82,13 +82,27 @@ std::string CHttpUrl::ProtocolToString(CHttpUrl::Protocol protocol)
 	}
 }
 
+std::string ToLower(std::string const& str)
+{
+	std::string result;
+	std::transform(
+		str.begin(),
+		str.end(),
+		std::back_inserter(result),
+		[](char ch) {
+			return std::tolower(ch);
+		});
+	return result;
+}
+
 CHttpUrl::Protocol CHttpUrl::ParseProtocol(std::string const& str)
 {
-	if (str == "http")
+	auto const lowerStr = ToLower(str);
+	if (lowerStr == "http")
 	{
 		return Protocol::HTTP;
 	}
-	else if (str == "https")
+	else if (lowerStr == "https")
 	{
 		return Protocol::HTTPS;
 	}
@@ -123,10 +137,10 @@ std::string CHttpUrl::ParseDocument(const std::string& str)
 
 CHttpUrl::Port CHttpUrl::ParsePort(std::string const& str)
 {
-	int port;
+	unsigned long port;
 	try
 	{
-		port = std::stoi(str);
+		port = std::stoul(str);
 	}
 	catch (std::invalid_argument const&)
 	{
@@ -137,7 +151,7 @@ CHttpUrl::Port CHttpUrl::ParsePort(std::string const& str)
 		throw CUrlParsingError::PortOutOfRangeError();
 	}
 
-	if (port < std::numeric_limits<Port>::min() || port > std::numeric_limits<Port>::max())
+	if (port < MIN_PORT || port > MAX_PORT)
 	{
 		throw CUrlParsingError::PortOutOfRangeError();
 	}

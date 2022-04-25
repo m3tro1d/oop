@@ -15,7 +15,7 @@ public:
 	};
 	using Port = unsigned short;
 
-	explicit CHttpUrl(std::string const& url);
+	CHttpUrl(std::string const& url);
 	CHttpUrl(
 		std::string const& domain,
 		std::string const& document,
@@ -35,6 +35,9 @@ public:
 	static std::string ProtocolToString(Protocol protocol);
 
 private:
+	static constexpr Port MIN_PORT = 1;
+	static constexpr Port MAX_PORT = std::numeric_limits<Port>::max();
+
 	static inline const std::unordered_map<Protocol, Port> DEFAULT_PORTS = {
 		{ Protocol::HTTP, 80 },
 		{ Protocol::HTTPS, 443 },
