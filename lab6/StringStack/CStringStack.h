@@ -5,7 +5,7 @@
 class CStringStack
 {
 public:
-	CStringStack();
+	CStringStack() = default;
 	CStringStack(CStringStack const& other);
 	CStringStack(CStringStack&& other) noexcept;
 
@@ -21,4 +21,13 @@ public:
 
 	bool IsEmpty() const;
 	size_t Size() const;
+
+private:
+	static constexpr size_t REALLOCATION_FACTOR = 2;
+
+	void Reallocate(size_t newSize);
+
+	std::string* m_data = nullptr;
+	size_t m_capacity = 1;
+	size_t m_size = 0;
 };
