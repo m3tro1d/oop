@@ -20,6 +20,7 @@ public:
 	void Pop();
 
 	bool IsEmpty() const;
+	size_t GetCapacity() const;
 	size_t GetSize() const;
 
 private:
