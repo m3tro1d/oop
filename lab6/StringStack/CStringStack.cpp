@@ -1,17 +1,15 @@
 #include "CStringStack.h"
 
-CStringStack::CStringStack(const CStringStack& other)
+CStringStack::CStringStack(CStringStack const& other)
 {
-	// TODO
+	// TODO: copy stack
 }
 
 CStringStack::CStringStack(CStringStack&& other) noexcept
-	: m_data(other.m_data)
-	, m_capacity(other.m_capacity)
+	: m_top(other.m_top)
 	, m_size(other.m_size)
 {
-	other.m_data = nullptr;
-	other.m_capacity = 0;
+	other.m_top = nullptr;
 	other.m_size = 0;
 }
 
@@ -20,8 +18,7 @@ CStringStack& CStringStack::operator=(CStringStack const& other)
 	if (std::addressof(other) != this)
 	{
 		CStringStack copy(other);
-		std::swap(m_data, copy.m_data);
-		std::swap(m_capacity, copy.m_capacity);
+		std::swap(m_top, copy.m_top);
 		std::swap(m_size, copy.m_size);
 	}
 	return *this;
@@ -31,14 +28,10 @@ CStringStack& CStringStack::operator=(CStringStack&& other) noexcept
 {
 	if (std::addressof(other) != this)
 	{
-		delete[] m_data;
-
-		m_data = other.m_data;
-		m_capacity = other.m_capacity;
+		m_top = other.m_top;
 		m_size = other.m_size;
 
-		other.m_data = nullptr;
-		other.m_capacity = 0;
+		other.m_top = nullptr;
 		other.m_size = 0;
 	}
 	return *this;
@@ -46,28 +39,46 @@ CStringStack& CStringStack::operator=(CStringStack&& other) noexcept
 
 CStringStack::~CStringStack() noexcept
 {
-	delete[] m_data;
+	while (!IsEmpty())
+	{
+		Pop();
+	}
 }
 
 void CStringStack::Push(const std::string& str)
 {
-	// TODO
+	auto newTop = std::make_shared<Node>(str, m_top);
+	m_top = newTop;
+	++m_size;
 }
 
 void CStringStack::Push(std::string&& str)
 {
-	// TODO
+	auto newTop = std::make_shared<Node>(std::move(str), m_top);
+	m_top = newTop;
+	++m_size;
 }
 
 std::string CStringStack::Top() const
 {
-	// TODO
-	return {};
+	if (IsEmpty())
+	{
+		throw CStringStackUnderflowError();
+	}
+
+	return m_top->Value;
 }
 
 void CStringStack::Pop()
 {
-	// TODO
+	if (IsEmpty())
+	{
+		throw CStringStackUnderflowError();
+	}
+
+	auto newTop = m_top->Next;
+	m_top = newTop;
+	--m_size;
 }
 
 bool CStringStack::IsEmpty() const
@@ -75,17 +86,7 @@ bool CStringStack::IsEmpty() const
 	return m_size == 0;
 }
 
-CStringStack::size_type CStringStack::GetCapacity() const
-{
-	return m_capacity;
-}
-
 CStringStack::size_type CStringStack::GetSize() const
 {
 	return m_size;
-}
-
-void CStringStack::Reallocate(size_type newSize)
-{
-	// TODO
 }

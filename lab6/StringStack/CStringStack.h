@@ -1,5 +1,7 @@
 #pragma once
 
+#include "CStringStackUnderflowError.h"
+#include <memory>
 #include <string>
 
 class CStringStack
@@ -22,15 +24,21 @@ public:
 	void Pop();
 
 	bool IsEmpty() const;
-	size_type GetCapacity() const;
 	size_type GetSize() const;
 
 private:
-	static constexpr size_type REALLOCATION_FACTOR = 2;
+	struct Node
+	{
+		Node(std::string const& value, std::shared_ptr<Node> const& next)
+			: Value(value)
+			, Next(next)
+		{
+		}
 
-	void Reallocate(size_type newSize);
+		std::string Value;
+		std::shared_ptr<Node> Next;
+	};
 
-	std::string* m_data = nullptr;
-	size_type m_capacity = 0;
+	std::shared_ptr<Node> m_top = nullptr;
 	size_type m_size = 0;
 };
