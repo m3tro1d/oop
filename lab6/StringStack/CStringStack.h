@@ -27,6 +27,10 @@ public:
 	size_type GetSize() const;
 
 private:
+	struct Node;
+
+	using NodePtr = std::shared_ptr<Node>;
+
 	struct Node
 	{
 		Node(std::string const& value, std::shared_ptr<Node> const& next)
@@ -41,9 +45,9 @@ private:
 		}
 
 		std::string Value;
-		std::shared_ptr<Node> Next = nullptr;
+		NodePtr Next = nullptr;
 	};
 
-	std::shared_ptr<Node> m_top = nullptr;
+	NodePtr m_top = nullptr;
 	size_type m_size = 0;
 };
