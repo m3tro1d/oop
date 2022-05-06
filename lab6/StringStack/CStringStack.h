@@ -35,8 +35,13 @@ private:
 		{
 		}
 
+		explicit Node(std::string const& value)
+			: Value(value)
+		{
+		}
+
 		std::string Value;
-		std::shared_ptr<Node> Next;
+		std::shared_ptr<Node> Next = nullptr;
 	};
 
 	std::shared_ptr<Node> m_top = nullptr;
