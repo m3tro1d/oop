@@ -32,9 +32,29 @@ SCENARIO("creating a stack")
 			// TODO
 		}
 
-		SECTION("moving")
+		WHEN("moving to another stack")
 		{
-			// TODO
+			CStringStack stack = std::move(original);
+
+			THEN("it is empty")
+			{
+				REQUIRE(stack.IsEmpty());
+			}
+
+			THEN("size equals 0")
+			{
+				REQUIRE(stack.GetSize() == 0);
+			}
+
+			THEN("original is still empty")
+			{
+				REQUIRE(original.IsEmpty());
+			}
+
+			THEN("original size equals 0")
+			{
+				REQUIRE(original.GetSize() == 0);
+			}
 		}
 	}
 
@@ -51,7 +71,32 @@ SCENARIO("creating a stack")
 
 		SECTION("moving")
 		{
-			// TODO
+			CStringStack stack = std::move(original);
+
+			THEN("it is not empty")
+			{
+				REQUIRE_FALSE(stack.IsEmpty());
+			}
+
+			THEN("size equals 1")
+			{
+				REQUIRE(stack.GetSize() == 1);
+			}
+
+			THEN("top element matches the original one")
+			{
+				REQUIRE(stack.Top() == element);
+			}
+
+			THEN("original becomes empty")
+			{
+				REQUIRE(original.IsEmpty());
+			}
+
+			THEN("original size equals 0")
+			{
+				REQUIRE(original.GetSize() == 0);
+			}
 		}
 	}
 
@@ -72,7 +117,36 @@ SCENARIO("creating a stack")
 
 		SECTION("moving")
 		{
-			// TODO
+			CStringStack stack = std::move(original);
+
+			THEN("it is not empty")
+			{
+				REQUIRE_FALSE(stack.IsEmpty());
+			}
+
+			THEN("size equals 1")
+			{
+				REQUIRE(stack.GetSize() == 3);
+			}
+
+			THEN("elements match the original ones")
+			{
+				REQUIRE(stack.Top() == element3);
+				stack.Pop();
+				REQUIRE(stack.Top() == element2);
+				stack.Pop();
+				REQUIRE(stack.Top() == element1);
+			}
+
+			THEN("original becomes empty")
+			{
+				REQUIRE(original.IsEmpty());
+			}
+
+			THEN("original size equals 0")
+			{
+				REQUIRE(original.GetSize() == 0);
+			}
 		}
 	}
 }
