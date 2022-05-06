@@ -2,7 +2,20 @@
 
 CStringStack::CStringStack(CStringStack const& other)
 {
-	// TODO: copy stack
+	auto current = other.m_top;
+
+	auto copy = std::make_shared<Node>(current->Value, nullptr);
+	auto head = copy;
+
+	current = current->Next;
+	while (current)
+	{
+		copy = copy->Next = std::make_shared<Node>(current->Value, nullptr);
+		current = current->Next;
+	}
+
+	m_top = head;
+	m_size = other.m_size;
 }
 
 CStringStack::CStringStack(CStringStack&& other) noexcept
