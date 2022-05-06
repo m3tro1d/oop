@@ -27,7 +27,7 @@ SCENARIO("creating a stack")
 	{
 		CStringStack original;
 
-		SECTION("copying")
+		WHEN("copying")
 		{
 			// TODO
 		}
@@ -64,12 +64,12 @@ SCENARIO("creating a stack")
 		std::string const element = "hello";
 		original.Push(element);
 
-		SECTION("copying")
+		WHEN("copying")
 		{
 			// TODO
 		}
 
-		SECTION("moving")
+		WHEN("moving")
 		{
 			CStringStack stack = std::move(original);
 
@@ -110,12 +110,12 @@ SCENARIO("creating a stack")
 		original.Push(element2);
 		original.Push(element3);
 
-		SECTION("copying")
+		WHEN("copying")
 		{
 			// TODO
 		}
 
-		SECTION("moving")
+		WHEN("moving")
 		{
 			CStringStack stack = std::move(original);
 
@@ -146,6 +146,152 @@ SCENARIO("creating a stack")
 			THEN("original size equals 0")
 			{
 				REQUIRE(original.GetSize() == 0);
+			}
+		}
+	}
+}
+
+SCENARIO("assigning a stack")
+{
+	GIVEN("source stack with several elements")
+	{
+		CStringStack source;
+		std::string const sourceElement1 = "I, rule the midnight air the destroyer";
+		std::string const sourceElement2 = "Born, I shall soon be there, deadly mass";
+		source.Push(sourceElement1);
+		source.Push(sourceElement2);
+
+		GIVEN("empty stack")
+		{
+			CStringStack stack;
+
+			WHEN("copying")
+			{
+				// TODO
+			}
+
+			WHEN("moving")
+			{
+				stack = std::move(source);
+
+				THEN("it is not empty")
+				{
+					REQUIRE_FALSE(stack.IsEmpty());
+				}
+
+				THEN("size equals 2")
+				{
+					REQUIRE(stack.GetSize() == 2);
+				}
+
+				THEN("source elements match")
+				{
+					REQUIRE(stack.Top() == sourceElement2);
+					stack.Pop();
+					REQUIRE(stack.Top() == sourceElement1);
+				}
+
+				THEN("source stack becomes empty")
+				{
+					REQUIRE(source.IsEmpty());
+				}
+
+				THEN("source size equals 0")
+				{
+					REQUIRE(source.GetSize() == 0);
+				}
+			}
+		}
+
+		GIVEN("stack with one element")
+		{
+			CStringStack stack;
+			std::string const element = "hello";
+			stack.Push(element);
+
+			WHEN("copying")
+			{
+				// TODO
+			}
+
+			WHEN("moving")
+			{
+				stack = std::move(source);
+
+				THEN("it is not empty")
+				{
+					REQUIRE_FALSE(stack.IsEmpty());
+				}
+
+				THEN("size equals 2")
+				{
+					REQUIRE(stack.GetSize() == 2);
+				}
+
+				THEN("source elements match")
+				{
+					REQUIRE(stack.Top() == sourceElement2);
+					stack.Pop();
+					REQUIRE(stack.Top() == sourceElement1);
+				}
+
+				THEN("source stack becomes empty")
+				{
+					REQUIRE(source.IsEmpty());
+				}
+
+				THEN("source size equals 0")
+				{
+					REQUIRE(source.GetSize() == 0);
+				}
+			}
+		}
+
+		GIVEN("stack with several elements")
+		{
+			CStringStack stack;
+			std::string const element1 = "Abracadabra boom shacka dae";
+			std::string const element2 = "I'm Violent J and I'm back like a vertebrae";
+			std::string const element3 = "And I come with a hat full of tricks";
+			stack.Push(element1);
+			stack.Push(element2);
+			stack.Push(element3);
+
+			WHEN("copying")
+			{
+				// TODO
+			}
+
+			WHEN("moving")
+			{
+				stack = std::move(source);
+
+				THEN("it is not empty")
+				{
+					REQUIRE_FALSE(stack.IsEmpty());
+				}
+
+				THEN("size equals 2")
+				{
+					REQUIRE(stack.GetSize() == 2);
+				}
+
+				THEN("source elements match")
+				{
+					REQUIRE(stack.Top() == sourceElement2);
+					stack.Pop();
+					REQUIRE(stack.Top() == sourceElement1);
+				}
+
+				THEN("source stack becomes empty")
+				{
+					REQUIRE(source.IsEmpty());
+				}
+
+				THEN("source size equals 0")
+				{
+					REQUIRE(source.GetSize() == 0);
+				}
 			}
 		}
 	}
