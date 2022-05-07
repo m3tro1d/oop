@@ -2,9 +2,22 @@
 
 CStringStack::CStringStack(CStringStack const& other)
 {
-	if (other.m_top)
+	if (other.m_top != nullptr)
 	{
-		// TODO: copy list
+		auto tmp = other.m_top;
+
+		m_top = std::make_shared<Node>(tmp->Value);
+		auto current = m_top;
+
+		tmp = tmp->Next;
+		while (tmp)
+		{
+			current->Next = std::make_shared<Node>(tmp->Value);
+			current = current->Next;
+			tmp = tmp->Next;
+		}
+
+		m_size = other.m_size;
 	}
 }
 

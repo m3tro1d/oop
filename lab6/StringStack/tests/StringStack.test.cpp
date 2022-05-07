@@ -29,7 +29,37 @@ SCENARIO("creating a stack")
 
 		WHEN("copying")
 		{
-			// TODO
+			CStringStack stack = original;
+
+			THEN("it is empty")
+			{
+				REQUIRE(stack.IsEmpty());
+			}
+
+			THEN("size equals 0")
+			{
+				REQUIRE(stack.GetSize() == 0);
+			}
+
+			THEN("original is still empty")
+			{
+				REQUIRE(original.IsEmpty());
+			}
+
+			THEN("original size equals 0")
+			{
+				REQUIRE(original.GetSize() == 0);
+			}
+
+			WHEN("modifying the original doesn't affect the copy")
+			{
+				original.Push("SPANISH INQUISITION");
+
+				THEN("it doesn't affect the copy")
+				{
+					REQUIRE(stack.IsEmpty());
+				}
+			}
 		}
 
 		WHEN("moving to another stack")
@@ -61,12 +91,48 @@ SCENARIO("creating a stack")
 	GIVEN("another stack with one element")
 	{
 		CStringStack original;
-		std::string const element = "hello";
+		std::string const element = "The first little piggy, his house is made of wood\n"
+									"He lives in a chicken-turkey-piggy neighborhood";
 		original.Push(element);
 
 		WHEN("copying")
 		{
-			// TODO
+			CStringStack stack = original;
+
+			THEN("it is not empty")
+			{
+				REQUIRE_FALSE(stack.IsEmpty());
+			}
+
+			THEN("size equals 1")
+			{
+				REQUIRE(stack.GetSize() == 1);
+			}
+
+			THEN("original is still not empty")
+			{
+				REQUIRE_FALSE(original.IsEmpty());
+			}
+
+			THEN("original size equals 1")
+			{
+				REQUIRE(original.GetSize() == 1);
+			}
+
+			THEN("the element matches")
+			{
+				REQUIRE(stack.Top() == element);
+			}
+
+			WHEN("modifying the original")
+			{
+				original.Pop();
+
+				THEN("it doesn't affect the copy")
+				{
+					REQUIRE(stack.Top() == element);
+				}
+			}
 		}
 
 		WHEN("moving")
@@ -103,16 +169,55 @@ SCENARIO("creating a stack")
 	GIVEN("another stack with several elements")
 	{
 		CStringStack original;
-		std::string const element1 = "hello";
-		std::string const element2 = "world";
-		std::string const element3 = "and bye";
+		std::string const element1 = "He likes to fuck his sister and drink his moonshine";
+		std::string const element2 = "A typical redneck filthy fuckin' swine";
+		std::string const element3 = "I rode into town with my axe in my holster";
 		original.Push(element1);
 		original.Push(element2);
 		original.Push(element3);
 
 		WHEN("copying")
 		{
-			// TODO
+			CStringStack stack = original;
+
+			THEN("it is not empty")
+			{
+				REQUIRE_FALSE(stack.IsEmpty());
+			}
+
+			THEN("size equals 3")
+			{
+				REQUIRE(stack.GetSize() == 3);
+			}
+
+			THEN("original is still not empty")
+			{
+				REQUIRE_FALSE(original.IsEmpty());
+			}
+
+			THEN("original size equals 3")
+			{
+				REQUIRE(original.GetSize() == 3);
+			}
+
+			THEN("the elements match")
+			{
+				REQUIRE(stack.Top() == element3);
+				stack.Pop();
+				REQUIRE(stack.Top() == element2);
+				stack.Pop();
+				REQUIRE(stack.Top() == element1);
+			}
+
+			WHEN("modifying the original")
+			{
+				original.Pop();
+
+				THEN("it doesn't affect the copy")
+				{
+					REQUIRE(stack.Top() == element3);
+				}
+			}
 		}
 
 		WHEN("moving")
@@ -167,7 +272,44 @@ SCENARIO("assigning a stack")
 
 			WHEN("copying")
 			{
-				// TODO
+				stack = source;
+
+				THEN("it is not empty")
+				{
+					REQUIRE_FALSE(stack.IsEmpty());
+				}
+
+				THEN("size equals 2")
+				{
+					REQUIRE(stack.GetSize() == 2);
+				}
+
+				THEN("source is still not empty")
+				{
+					REQUIRE_FALSE(source.IsEmpty());
+				}
+
+				THEN("source size equals 2")
+				{
+					REQUIRE(source.GetSize() == 2);
+				}
+
+				THEN("the elements match")
+				{
+					REQUIRE(stack.Top() == sourceElement2);
+					stack.Pop();
+					REQUIRE(stack.Top() == sourceElement1);
+				}
+
+				WHEN("modifying the source")
+				{
+					source.Pop();
+
+					THEN("it doesn't affect the copy")
+					{
+						REQUIRE(stack.Top() == sourceElement2);
+					}
+				}
 			}
 
 			WHEN("moving")
@@ -206,12 +348,49 @@ SCENARIO("assigning a stack")
 		GIVEN("stack with one element")
 		{
 			CStringStack stack;
-			std::string const element = "hello";
+			std::string const element = "Three little piggies to make a piggy pie";
 			stack.Push(element);
 
 			WHEN("copying")
 			{
-				// TODO
+				stack = source;
+
+				THEN("it is not empty")
+				{
+					REQUIRE_FALSE(stack.IsEmpty());
+				}
+
+				THEN("size equals 2")
+				{
+					REQUIRE(stack.GetSize() == 2);
+				}
+
+				THEN("source is still not empty")
+				{
+					REQUIRE_FALSE(source.IsEmpty());
+				}
+
+				THEN("source size equals 2")
+				{
+					REQUIRE(source.GetSize() == 2);
+				}
+
+				THEN("the elements match")
+				{
+					REQUIRE(stack.Top() == sourceElement2);
+					stack.Pop();
+					REQUIRE(stack.Top() == sourceElement1);
+				}
+
+				WHEN("modifying the source")
+				{
+					source.Pop();
+
+					THEN("it doesn't affect the copy")
+					{
+						REQUIRE(stack.Top() == sourceElement2);
+					}
+				}
 			}
 
 			WHEN("moving")
@@ -259,7 +438,44 @@ SCENARIO("assigning a stack")
 
 			WHEN("copying")
 			{
-				// TODO
+				stack = source;
+
+				THEN("it is not empty")
+				{
+					REQUIRE_FALSE(stack.IsEmpty());
+				}
+
+				THEN("size equals 2")
+				{
+					REQUIRE(stack.GetSize() == 2);
+				}
+
+				THEN("source is still not empty")
+				{
+					REQUIRE_FALSE(source.IsEmpty());
+				}
+
+				THEN("source size equals 2")
+				{
+					REQUIRE(source.GetSize() == 2);
+				}
+
+				THEN("the elements match")
+				{
+					REQUIRE(stack.Top() == sourceElement2);
+					stack.Pop();
+					REQUIRE(stack.Top() == sourceElement1);
+				}
+
+				WHEN("modifying the source")
+				{
+					source.Pop();
+
+					THEN("it doesn't affect the copy")
+					{
+						REQUIRE(stack.Top() == sourceElement2);
+					}
+				}
 			}
 
 			WHEN("moving")
@@ -294,6 +510,36 @@ SCENARIO("assigning a stack")
 				}
 			}
 		}
+
+		WHEN("copy-assigning stack to itself")
+		{
+			source = source;
+
+			THEN("it doesn't change")
+			{
+				REQUIRE_FALSE(source.IsEmpty());
+				REQUIRE(source.GetSize() == 2);
+
+				REQUIRE(source.Top() == sourceElement2);
+				source.Pop();
+				REQUIRE(source.Top() == sourceElement1);
+			}
+		}
+
+		WHEN("move-assigning stack to itself")
+		{
+			source = source;
+
+			THEN("it doesn't change")
+			{
+				REQUIRE_FALSE(source.IsEmpty());
+				REQUIRE(source.GetSize() == 2);
+
+				REQUIRE(source.Top() == sourceElement2);
+				source.Pop();
+				REQUIRE(source.Top() == sourceElement1);
+			}
+		}
 	}
 }
 
@@ -315,7 +561,7 @@ SCENARIO("getting top element from the stack")
 	GIVEN("stack with one element")
 	{
 		CStringStack stack;
-		std::string const element = "a tout le monde";
+		std::string const element = "The carnival's in town, come and get your piggy snacks";
 		stack.Push(element);
 
 		WHEN("getting the top element")
@@ -330,9 +576,9 @@ SCENARIO("getting top element from the stack")
 	GIVEN("stack with several elements")
 	{
 		CStringStack stack;
-		std::string const lastElement = "that's what she said";
-		stack.Push("Somebody once told me the world is gonna roll me");
-		stack.Push("I ain't the sharpest tool in the shed");
+		std::string const lastElement = "The second little piggy, his house is made of brick";
+		stack.Push("And this little piggy is a motherfuckin' dick");
+		stack.Push("He sits on his bench and gets all the respect");
 		stack.Push(lastElement);
 
 		WHEN("getting the top element")
@@ -373,8 +619,8 @@ SCENARIO("adding elements to the stack")
 
 			WHEN("pushing more elements")
 			{
-				std::string const element1 = "the";
-				std::string const element2 = "spiral";
+				std::string const element1 = "I can smoke this room before his hearing aid will pick it up";
+				std::string const element2 = "Old-ass man, I let him get away";
 				stack.Push(element1);
 				stack.Push(element2);
 
@@ -444,9 +690,9 @@ SCENARIO("removing elements from the stack")
 	GIVEN("stack with several elements")
 	{
 		CStringStack stack;
-		std::string const aboveLastElement = "You're so fucking ugly and your face is fucking foul, jeez";
 		stack.Push("You're a fucking penis-hole, grab a dick and eat it whole");
 		stack.Push("I need to know if you were dropped when you were just a fetus though");
+		std::string const aboveLastElement = "You're so fucking ugly and your face is fucking foul, jeez";
 		stack.Push(aboveLastElement);
 		stack.Push("You're so fucking loud, can you shut your fucking mouth, can you");
 
