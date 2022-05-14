@@ -89,7 +89,7 @@ std::vector<Sportsman> ParseSportsmen(std::istream& input)
 			>> sportsman.height
 			>> sportsman.weight;
 
-		if (lineStream.bad())
+		if (lineStream.fail())
 		{
 			throw std::runtime_error("invalid sportsmen file format");
 		}
