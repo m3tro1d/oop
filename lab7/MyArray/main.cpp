@@ -4,20 +4,20 @@
 
 int main()
 {
-	CMyArray<int> intArray;
-	intArray.Push(1);
-	intArray.Push(2);
-	intArray.Push(3);
-	for (auto const& element : intArray)
+	CMyArray<std::string> arrayOfStrings;
+	arrayOfStrings.Push("Bitterness and burden");
+	arrayOfStrings.Push("Curses rest on thee");
+	arrayOfStrings.Push("Solitaire and sorrow");
+	for (auto const& element : arrayOfStrings)
 	{
 		std::cout << element << '\n';
 	}
 
-	CMyArray<std::string> stringArray;
-	stringArray.Push("Bitterness and burden");
-	stringArray.Push("Curses rest on thee");
-	stringArray.Push("Solitaire and sorrow");
-	for (auto const& element : stringArray)
+	CMyArray<double> arrayOfDoubles;
+	arrayOfDoubles.Push(1337.42);
+	arrayOfDoubles.Push(12);
+	arrayOfDoubles.Push(135.99);
+	for (auto const& element : arrayOfDoubles)
 	{
 		std::cout << element << '\n';
 	}
