@@ -1,3 +1,4 @@
+#include "CMyArray.hpp"
 #include <iostream>
 
 int main()
