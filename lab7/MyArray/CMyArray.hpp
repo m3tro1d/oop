@@ -52,6 +52,13 @@ public:
 			return *this += 1;
 		}
 
+		MyType operator++(int)
+		{
+			auto self = *this;
+			++(*this);
+			return self;
+		}
+
 		MyType& operator-=(difference_type offset)
 		{
 			m_item -= offset;
@@ -72,6 +79,13 @@ public:
 		MyType& operator--()
 		{
 			return *this -= 1;
+		}
+
+		MyType operator--(int)
+		{
+			auto self = *this;
+			--(*this);
+			return self;
 		}
 
 		friend bool operator==(MyType const& it1, MyType const& it2)
