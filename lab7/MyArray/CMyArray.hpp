@@ -258,22 +258,22 @@ public:
 
 	reverse_iterator rbegin()
 	{
-		return m_data + m_size - 1;
+		return reverse_iterator(end());
 	}
 
 	reverse_iterator rend()
 	{
-		return m_data - 1;
+		return reverse_iterator(begin());
 	}
 
 	const_reverse_iterator crbegin() const
 	{
-		return m_data + m_size - 1;
+		return const_reverse_iterator(end());
 	}
 
 	const_reverse_iterator crend() const
 	{
-		return m_data - 1;
+		return const_reverse_iterator(begin());
 	}
 
 private:
