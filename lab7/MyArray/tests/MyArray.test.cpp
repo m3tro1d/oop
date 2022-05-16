@@ -702,5 +702,54 @@ SCENARIO("clearing the array")
 
 SCENARIO("working with iterators")
 {
-	// TODO
+	GIVEN("an array with several elements")
+	{
+		CMyArray<std::string> array;
+		std::string const element1 = "What the hell's going on?!";
+		std::string const element2 = "Can someone tell me please?";
+		std::string const element3 = "Why I'm switching faster than the channels on TV?";
+		std::string const compilation = "What the hell's going on?!\n"
+										"Can someone tell me please?\n"
+										"Why I'm switching faster than the channels on TV?\n";
+		array.Push(element1);
+		array.Push(element2);
+		array.Push(element3);
+
+		// TODO
+
+		WHEN("using std::copy")
+		{
+			std::stringstream output;
+			std::copy(
+				array.begin(),
+				array.end(),
+				std::ostream_iterator<std::string>(output, "\n"));
+
+			THEN("it is compatible")
+			{
+				REQUIRE(output.str() == compilation);
+			}
+		}
+
+		AND_GIVEN("constant copy of the array")
+		{
+			CMyArray const arrayConst = array;
+
+			// TODO
+
+			WHEN("using std::copy")
+			{
+				std::stringstream output;
+				std::copy(
+					arrayConst.begin(),
+					arrayConst.end(),
+					std::ostream_iterator<std::string>(output, "\n"));
+
+				THEN("it is compatible")
+				{
+					REQUIRE(output.str() == compilation);
+				}
+			}
+		}
+	}
 }
