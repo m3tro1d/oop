@@ -525,7 +525,143 @@ SCENARIO("accessing elements by index")
 
 SCENARIO("resizing the array")
 {
-	// TODO
+	GIVEN("an empty array")
+	{
+		CMyArray<std::string> array;
+
+		AND_GIVEN("new size which is the same")
+		{
+			size_t const newSize = array.GetSize();
+
+			WHEN("resizing the array")
+			{
+				array.Resize(newSize);
+
+				THEN("it stays empty")
+				{
+					REQUIRE(array.GetSize() == 0);
+				}
+			}
+		}
+
+		AND_GIVEN("new size which is greater")
+		{
+			size_t const newSize = array.GetSize() + 2;
+
+			WHEN("resizing the array")
+			{
+				array.Resize(newSize);
+
+				THEN("size matches")
+				{
+					REQUIRE(array.GetSize() == newSize);
+				}
+
+				THEN("elements have default values")
+				{
+					REQUIRE(array[0].empty());
+					REQUIRE(array[1].empty());
+				}
+			}
+		}
+	}
+
+	GIVEN("array with several elements")
+	{
+		CMyArray<std::string> array;
+		std::string const element1 = "Control, your delusion";
+		std::string const element2 = "Insane and striking at random";
+		std::string const element3 = "Victim of your certainty";
+		array.Push(element1);
+		array.Push(element2);
+		array.Push(element3);
+
+		AND_GIVEN("new zero size")
+		{
+			size_t const newSize = 0;
+
+			WHEN("resizing the array")
+			{
+				array.Resize(newSize);
+
+				THEN("it becomes empty")
+				{
+					REQUIRE(array.GetSize() == newSize);
+				}
+			}
+		}
+
+		AND_GIVEN("new size which is the same")
+		{
+			size_t const newSize = array.GetSize();
+
+			WHEN("resizing the array")
+			{
+				array.Resize(newSize);
+
+				THEN("size doesn't change")
+				{
+					REQUIRE(array.GetSize() == newSize);
+				}
+
+				THEN("elements stay the same")
+				{
+					REQUIRE(array[0] == element1);
+					REQUIRE(array[1] == element2);
+					REQUIRE(array[2] == element3);
+				}
+			}
+		}
+
+		AND_GIVEN("new size which is less")
+		{
+			size_t const newSize = array.GetSize() - 1;
+
+			WHEN("resizing the array")
+			{
+				array.Resize(newSize);
+
+				THEN("size becomes less")
+				{
+					REQUIRE(array.GetSize() == newSize);
+				}
+
+				THEN("elements are truncated")
+				{
+					REQUIRE(array[0] == element1);
+					REQUIRE(array[1] == element2);
+					REQUIRE_THROWS_AS(array[2], std::out_of_range);
+				}
+			}
+		}
+
+		AND_GIVEN("new size which is greater")
+		{
+			size_t const newSize = array.GetSize() + 1;
+
+			WHEN("resizing the array")
+			{
+				array.Resize(newSize);
+
+				THEN("size becomes greater")
+				{
+					REQUIRE(array.GetSize() == newSize);
+				}
+
+				THEN("initial elements stay the same")
+				{
+					REQUIRE(array[0] == element1);
+					REQUIRE(array[1] == element2);
+					REQUIRE(array[2] == element3);
+				}
+
+				THEN("new element has the default value")
+				{
+					REQUIRE(array[3].empty());
+				}
+			}
+		}
+	}
 }
 
 SCENARIO("clearing the array")
