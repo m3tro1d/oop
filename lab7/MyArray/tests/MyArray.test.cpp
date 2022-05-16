@@ -391,7 +391,136 @@ SCENARIO("getting size of the array")
 
 SCENARIO("accessing elements by index")
 {
-	// TODO
+	GIVEN("an empty array")
+	{
+		CMyArray<int> array;
+
+		WHEN("accessing any element")
+		{
+			THEN("it throws an exception")
+			{
+				REQUIRE_THROWS_AS(array[-1], std::out_of_range);
+				REQUIRE_THROWS_AS(array[0], std::out_of_range);
+				REQUIRE_THROWS_AS(array[1], std::out_of_range);
+			}
+		}
+
+		WHEN("assigning to any element")
+		{
+			THEN("it throws an exception")
+			{
+				REQUIRE_THROWS_AS(array[-1] = 1, std::out_of_range);
+				REQUIRE_THROWS_AS(array[0] = 1, std::out_of_range);
+				REQUIRE_THROWS_AS(array[1] = 1, std::out_of_range);
+			}
+		}
+	}
+
+	GIVEN("pre-allocated array")
+	{
+		CMyArray<std::string> array(1);
+
+		WHEN("accessing the first element")
+		{
+			auto element = array[0];
+
+			THEN("it has default value")
+			{
+				REQUIRE(element.empty());
+			}
+		}
+
+		WHEN("accessing other elements")
+		{
+			THEN("it throws an exception")
+			{
+				REQUIRE_THROWS_AS(array[-1], std::out_of_range);
+				REQUIRE_THROWS_AS(array[1], std::out_of_range);
+			}
+		}
+
+		WHEN("assigning to the first element")
+		{
+			std::string value = "Blame it all on the bastards when you're blowing out";
+			array[0] = value;
+
+			THEN("it changes")
+			{
+				REQUIRE(array[0] == value);
+			}
+		}
+
+		WHEN("assigning to the elements out of range")
+		{
+			THEN("it throws an exception")
+			{
+				REQUIRE_THROWS_AS(array[-1] = "", std::out_of_range);
+				REQUIRE_THROWS_AS(array[1] = "", std::out_of_range);
+			}
+		}
+	}
+
+	GIVEN("array with several elements")
+	{
+		CMyArray<std::string> array;
+		std::string sourceElement1 = "Heat lighting flash, but don't blink";
+		std::string sourceElement2 = "Misleading";
+		std::string sourceElement3 = "Tranquility ruse";
+		array.Push(sourceElement1);
+		array.Push(sourceElement2);
+		array.Push(sourceElement3);
+
+		WHEN("accessing the elements within range")
+		{
+			auto element1 = array[0];
+			auto element2 = array[1];
+			auto element3 = array[2];
+
+			THEN("elements match")
+			{
+				REQUIRE(element1 == sourceElement1);
+				REQUIRE(element2 == sourceElement2);
+				REQUIRE(element3 == sourceElement3);
+			}
+		}
+
+		WHEN("accessing the elements out of range")
+		{
+			THEN("it throws an exception")
+			{
+				REQUIRE_THROWS_AS(array[-1], std::out_of_range);
+				REQUIRE_THROWS_AS(array[3], std::out_of_range);
+			}
+		}
+
+		WHEN("assigning to the arbitrary elements")
+		{
+			std::string const value1 = "A tempest must be";
+			std::string const value2 = "True to its nature";
+			array[0] = value1;
+			array[2] = value2;
+
+			THEN("they change")
+			{
+				REQUIRE(array[0] == value1);
+				REQUIRE(array[2] == value2);
+			}
+
+			THEN("unassigned element remains the same")
+			{
+				REQUIRE(array[1] == sourceElement2);
+			}
+		}
+
+		WHEN("assigning to the elements out of range")
+		{
+			THEN("it throws an exception")
+			{
+				REQUIRE_THROWS_AS(array[-1] = "", std::out_of_range);
+				REQUIRE_THROWS_AS(array[3] = "", std::out_of_range);
+			}
+		}
+	}
 }
 
 SCENARIO("resizing the array")
