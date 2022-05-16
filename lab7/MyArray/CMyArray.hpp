@@ -151,13 +151,13 @@ public:
 	void Push(T const& element)
 	{
 		Resize(m_size + 1);
-		m_data[m_size++] = element;
+		m_data[m_size - 1] = element;
 	}
 
 	void Push(T&& element)
 	{
 		Resize(m_size + 1);
-		m_data[m_size++] = std::move(element);
+		m_data[m_size - 1] = std::move(element);
 	}
 
 	void Resize(size_type newSize)
@@ -174,7 +174,9 @@ public:
 		}
 
 		delete[] m_data;
+
 		m_data = newData;
+		m_size = newSize;
 	}
 
 	void Clear()
