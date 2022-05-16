@@ -705,21 +705,77 @@ SCENARIO("working with iterators")
 	GIVEN("an array with several elements")
 	{
 		CMyArray<std::string> array;
+
 		std::string const element1 = "What the hell's going on?!";
 		std::string const element2 = "Can someone tell me please?";
 		std::string const element3 = "Why I'm switching faster than the channels on TV?";
-		std::string const compilation = "What the hell's going on?!\n"
-										"Can someone tell me please?\n"
-										"Why I'm switching faster than the channels on TV?\n";
+
 		array.Push(element1);
 		array.Push(element2);
 		array.Push(element3);
 
-		// TODO
+		std::string const compilation = "What the hell's going on?!\n"
+										"Can someone tell me please?\n"
+										"Why I'm switching faster than the channels on TV?\n";
+		std::string const compilationReversed = "Why I'm switching faster than the channels on TV?\n"
+												"Can someone tell me please?\n"
+												"What the hell's going on?!\n";
+
+		std::stringstream output;
+
+		WHEN("iterating from beginning to end")
+		{
+			for (auto it = array.begin(); it != array.end(); ++it)
+			{
+				output << *it << '\n';
+			}
+
+			THEN("the result matches")
+			{
+				REQUIRE(output.str() == compilation);
+			}
+		}
+
+		WHEN("modifying the element through the iterator")
+		{
+			auto it = array.begin();
+			std::string const newElement = "vanilla smile and gorgeous strawberry kiss";
+			*it = newElement;
+
+			THEN("the element changes")
+			{
+				REQUIRE(array[0] == newElement);
+			}
+		}
+
+		WHEN("using range-based for loop")
+		{
+			for (auto const& element : array)
+			{
+				output << element << '\n';
+			}
+
+			THEN("the result matches")
+			{
+				REQUIRE(output.str() == compilation);
+			}
+		}
+
+		WHEN("iterating from beginning to end in reverse")
+		{
+			for (auto it = array.rbegin(); it != array.rend(); ++it)
+			{
+				output << *it << '\n';
+			}
+
+			THEN("the result matches")
+			{
+				REQUIRE(output.str() == compilationReversed);
+			}
+		}
 
 		WHEN("using std::copy")
 		{
-			std::stringstream output;
 			std::copy(
 				array.begin(),
 				array.end(),
@@ -735,11 +791,47 @@ SCENARIO("working with iterators")
 		{
 			CMyArray const arrayConst = array;
 
-			// TODO
+			WHEN("iterating from beginning to end")
+			{
+				for (auto it = arrayConst.cbegin(); it != arrayConst.cend(); ++it)
+				{
+					output << *it << '\n';
+				}
+
+				THEN("the result matches")
+				{
+					REQUIRE(output.str() == compilation);
+				}
+			}
+
+			WHEN("using range-based for loop")
+			{
+				for (auto const& element : arrayConst)
+				{
+					output << element << '\n';
+				}
+
+				THEN("the result matches")
+				{
+					REQUIRE(output.str() == compilation);
+				}
+			}
+
+			WHEN("iterating from beginning to end in reverse")
+			{
+				for (auto it = array.crbegin(); it != array.crend(); ++it)
+				{
+					output << *it << '\n';
+				}
+
+				THEN("the result matches")
+				{
+					REQUIRE(output.str() == compilationReversed);
+				}
+			}
 
 			WHEN("using std::copy")
 			{
-				std::stringstream output;
 				std::copy(
 					arrayConst.begin(),
 					arrayConst.end(),
