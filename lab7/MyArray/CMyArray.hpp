@@ -9,14 +9,14 @@ class CMyArray
 {
 public:
 	template <bool IsConst>
-	class IteratorBase
+	class IteratorBase : public std::iterator<std::bidirectional_iterator_tag, std::conditional_t<IsConst, T const, T>>
 	{
 	public:
 		using MyType = IteratorBase<IsConst>;
 		using value_type = std::conditional_t<IsConst, T const, T>;
 		using reference = value_type&;
 		using difference_type = std::ptrdiff_t;
-		using iterator_category = std::random_access_iterator_tag;
+		using iterator_category = std::bidirectional_iterator_tag;
 
 		IteratorBase() = default;
 
