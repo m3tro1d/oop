@@ -528,7 +528,7 @@ SCENARIO("assigning a stack")
 
 		WHEN("move-assigning stack to itself")
 		{
-			source = source;
+			source = std::move(source);
 
 			THEN("it doesn't change")
 			{
