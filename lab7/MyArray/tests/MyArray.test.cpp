@@ -139,28 +139,303 @@ SCENARIO("creating an array")
 
 SCENARIO("assigning to the array")
 {
+	GIVEN("source array with several elements")
+	{
+		CMyArray<std::string> source;
+		std::string const sourceElement1 = "The city's cold blood calls me home";
+		std::string const sourceElement2 = "Home, it's what I long for";
+		source.Push(sourceElement1);
+		source.Push(sourceElement2);
+		size_t const sourceSize = source.GetSize();
+
+		AND_GIVEN("empty array")
+		{
+			CMyArray<std::string> array;
+
+			WHEN("copying")
+			{
+				array = source;
+
+				THEN("size equals 2")
+				{
+					REQUIRE(array.GetSize() == sourceSize);
+				}
+
+				THEN("source size is unchanged")
+				{
+					REQUIRE(source.GetSize() == sourceSize);
+				}
+
+				THEN("elements match")
+				{
+					REQUIRE(array[0] == sourceElement1);
+					REQUIRE(array[1] == sourceElement2);
+				}
+
+				WHEN("modifying the source")
+				{
+					source.Push("A little stitious");
+
+					THEN("it doesn't affect the copy")
+					{
+						REQUIRE(array.GetSize() == sourceSize);
+					}
+				}
+			}
+
+			WHEN("moving")
+			{
+				array = std::move(source);
+
+				THEN("size equals 2")
+				{
+					REQUIRE(array.GetSize() == sourceSize);
+				}
+
+				THEN("source becomes empty")
+				{
+					REQUIRE(source.GetSize() == 0);
+				}
+
+				THEN("elements match")
+				{
+					REQUIRE(array[0] == sourceElement1);
+					REQUIRE(array[1] == sourceElement2);
+				}
+			}
+		}
+
+		AND_GIVEN("array with several elements")
+		{
+			CMyArray<std::string> array;
+			std::string const element1 = "Warrior\n"
+										 "Strugglin'\n"
+										 "To remain\n"
+										 "Relevant";
+			std::string const element2 = "Warrior\n"
+										 "Strugglin'\n"
+										 "To remain\n"
+										 "Consequential";
+
+			WHEN("copying")
+			{
+				array = source;
+
+				THEN("size equals 2")
+				{
+					REQUIRE(array.GetSize() == sourceSize);
+				}
+
+				THEN("source size is unchanged")
+				{
+					REQUIRE(source.GetSize() == sourceSize);
+				}
+
+				THEN("elements match")
+				{
+					REQUIRE(array[0] == sourceElement1);
+					REQUIRE(array[1] == sourceElement2);
+				}
+
+				WHEN("modifying the source")
+				{
+					source.Push("A little stitious");
+
+					THEN("it doesn't affect the copy")
+					{
+						REQUIRE(array.GetSize() == sourceSize);
+					}
+				}
+			}
+
+			WHEN("moving")
+			{
+				array = std::move(source);
+
+				THEN("size equals 2")
+				{
+					REQUIRE(array.GetSize() == sourceSize);
+				}
+
+				THEN("source becomes empty")
+				{
+					REQUIRE(source.GetSize() == 0);
+				}
+
+				THEN("elements match")
+				{
+					REQUIRE(array[0] == sourceElement1);
+					REQUIRE(array[1] == sourceElement2);
+				}
+			}
+		}
+
+		WHEN("copy-assigning array to itself")
+		{
+			source = source;
+
+			THEN("it doesn't change")
+			{
+				REQUIRE(source.GetSize() == sourceSize);
+
+				REQUIRE(source[0] == sourceElement1);
+				REQUIRE(source[1] == sourceElement2);
+			}
+		}
+
+		WHEN("move-assigning array to itself")
+		{
+			source = std::move(source);
+
+			THEN("it doesn't change")
+			{
+				REQUIRE(source.GetSize() == sourceSize);
+
+				REQUIRE(source[0] == sourceElement1);
+				REQUIRE(source[1] == sourceElement2);
+			}
+		}
+	}
 }
 
 SCENARIO("adding elements in the end")
 {
+	GIVEN("empty array")
+	{
+		CMyArray<double> array;
+
+		AND_GIVEN("an element")
+		{
+			double const element1 = 12.43;
+
+			WHEN("adding the element")
+			{
+				array.Push(element1);
+
+				THEN("size equals 1")
+				{
+					REQUIRE(array.GetSize() == 1);
+				}
+
+				THEN("element matches")
+				{
+					REQUIRE(array[0] == element1);
+				}
+
+				AND_GIVEN("another element")
+				{
+					double const element2 = 56.33;
+
+					WHEN("adding another element")
+					{
+						array.Push(element2);
+
+						THEN("size equals 2")
+						{
+							REQUIRE(array.GetSize() == 2);
+						}
+
+						THEN("the last element matches")
+						{
+							REQUIRE(array[1] == element2);
+						}
+
+						THEN("first element is left intact")
+						{
+							REQUIRE(array[0] == element1);
+						}
+					}
+				}
+			}
+		}
+	}
 }
 
 SCENARIO("getting size of the array")
 {
+	GIVEN("an empty array")
+	{
+		CMyArray<long> array;
+
+		THEN("size equals 0")
+		{
+			REQUIRE(array.GetSize() == 0);
+		}
+	}
+
+	GIVEN("array with one element")
+	{
+		CMyArray<float> array;
+		array.Push(12.5);
+
+		THEN("size equals 1")
+		{
+			REQUIRE(array.GetSize() == 1);
+		}
+	}
+
+	GIVEN("array with several elements")
+	{
+		CMyArray<std::vector<int>> array;
+		array.Push({ 1, 1 });
+		array.Push({ 1, 1, 2 });
+		array.Push({ 1, 1, 2, 3 });
+		array.Push({ 1, 1, 2, 3, 5 });
+
+		THEN("size equals 4")
+		{
+			REQUIRE(array.GetSize() == 4);
+		}
+	}
 }
 
 SCENARIO("accessing elements by index")
 {
+	// TODO
 }
 
 SCENARIO("resizing the array")
 {
+	// TODO
 }
 
 SCENARIO("clearing the array")
 {
+	GIVEN("an empty array")
+	{
+		CMyArray<int> array;
+
+		WHEN("clearing the array")
+		{
+			array.Clear();
+
+			THEN("it remains empty")
+			{
+				REQUIRE(array.GetSize() == 0);
+			}
+		}
+	}
+
+	GIVEN("array with several elements")
+	{
+		CMyArray<std::string> array;
+		array.Push("Tears in my eyes, chasing Ponce de Leon's phantom soul");
+		array.Push("Filled with hope, I can taste mythical fountains");
+		array.Push("False hope, perhaps");
+
+		WHEN("clearing the array")
+		{
+			array.Clear();
+
+			THEN("it becomes empty")
+			{
+				REQUIRE(array.GetSize() == 0);
+			}
+		}
+	}
 }
 
 SCENARIO("working with iterators")
 {
+	// TODO
 }
