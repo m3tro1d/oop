@@ -8,19 +8,20 @@ int main()
 	arrayOfStrings.Push("Bitterness and burden");
 	arrayOfStrings.Push("Curses rest on thee");
 	arrayOfStrings.Push("Solitaire and sorrow");
-	for (auto const& element : arrayOfStrings)
-	{
-		std::cout << element << '\n';
-	}
+	std::copy(
+		arrayOfStrings.begin(),
+		arrayOfStrings.end(),
+		std::ostream_iterator<std::string>(std::cout, "\n"));
+	std::cout << '\n';
 
 	CMyArray<double> arrayOfDoubles;
 	arrayOfDoubles.Push(1337.42);
 	arrayOfDoubles.Push(12);
 	arrayOfDoubles.Push(135.99);
-	for (auto const& element : arrayOfDoubles)
-	{
-		std::cout << element << '\n';
-	}
+	std::copy(
+		arrayOfDoubles.begin(),
+		arrayOfDoubles.end(),
+		std::ostream_iterator<double>(std::cout, "\n"));
 
 	return EXIT_SUCCESS;
 }
