@@ -774,6 +774,19 @@ SCENARIO("working with iterators")
 			}
 		}
 
+		WHEN("iterating backwards")
+		{
+			for (auto it = array.end() - 1; it != array.begin() - 1; --it)
+			{
+				output << *it << '\n';
+			}
+
+			THEN("the result matches")
+			{
+				REQUIRE(output.str() == compilationReversed);
+			}
+		}
+
 		WHEN("using std::copy")
 		{
 			std::copy(
@@ -819,7 +832,20 @@ SCENARIO("working with iterators")
 
 			WHEN("iterating from beginning to end in reverse")
 			{
-				for (auto it = array.crbegin(); it != array.crend(); ++it)
+				for (auto it = arrayConst.crbegin(); it != arrayConst.crend(); ++it)
+				{
+					output << *it << '\n';
+				}
+
+				THEN("the result matches")
+				{
+					REQUIRE(output.str() == compilationReversed);
+				}
+			}
+
+			WHEN("iterating backwards")
+			{
+				for (auto it = arrayConst.cend() - 1; it != arrayConst.cbegin() - 1; --it)
 				{
 					output << *it << '\n';
 				}
