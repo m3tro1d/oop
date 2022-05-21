@@ -9,6 +9,12 @@ add_executable(Vehicle
                People/IPerson.h
                People/IPoliceMan.h
                People/IRacer.h
+               People/CPerson.h
+               People/CPerson.cpp
+               People/CPoliceMan.h
+               People/CPoliceMan.cpp
+               People/CRacer.h
+               People/CRacer.cpp
                main.cpp)
 
 add_subdirectory(tests)
