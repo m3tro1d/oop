@@ -1,5 +1,8 @@
 #pragma once
 
-class IPoliceCar
+#include "../../People/IPoliceMan.h"
+#include "./ICar.h"
+
+class IPoliceCar : public ICar<IPoliceMan>
 {
 };

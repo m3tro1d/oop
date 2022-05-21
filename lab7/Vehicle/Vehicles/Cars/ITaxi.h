@@ -1,5 +1,8 @@
 #pragma once
 
-class ITaxi
+#include "../../People/IPerson.h"
+#include "./ICar.h"
+
+class ITaxi : public ICar<IPerson>
 {
 };
