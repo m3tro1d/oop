@@ -2,6 +2,8 @@ add_executable(Vehicle
                Vehicles/IBasicVehicle.h
                Vehicles/IVehicle.h
                Vehicles/IBus.h
+               Vehicles/CBus.h
+               Vehicles/CBus.cpp
                Vehicles/Cars/ICar.h
                Vehicles/Cars/IPoliceCar.h
                Vehicles/Cars/IRacingCar.h
