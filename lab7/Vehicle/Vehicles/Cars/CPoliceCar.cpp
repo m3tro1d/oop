@@ -1,5 +1,11 @@
 #include "CPoliceCar.h"
 
+CPoliceCar::CPoliceCar(std::size_t placeCount, MakeOfTheCar makeOfTheCar)
+	: m_placeCount(placeCount)
+	, m_makeOfTheCar(makeOfTheCar)
+{
+}
+
 bool CPoliceCar::IsEmpty() const
 {
 	return m_passengers.empty();
@@ -7,12 +13,12 @@ bool CPoliceCar::IsEmpty() const
 
 bool CPoliceCar::IsFull() const
 {
-	return m_passengers.size() == PLACE_COUNT;
+	return m_passengers.size() == m_placeCount;
 }
 
 std::size_t CPoliceCar::GetPlaceCount() const
 {
-	return PLACE_COUNT;
+	return m_placeCount;
 }
 
 std::size_t CPoliceCar::GetPassengerCount() const
@@ -23,11 +29,6 @@ std::size_t CPoliceCar::GetPassengerCount() const
 void CPoliceCar::RemoveAllPassengers()
 {
 	m_passengers.clear();
-}
-
-CPoliceCar::CPoliceCar(MakeOfTheCar makeOfTheCar)
-	: m_makeOfTheCar(makeOfTheCar)
-{
 }
 
 void CPoliceCar::AddPassenger(std::shared_ptr<IPoliceMan> passenger)

@@ -6,6 +6,8 @@
 class CTaxi : public ITaxi
 {
 public:
+	CTaxi(std::size_t placeCount, MakeOfTheCar makeOfTheCar);
+
 	bool IsEmpty() const final;
 	bool IsFull() const final;
 
@@ -13,8 +15,6 @@ public:
 	std::size_t GetPassengerCount() const final;
 
 	void RemoveAllPassengers() final;
-
-	explicit CTaxi(MakeOfTheCar makeOfTheCar);
 
 	void AddPassenger(std::shared_ptr<IPerson> passenger) final;
 
@@ -25,8 +25,7 @@ public:
 	MakeOfTheCar GetMakeOfTheCar() const final;
 
 private:
-	static const std::size_t PLACE_COUNT = 4;
-
+	std::size_t m_placeCount;
 	MakeOfTheCar m_makeOfTheCar;
 	std::vector<std::shared_ptr<IPerson>> m_passengers;
 };

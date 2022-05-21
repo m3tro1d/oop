@@ -1,5 +1,11 @@
 #include "CTaxi.h"
 
+CTaxi::CTaxi(std::size_t placeCount, MakeOfTheCar makeOfTheCar)
+	: m_placeCount(placeCount)
+	, m_makeOfTheCar(makeOfTheCar)
+{
+}
+
 bool CTaxi::IsEmpty() const
 {
 	return m_passengers.empty();
@@ -7,12 +13,12 @@ bool CTaxi::IsEmpty() const
 
 bool CTaxi::IsFull() const
 {
-	return m_passengers.size() == PLACE_COUNT;
+	return m_passengers.size() == m_placeCount;
 }
 
 std::size_t CTaxi::GetPlaceCount() const
 {
-	return PLACE_COUNT;
+	return m_placeCount;
 }
 
 std::size_t CTaxi::GetPassengerCount() const
@@ -23,11 +29,6 @@ std::size_t CTaxi::GetPassengerCount() const
 void CTaxi::RemoveAllPassengers()
 {
 	m_passengers.clear();
-}
-
-CTaxi::CTaxi(MakeOfTheCar makeOfTheCar)
-	: m_makeOfTheCar(makeOfTheCar)
-{
 }
 
 void CTaxi::AddPassenger(std::shared_ptr<IPerson> passenger)

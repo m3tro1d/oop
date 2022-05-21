@@ -6,6 +6,8 @@
 class CBus : public IBus
 {
 public:
+	explicit CBus(std::size_t placeCount);
+
 	bool IsEmpty() const final;
 	bool IsFull() const final;
 
@@ -21,7 +23,6 @@ public:
 	IPerson const& GetPassenger(std::size_t index) const final;
 
 private:
-	static const std::size_t PLACE_COUNT = 20;
-
+	std::size_t m_placeCount;
 	std::vector<std::shared_ptr<IPerson>> m_passengers;
 };

@@ -1,5 +1,11 @@
 #include "CRacingCar.h"
 
+CRacingCar::CRacingCar(std::size_t placeCount, MakeOfTheCar makeOfTheCar)
+	: m_placeCount(placeCount)
+	, m_makeOfTheCar(makeOfTheCar)
+{
+}
+
 bool CRacingCar::IsEmpty() const
 {
 	return m_passengers.empty();
@@ -7,12 +13,12 @@ bool CRacingCar::IsEmpty() const
 
 bool CRacingCar::IsFull() const
 {
-	return m_passengers.size() == PLACE_COUNT;
+	return m_passengers.size() == m_placeCount;
 }
 
 std::size_t CRacingCar::GetPlaceCount() const
 {
-	return PLACE_COUNT;
+	return m_placeCount;
 }
 
 std::size_t CRacingCar::GetPassengerCount() const
@@ -23,11 +29,6 @@ std::size_t CRacingCar::GetPassengerCount() const
 void CRacingCar::RemoveAllPassengers()
 {
 	m_passengers.clear();
-}
-
-CRacingCar::CRacingCar(MakeOfTheCar makeOfTheCar)
-	: m_makeOfTheCar(makeOfTheCar)
-{
 }
 
 void CRacingCar::AddPassenger(std::shared_ptr<IRacer> passenger)

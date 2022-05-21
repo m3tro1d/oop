@@ -6,7 +6,7 @@
 class CPoliceCar : public IPoliceCar
 {
 public:
-	explicit CPoliceCar(MakeOfTheCar makeOfTheCar);
+	CPoliceCar(std::size_t placeCount, MakeOfTheCar makeOfTheCar);
 
 	bool IsEmpty() const final;
 	bool IsFull() const final;
@@ -25,8 +25,7 @@ public:
 	MakeOfTheCar GetMakeOfTheCar() const final;
 
 private:
-	static const std::size_t PLACE_COUNT = 4;
-
+	std::size_t m_placeCount;
 	MakeOfTheCar m_makeOfTheCar;
 	std::vector<std::shared_ptr<IPoliceMan>> m_passengers;
 };

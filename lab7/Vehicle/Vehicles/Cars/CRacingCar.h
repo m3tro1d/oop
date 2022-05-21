@@ -6,7 +6,7 @@
 class CRacingCar : public IRacingCar
 {
 public:
-	explicit CRacingCar(MakeOfTheCar makeOfTheCar);
+	CRacingCar(std::size_t placeCount, MakeOfTheCar makeOfTheCar);
 
 	bool IsEmpty() const final;
 	bool IsFull() const final;
@@ -25,8 +25,7 @@ public:
 	MakeOfTheCar GetMakeOfTheCar() const final;
 
 private:
-	static const std::size_t PLACE_COUNT = 2;
-
+	std::size_t m_placeCount;
 	MakeOfTheCar m_makeOfTheCar;
 	std::vector<std::shared_ptr<IRacer>> m_passengers;
 };

@@ -1,5 +1,10 @@
 #include "CBus.h"
 
+CBus::CBus(std::size_t placeCount)
+	: m_placeCount(placeCount)
+{
+}
+
 bool CBus::IsEmpty() const
 {
 	return m_passengers.empty();
@@ -7,12 +12,12 @@ bool CBus::IsEmpty() const
 
 bool CBus::IsFull() const
 {
-	return m_passengers.size() == PLACE_COUNT;
+	return m_passengers.size() == m_placeCount;
 }
 
 std::size_t CBus::GetPlaceCount() const
 {
-	return PLACE_COUNT;
+	return m_placeCount;
 }
 
 std::size_t CBus::GetPassengerCount() const
