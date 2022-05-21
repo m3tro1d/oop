@@ -6,8 +6,14 @@ add_executable(Vehicle
                Vehicles/CBus.cpp
                Vehicles/Cars/ICar.h
                Vehicles/Cars/IPoliceCar.h
+               Vehicles/Cars/CPoliceCar.h
+               Vehicles/Cars/CPoliceCar.cpp
                Vehicles/Cars/IRacingCar.h
+               Vehicles/Cars/CRacingCar.h
+               Vehicles/Cars/CRacingCar.cpp
                Vehicles/Cars/ITaxi.h
+               Vehicles/Cars/CTaxi.h
+               Vehicles/Cars/CTaxi.cpp
                People/IPerson.h
                People/IPoliceMan.h
                People/IRacer.h
