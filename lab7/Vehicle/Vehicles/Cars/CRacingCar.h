@@ -6,7 +6,15 @@
 class CRacingCar : public IRacingCar
 {
 public:
-	CRacingCar(MakeOfTheCar makeOfTheCar);
+	explicit CRacingCar(MakeOfTheCar makeOfTheCar);
+
+	bool IsEmpty() const final;
+	bool IsFull() const final;
+
+	std::size_t GetPlaceCount() const final;
+	std::size_t GetPassengerCount() const final;
+
+	void RemoveAllPassengers() final;
 
 	void AddPassenger(std::shared_ptr<IRacer> passenger) final;
 
@@ -17,6 +25,8 @@ public:
 	MakeOfTheCar GetMakeOfTheCar() const final;
 
 private:
-	MakeOfTheCar m_makeOfCar;
+	static const std::size_t PLACE_COUNT = 2;
+
+	MakeOfTheCar m_makeOfTheCar;
 	std::vector<std::shared_ptr<IRacer>> m_passengers;
 };
