@@ -240,7 +240,8 @@ SCENARIO("error during finding max element")
 
 			AND_GIVEN("output variable")
 			{
-				Test result = 42;
+				int const initialValue = 42;
+				Test result = initialValue;
 
 				WHEN("trying to find max and catching exception")
 				{
@@ -256,7 +257,7 @@ SCENARIO("error during finding max element")
 
 					THEN("output variable isn't changed")
 					{
-						REQUIRE(result.GetValue() == 42);
+						REQUIRE(result.GetValue() == initialValue);
 					}
 				}
 			}
