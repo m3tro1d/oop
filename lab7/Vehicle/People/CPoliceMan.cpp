@@ -1,8 +1,8 @@
 #include "CPoliceMan.h"
 
-CPoliceMan::CPoliceMan(std::string&& name, std::string&& departmentName)
-	: m_name(std::move(name))
-	, m_departmentName(std::move(departmentName))
+CPoliceMan::CPoliceMan(std::string const& name, std::string const& departmentName)
+	: m_name(name)
+	, m_departmentName(departmentName)
 {
 }
 

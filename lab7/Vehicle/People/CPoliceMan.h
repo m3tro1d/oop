@@ -6,7 +6,7 @@
 class CPoliceMan : public IPoliceMan
 {
 public:
-	CPoliceMan(std::string&& name, std::string&& departmentName);
+	CPoliceMan(std::string const& name, std::string const& departmentName);
 
 	std::string GetName() const final;
 

@@ -5,7 +5,7 @@
 class CRacer : public IRacer
 {
 public:
-	CRacer(std::string&& name, std::size_t awardsCount);
+	CRacer(std::string const& name, std::size_t awardsCount);
 
 	std::string GetName() const final;
 

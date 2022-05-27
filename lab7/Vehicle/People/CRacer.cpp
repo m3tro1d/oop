@@ -1,7 +1,7 @@
 #include "CRacer.h"
 
-CRacer::CRacer(std::string&& name, std::size_t awardsCount)
-	: m_name(std::move(name))
+CRacer::CRacer(std::string const& name, std::size_t awardsCount)
+	: m_name(name)
 	, m_awardsCount(awardsCount)
 {
 }

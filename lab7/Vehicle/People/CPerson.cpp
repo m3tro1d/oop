@@ -1,7 +1,7 @@
 #include "CPerson.h"
 
-CPerson::CPerson(std::string&& name)
-	: m_name(std::move(name))
+CPerson::CPerson(std::string const& name)
+	: m_name(name)
 {
 }
 
