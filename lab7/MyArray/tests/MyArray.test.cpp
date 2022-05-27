@@ -696,6 +696,23 @@ SCENARIO("clearing the array")
 			{
 				REQUIRE(array.GetSize() == 0);
 			}
+
+			AND_WHEN("inserting new elements")
+			{
+				array.Push("Beating tired bones");
+				array.Push("Tripping through remember when");
+
+				THEN("size equals 2")
+				{
+					REQUIRE(array.GetSize() == 2);
+				}
+
+				THEN("new elements match")
+				{
+					REQUIRE(array[0] == "Beating tired bones");
+					REQUIRE(array[1] == "Tripping through remember when");
+				}
+			}
 		}
 	}
 }

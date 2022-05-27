@@ -207,3 +207,60 @@ SCENARIO("find max element in not empty vector with different value types")
 		}
 	}
 }
+
+SCENARIO("error during finding max element")
+{
+	GIVEN("type with faulty copy assignment operator")
+	{
+		class Test
+		{
+		public:
+			Test(int value)
+				: m_value(value)
+			{
+			}
+
+			Test& operator=(Test const& other)
+			{
+				throw std::runtime_error("oops");
+			}
+
+			int GetValue() const
+			{
+				return m_value;
+			}
+
+		private:
+			int m_value;
+		};
+
+		AND_GIVEN("vector with values")
+		{
+			std::vector<Test> vector{ Test(12), Test(-1), Test(5) };
+
+			AND_GIVEN("output variable")
+			{
+				int const initialValue = 42;
+				Test result = initialValue;
+
+				WHEN("trying to find max and catching exception")
+				{
+					try
+					{
+						FindMaxEx(vector, result, [](Test const& l, Test const& r) {
+							return l.GetValue() < r.GetValue();
+						});
+					}
+					catch (std::exception const&)
+					{
+					}
+
+					THEN("output variable isn't changed")
+					{
+						REQUIRE(result.GetValue() == initialValue);
+					}
+				}
+			}
+		}
+	}
+}
