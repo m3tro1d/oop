@@ -5,7 +5,7 @@
 class CPerson : public IPerson
 {
 public:
-	CPerson(std::string const& name);
+	explicit CPerson(std::string const& name);
 
 	std::string GetName() const final;
 
