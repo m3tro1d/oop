@@ -1,10 +1,28 @@
 add_executable(VehicleTest
                ../Vehicles/IBasicVehicle.h
                ../Vehicles/IVehicle.h
+               ../Vehicles/IBus.h
+               ../Vehicles/CBus.h
+               ../Vehicles/CBus.cpp
                ../Vehicles/Cars/ICar.h
                ../Vehicles/Cars/IPoliceCar.h
+               ../Vehicles/Cars/CPoliceCar.h
+               ../Vehicles/Cars/CPoliceCar.cpp
                ../Vehicles/Cars/IRacingCar.h
+               ../Vehicles/Cars/CRacingCar.h
+               ../Vehicles/Cars/CRacingCar.cpp
                ../Vehicles/Cars/ITaxi.h
+               ../Vehicles/Cars/CTaxi.h
+               ../Vehicles/Cars/CTaxi.cpp
+               ../People/IPerson.h
+               ../People/IPoliceMan.h
+               ../People/IRacer.h
+               ../People/CPerson.h
+               ../People/CPerson.cpp
+               ../People/CPoliceMan.h
+               ../People/CPoliceMan.cpp
+               ../People/CRacer.h
+               ../People/CRacer.cpp
                Vehicle.test.cpp)
 target_link_libraries(VehicleTest PUBLIC catch2)
 add_test(NAME VehicleTest COMMAND VehicleTest)
