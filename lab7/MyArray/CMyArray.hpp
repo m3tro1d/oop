@@ -158,6 +158,31 @@ public:
 		return *this;
 	}
 
+	template <typename V>
+	CMyArray& operator=(CMyArray<V> const& other)
+	{
+		T* newData = new T[other.GetSize()];
+
+		try
+		{
+			for (size_type i = 0; i < other.GetSize(); ++i)
+			{
+				newData[i] = static_cast<T>(other[i]);
+			}
+		}
+		catch (...)
+		{
+			delete[] newData;
+			throw;
+		}
+
+		delete[] m_data;
+		m_data = newData;
+		m_size = other.GetSize();
+
+		return *this;
+	}
+
 	~CMyArray()
 	{
 		delete[] m_data;
