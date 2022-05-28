@@ -251,7 +251,7 @@ SCENARIO("error during finding max element")
 							return l.GetValue() < r.GetValue();
 						});
 					}
-					catch (std::exception const&)
+					catch (...)
 					{
 					}
 
