@@ -888,3 +888,110 @@ SCENARIO("working with iterators")
 		}
 	}
 }
+
+SCENARIO("assigning arrays with different types")
+{
+	GIVEN("source array of doubles")
+	{
+		CMyArray<double> source;
+		double const element1 = 12.3;
+		double const element2 = 42.333;
+		double const element3 = 4;
+
+		source.Push(element1);
+		source.Push(element2);
+		source.Push(element3);
+
+		AND_GIVEN("an array of integers")
+		{
+			CMyArray<int> array;
+
+			WHEN("assigning array of doubles to an array of integers")
+			{
+				array = source;
+
+				THEN("size matches")
+				{
+					REQUIRE(array.GetSize() == source.GetSize());
+				}
+
+				THEN("elements match after a cast")
+				{
+					REQUIRE(array[0] == static_cast<int>(element1));
+					REQUIRE(array[1] == static_cast<int>(element2));
+					REQUIRE(array[2] == static_cast<int>(element3));
+				}
+			}
+		}
+	}
+
+	GIVEN("type with faulty cast to integer operator")
+	{
+		class Test
+		{
+		public:
+			Test() = default;
+
+			Test(int value)
+				: m_value(value)
+			{
+			}
+
+			operator int() const
+			{
+				throw std::runtime_error("oops");
+			}
+
+			int GetValue() const
+			{
+				return m_value;
+			}
+
+		private:
+			int m_value = 0;
+		};
+
+		AND_GIVEN("source array of values")
+		{
+			CMyArray<Test> source;
+			source.Push(Test(42));
+
+			AND_GIVEN("array with integers")
+			{
+				CMyArray<int> array;
+				int const element1 = 3;
+				int const element2 = -1;
+				int const element3 = 100;
+
+				array.Push(element1);
+				array.Push(element2);
+				array.Push(element3);
+
+				auto const initialSize = array.GetSize();
+
+				WHEN("assigning array of values to an array of integers and catching exception")
+				{
+					try
+					{
+						array = source;
+					}
+					catch (...)
+					{
+					}
+
+					THEN("size doesn't change")
+					{
+						REQUIRE(array.GetSize() == initialSize);
+					}
+
+					THEN("elements don't change")
+					{
+						REQUIRE(array[0] == element1);
+						REQUIRE(array[1] == element2);
+						REQUIRE(array[2] == element3);
+					}
+				}
+			}
+		}
+	}
+}
