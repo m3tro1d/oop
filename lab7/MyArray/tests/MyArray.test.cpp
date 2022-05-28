@@ -932,19 +932,9 @@ SCENARIO("assigning arrays with different types")
 		public:
 			Test() = default;
 
-			Test(int value)
-				: m_value(value)
-			{
-			}
-
 			operator int() const
 			{
 				throw std::runtime_error("oops");
-			}
-
-			int GetValue() const
-			{
-				return m_value;
 			}
 
 		private:
@@ -954,7 +944,7 @@ SCENARIO("assigning arrays with different types")
 		AND_GIVEN("source array of values")
 		{
 			CMyArray<Test> source;
-			source.Push(Test(42));
+			source.Push(Test());
 
 			AND_GIVEN("array with integers")
 			{
