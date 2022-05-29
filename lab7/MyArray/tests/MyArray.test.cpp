@@ -135,6 +135,55 @@ SCENARIO("creating an array")
 			}
 		}
 	}
+
+	GIVEN("type with faulty copy constructor")
+	{
+		class Test
+		{
+		public:
+			Test() = default;
+
+			Test(Test const& other)
+			{
+				throw std::runtime_error("oops");
+			}
+
+			int GetValue() const
+			{
+				return m_value;
+			}
+
+		private:
+			int m_value = 12;
+		};
+
+		AND_GIVEN("array of values")
+		{
+			CMyArray<Test> original;
+			original.Push(Test());
+
+			WHEN("copying and catching an exception")
+			{
+				try
+				{
+					CMyArray array(original);
+				}
+				catch (...)
+				{
+				}
+
+				THEN("original size stays the same")
+				{
+					REQUIRE(original.GetSize() == 1);
+				}
+
+				THEN("original element matches")
+				{
+					REQUIRE(original[0].GetValue() == 12);
+				}
+			}
+		}
+	}
 }
 
 SCENARIO("assigning to the array")
