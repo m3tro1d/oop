@@ -9,6 +9,9 @@ template <typename T>
 class CMyArray
 {
 public:
+	template <typename>
+	friend class CMyArray;
+
 	template <bool IsConst>
 	class IteratorBase : public std::iterator<std::bidirectional_iterator_tag, std::conditional_t<IsConst, T const, T>>
 	{
@@ -161,13 +164,13 @@ public:
 	template <typename V>
 	CMyArray& operator=(CMyArray<V> const& other)
 	{
-		T* newData = new T[other.GetSize()];
+		T* newData = new T[other.m_size];
 
 		try
 		{
-			for (size_type i = 0; i < other.GetSize(); ++i)
+			for (size_type i = 0; i < other.m_size; ++i)
 			{
-				newData[i] = static_cast<T>(other[i]);
+				newData[i] = static_cast<T>(other.m_data[i]);
 			}
 		}
 		catch (...)
@@ -178,7 +181,7 @@ public:
 
 		delete[] m_data;
 		m_data = newData;
-		m_size = other.GetSize();
+		m_size = other.m_size;
 
 		return *this;
 	}
