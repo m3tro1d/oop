@@ -217,14 +217,7 @@ public:
 
 		try
 		{
-			if (newSize < m_size)
-			{
-				std::copy_n(m_data, newSize, newData);
-			}
-			else
-			{
-				std::copy(m_data, m_data + m_size, newData);
-			}
+			std::copy_n(m_data, std::min(newSize, m_size), newData);
 		}
 		catch (...)
 		{
