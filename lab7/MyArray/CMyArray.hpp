@@ -121,21 +121,18 @@ public:
 	}
 
 	CMyArray(CMyArray const& other)
+		: m_data(new T[other.m_size])
+		, m_size(other.m_size)
 	{
-		T* newData = new T[other.m_size];
-
 		try
 		{
-			std::copy(other.m_data, other.m_data + other.m_size, newData);
+			std::copy(other.m_data, other.m_data + other.m_size, m_data);
 		}
 		catch (...)
 		{
-			delete[] newData;
+			delete[] m_data;
 			throw;
 		}
-
-		m_data = newData;
-		m_size = other.m_size;
 	}
 
 	CMyArray(CMyArray&& other) noexcept
