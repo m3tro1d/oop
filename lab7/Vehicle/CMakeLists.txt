@@ -15,6 +15,7 @@ add_executable(Vehicle
                Vehicles/Cars/CTaxi.h
                Vehicles/Cars/CTaxi.cpp
                People/IPerson.h
+               People/CPersonImpl.h
                People/IPoliceMan.h
                People/IRacer.h
                People/CPerson.h

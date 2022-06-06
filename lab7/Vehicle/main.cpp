@@ -1,3 +1,4 @@
+#include "People/CPerson.h"
 #include "People/CPoliceMan.h"
 #include "People/CRacer.h"
 #include "Vehicles/Cars/CPoliceCar.h"
