@@ -4,7 +4,7 @@
 #include "CCarImpl.h"
 #include <vector>
 
-class CTaxi : public CCarImpl<ITaxi, IPerson>
+class CTaxi : public CCarImpl<ITaxi>
 {
 public:
 	CTaxi(std::size_t placeCount, MakeOfTheCar makeOfTheCar);

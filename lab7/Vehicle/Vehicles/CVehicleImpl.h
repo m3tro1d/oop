@@ -5,7 +5,7 @@
 #include <type_traits>
 #include <vector>
 
-template <class Base, class Passenger>
+template <class Base>
 class CVehicleImpl : public Base
 {
 public:
@@ -39,7 +39,7 @@ public:
 		m_passengers.clear();
 	}
 
-	void AddPassenger(std::shared_ptr<Passenger> passenger) final
+	void AddPassenger(std::shared_ptr<typename Base::PassengerType> passenger) final
 	{
 		if (IsFull())
 		{
@@ -59,12 +59,12 @@ public:
 		m_passengers.erase(std::next(m_passengers.begin(), index));
 	}
 
-	Passenger const& GetPassenger(std::size_t index) const final
+	typename Base::PassengerType const& GetPassenger(std::size_t index) const final
 	{
 		return *m_passengers.at(index);
 	}
 
 private:
 	std::size_t m_placeCount;
-	std::vector<std::shared_ptr<Passenger>> m_passengers;
+	std::vector<std::shared_ptr<typename Base::PassengerType>> m_passengers;
 };

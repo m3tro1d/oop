@@ -3,12 +3,12 @@
 #include "../CVehicleImpl.h"
 #include "ICar.h"
 
-template <class Base, class Passenger>
-class CCarImpl : public CVehicleImpl<Base, Passenger>
+template <class Base>
+class CCarImpl : public CVehicleImpl<Base>
 {
 public:
 	CCarImpl(std::size_t placeCount, MakeOfTheCar makeOfTheCar)
-		: CVehicleImpl<Base, Passenger>(placeCount)
+		: CVehicleImpl<Base>(placeCount)
 		, m_makeOfTheCar(makeOfTheCar)
 	{
 	}

@@ -4,7 +4,7 @@
 #include "CCarImpl.h"
 #include <vector>
 
-class CPoliceCar : public CCarImpl<IPoliceCar, IPoliceMan>
+class CPoliceCar : public CCarImpl<IPoliceCar>
 {
 public:
 	CPoliceCar(std::size_t placeCount, MakeOfTheCar makeOfTheCar);
