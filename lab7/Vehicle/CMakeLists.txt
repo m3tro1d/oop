@@ -1,10 +1,12 @@
 add_executable(Vehicle
                Vehicles/IBasicVehicle.h
                Vehicles/IVehicle.h
+               Vehicles/CVehicleImpl.h
                Vehicles/IBus.h
                Vehicles/CBus.h
                Vehicles/CBus.cpp
                Vehicles/Cars/ICar.h
+               Vehicles/Cars/CCarImpl.h
                Vehicles/Cars/IPoliceCar.h
                Vehicles/Cars/CPoliceCar.h
                Vehicles/Cars/CPoliceCar.cpp
