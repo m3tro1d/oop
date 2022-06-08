@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../CVehicleImpl.h"
+#include "../CVehicleImpl.hpp"
 #include "ICar.h"
 
 template <class Base>

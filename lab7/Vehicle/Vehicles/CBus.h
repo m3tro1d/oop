@@ -1,7 +1,7 @@
 #pragma once
 
 #include "./IBus.h"
-#include "CVehicleImpl.h"
+#include "CVehicleImpl.hpp"
 #include <vector>
 
 class CBus : public CVehicleImpl<IBus>

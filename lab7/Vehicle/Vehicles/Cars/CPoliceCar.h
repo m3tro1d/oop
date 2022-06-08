@@ -1,7 +1,7 @@
 #pragma once
 
 #include "./IPoliceCar.h"
-#include "CCarImpl.h"
+#include "CCarImpl.hpp"
 #include <vector>
 
 class CPoliceCar : public CCarImpl<IPoliceCar>
