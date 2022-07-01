@@ -120,7 +120,7 @@ class Ellipse : public ICanvasDrawable
 	, public ISerializable
 {
 public:
-	Ellipse(Point center, unsigned int radiusX, unsigned int radiusY)
+	Ellipse(Point const& center, unsigned int radiusX, unsigned int radiusY)
 		: m_center(center)
 		, m_radiusX(radiusX)
 		, m_radiusY(radiusY)
@@ -321,7 +321,7 @@ void Draw(ICanvas& canvas, std::vector<ICanvasDrawable*> const& drawables)
 }
 
 /* Копирует состояние из одного сериализуемого объекта в другой */
-void CopyState(const ISerializable& from, ISerializable& to)
+void CopyState(ISerializable const& from, ISerializable& to)
 {
 	std::stringstream stream;
 	from.SaveTo(stream);
